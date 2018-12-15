@@ -1,4 +1,6 @@
 package com.summer.itis.curatorapp.model.api_result
 
-class LoginBody(var username: String, var password: String) {
+import com.google.gson.annotations.Expose
+
+class LoginBody(@Expose var username: String, @Expose var password: String) {
 }

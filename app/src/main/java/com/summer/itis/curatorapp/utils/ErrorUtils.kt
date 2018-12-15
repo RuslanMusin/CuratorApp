@@ -10,7 +10,7 @@ object ErrorUtils {
 
     fun parseError(response: Response<*>): APIError {
 
-        var error: APIError = APIError()
+        var error = APIError()
 
         try {
             response.errorBody()?.let { error = errorConverter.convert(it) }

@@ -1,16 +1,12 @@
 package com.summer.itis.curatorapp.model.common
 
+import com.google.gson.annotations.Expose
+
 
 class APIError {
 
-    private val statusCode: Int = 0
-    private val message: String? = null
+//    private val statusCode: Int = 0
+    @Expose
+    lateinit var error: String
 
-    fun status(): Int {
-        return statusCode
-    }
-
-    fun message(): String? {
-        return message
-    }
 }

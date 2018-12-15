@@ -1,9 +1,10 @@
 package com.summer.itis.curatorapp.model.api_result
 
-class LoginResult {
+import com.google.gson.annotations.SerializedName
 
-    lateinit var status: String
-    lateinit var accessToken: String
+class LoginResult {
+    @SerializedName("token")
+    lateinit var token: String
+    @SerializedName("user_id")
     lateinit var userId: String
-    var isSuccessful: Boolean = true //по идее false at start
 }

@@ -31,7 +31,7 @@ object OkHttpProvider {
 
     private fun buildMessageClient(): OkHttpClient {
         return OkHttpClient.Builder()
-//                .addInterceptor(ApiKeyInterceptor.create())
+                .addInterceptor(ApiKeyInterceptor.create())
                 .addInterceptor(ErrorHandlingInterceptor.create())
                 .build()
     }

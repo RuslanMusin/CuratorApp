@@ -83,8 +83,8 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginActView, View.OnClick
             }
 
             R.id.iv_cover -> {
-                et_email.setText("rust@ma.ru")
-                et_password.setText("rustamka")
+                et_email.setText("Прохор.Куклев.Брониславович")
+                et_password.setText("Прохор.Куклев.Брониславович")
             }
         }
     }

@@ -90,9 +90,15 @@ object Const {
     const val ENTITY_NOT_EXIST = "not_exist"
 
     // Http request
-    const val MESSAGING_KEY = "Authorization"
+    const val AUTHORIZATION = "Authorization"
     const val CONTENT_TYPE = "Content-Type"
+    const val ACCEPT = "Accept"
+    const val CSRF_TOKEN = "X-CSRFToken"
     const val APP_JSON = "application/json"
+    const val CSRF_TOKEN_VALUE = "l35FZP6OxS5ZgIpT1f3Qmv6h36N7qRptcSjAMZk6pebCUU7wm15YK3xLAZC9OcRj"
+    const val AUTH_VALUE = "Token 7693b0639732d984be86e310f955d0d2d8aef782"
+
+    var AUTH_VALUE_2 = AUTH_VALUE
 
     const val PAGE_SIZE = 20
     const val ZERO_OFFSET = 0
