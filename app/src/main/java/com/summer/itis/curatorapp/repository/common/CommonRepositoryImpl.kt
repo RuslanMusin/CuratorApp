@@ -18,4 +18,10 @@ class CommonRepositoryImpl : CommonRepository {
             .login(loginBody)
             .compose(RxUtils.asyncSingle())
     }
+
+    override fun logout(loginBody: LoginBody): Single<Result<LoginResult>> {
+        return commonService
+            .logout(loginBody)
+            .compose(RxUtils.asyncSingle())
+    }
 }

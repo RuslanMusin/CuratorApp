@@ -153,7 +153,7 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
 
 //            R.id.li_works -> showWorks()
 
-            R.id.li_logout -> logout()
+            R.id.li_logout -> presenter.logout()
 
             R.id.li_desc -> showDesc()
         }
@@ -176,7 +176,7 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
 
     }
 
-    private fun logout() {
+    override fun logout() {
         LoginActivity.start(requireActivity())
     }
 

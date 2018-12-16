@@ -6,4 +6,6 @@ interface CuratorView: BaseFragView {
 
     fun initViews(type: String)
 
+    fun logout()
+
 }

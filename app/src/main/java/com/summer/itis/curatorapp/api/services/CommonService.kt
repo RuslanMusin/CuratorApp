@@ -11,4 +11,7 @@ interface CommonService {
 
     @POST("login")
     fun login(@Body loginBody: LoginBody): Single<Result<LoginResult>>
+
+    @POST("logout")
+    fun logout(@Body loginBody: LoginBody): Single<Result<LoginResult>>
 }
