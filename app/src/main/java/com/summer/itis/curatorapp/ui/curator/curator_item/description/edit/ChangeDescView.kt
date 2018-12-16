@@ -4,4 +4,6 @@ import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragView
 
 interface ChangeDescView: BaseFragView {
 
+    fun showChanges()
+
 }

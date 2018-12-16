@@ -1,6 +1,7 @@
 package com.summer.itis.curatorapp.model.skill
 
 import com.summer.itis.curatorapp.model.common.Identified
+import com.summer.itis.curatorapp.utils.Const.LOW_LEVEL
 
 class Skill: Identified {
 
@@ -8,7 +9,7 @@ class Skill: Identified {
 
     lateinit var name: String
 
-    lateinit var level: String
+    var level: String = LOW_LEVEL
 
     override fun equals(other: Any?): Boolean {
         if(other != null) {

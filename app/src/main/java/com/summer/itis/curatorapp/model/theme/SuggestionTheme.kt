@@ -1,5 +1,6 @@
 package com.summer.itis.curatorapp.model.theme
 
+import com.google.gson.annotations.SerializedName
 import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
@@ -15,8 +16,11 @@ class SuggestionTheme: Identified {
     lateinit var curatorId: String
     lateinit var studentId: String
     lateinit var themeProgressId: String
-    var status: String = WAITING_CURATOR
+    var status: Status = Status(Integer.toString(Random().nextInt(100) + 1), WAITING_CURATOR)
+    @SerializedName("date_creation")
     lateinit var dateCreation: Date
+
+    lateinit var progress: String
     var type: String = STUDENT_TYPE
 
     var curator: Curator? = null

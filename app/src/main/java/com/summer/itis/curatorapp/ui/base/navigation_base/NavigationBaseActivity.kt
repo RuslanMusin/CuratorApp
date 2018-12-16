@@ -18,6 +18,7 @@ import com.summer.itis.curatorapp.ui.curator.curator_item.view.CuratorFragment
 import com.summer.itis.curatorapp.ui.student.student_list.StudentListFragment
 import com.summer.itis.curatorapp.ui.theme.theme_list.ThemeListFragment
 import com.summer.itis.curatorapp.ui.work.works.WorkListFragment
+import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.USER_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import kotlinx.android.synthetic.main.activity_base.*
@@ -247,8 +248,7 @@ class NavigationBaseActivity : BaseActivity<NavigationPresenter>(), NavigationVi
     private fun showProfile(tabId: String) {
         Log.d(TAG_NAVIG_ACT, "curator start")
         val args: Bundle = Bundle()
-        val userJson = gsonConverter.toJson(AppHelper.currentCurator)
-        args.putString(USER_KEY, userJson)
+        args.putString(ID_KEY, AppHelper.currentCurator.id)
         val fragment = CuratorFragment.newInstance(args, this)
         pushFragments(tabId, fragment, true)
     }
@@ -266,7 +266,9 @@ class NavigationBaseActivity : BaseActivity<NavigationPresenter>(), NavigationVi
     }
 
     private fun showWorks(tabId: String) {
-        val fragment = WorkListFragment.newInstance(this)
+        val args = Bundle()
+        args.putString(ID_KEY, AppHelper.currentCurator.id)
+        val fragment = WorkListFragment.newInstance(args,this)
         pushFragments(tabId, fragment, true)
     }
 

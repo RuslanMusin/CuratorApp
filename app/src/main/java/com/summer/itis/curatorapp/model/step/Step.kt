@@ -1,6 +1,8 @@
 package com.summer.itis.curatorapp.model.step
 
+import com.google.gson.annotations.SerializedName
 import com.summer.itis.curatorapp.model.common.Identified
+import com.summer.itis.curatorapp.model.theme.Status
 import com.summer.itis.curatorapp.model.theme.Theme
 import java.util.*
 
@@ -10,8 +12,12 @@ class Step: Identified {
 
     lateinit var title: String
     lateinit var description: String
-    lateinit var links: String
+    var links: String = "some links"
 
+    @SerializedName("date_start")
     lateinit var dateStart: Date
+    @SerializedName("date_finish")
     lateinit var dateFinish: Date
+
+    lateinit var status: Status
 }

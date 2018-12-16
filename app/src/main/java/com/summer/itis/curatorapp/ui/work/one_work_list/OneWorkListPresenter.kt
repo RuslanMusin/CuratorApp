@@ -14,13 +14,13 @@ class OneWorkListPresenter(): BaseFragPresenter<OneWorkListView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
 
-    fun loadSkills(id: String, dateFinish: Long?, skill: String?) {
+   /* fun loadWorks(id: String, dateFinish: Long?, skill: String?) {
               val disposable = worksRepository
                       .findMyWorks(id, dateFinish, skill)
                       .doOnSubscribe(Consumer<Disposable> { viewState.showLoading(it) })
                       .doAfterTerminate(Action { viewState.hideLoading() })
                       .subscribe ({ viewState.changeDataSet(it) }, { viewState.handleError(it) })
         compositeDisposable.add(disposable)
-    }
+    }*/
 
 }

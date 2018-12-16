@@ -67,7 +67,7 @@ class PastWorkListFragment : BaseFragment<PastWorkListPresenter>(), PastWorkList
     }
 
     private fun loadSkills() {
-//        presenter.loadSkills(AppHelper.currentCurator.id)
+//        presenter.loadWorks(AppHelper.currentCurator.id)
         works = ArrayList()
         val themes = AppHelper.getThemeList(AppHelper.otherCurator)
         val calendarFirst = Calendar.getInstance()

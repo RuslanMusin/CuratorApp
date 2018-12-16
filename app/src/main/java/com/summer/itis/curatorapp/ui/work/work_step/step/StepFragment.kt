@@ -18,6 +18,7 @@ import com.summer.itis.curatorapp.ui.work.work_step.edit_step.EditStepFragment
 import com.summer.itis.curatorapp.utils.Const.EDIT_STEP
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.STEP_KEY
+import com.summer.itis.curatorapp.utils.Const.WORK_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import com.summer.itis.curatorapp.utils.FormatterUtil
 import kotlinx.android.synthetic.main.fragment_step.*
@@ -64,15 +65,26 @@ class StepFragment: BaseFragment<StepPresenter>(), StepView, View.OnClickListene
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            step = gsonConverter.fromJson(it.getString(STEP_KEY), Step::class.java)
-            workId = it.getString(ID_KEY)
+            workId = it.getString(WORK_KEY)
+            val stepId = it.getString(STEP_KEY)
+            presenter.loadStep(workId, stepId)
         }
+    }
+
+    override fun showStep(step: Step) {
+        this.step = step
+        tv_title.text = step.title
+        tv_date_start.text = FormatterUtil.getStringFromDate(step.dateStart)
+        tv_date_finish.text = FormatterUtil.getStringFromDate(step.dateFinish)
+        val tvDesc: ExpandableTextView = li_desc.findViewById(R.id.expand_text_view)
+        val tvLinks: ExpandableTextView = li_links.findViewById(R.id.expand_text_view)
+        tvDesc.text = step.description
+        tvLinks.text = step.links
     }
 
     fun initViews() {
         setToolbarData()
         setListeners()
-        setData()
     }
 
     private fun setToolbarData() {
@@ -83,16 +95,6 @@ class StepFragment: BaseFragment<StepPresenter>(), StepView, View.OnClickListene
     private fun setListeners() {
         btn_back.setOnClickListener(this)
         btn_edit.setOnClickListener(this)
-    }
-
-    private fun setData() {
-        tv_title.text = step.title
-        tv_date_start.text = FormatterUtil.getStringFromDate(step.dateStart)
-        tv_date_finish.text = FormatterUtil.getStringFromDate(step.dateFinish)
-        val tvDesc: ExpandableTextView = li_desc.findViewById(R.id.expand_text_view)
-        val tvLinks: ExpandableTextView = li_links.findViewById(R.id.expand_text_view)
-        tvDesc.text = step.description
-        tvLinks.text = step.links
     }
 
     override fun onClick(v: View) {

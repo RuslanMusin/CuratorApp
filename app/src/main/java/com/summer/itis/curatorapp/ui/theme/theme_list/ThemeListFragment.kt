@@ -14,6 +14,8 @@ import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.base.base_custom.SearchListener
 import com.summer.itis.curatorapp.ui.theme.theme_list.tab_fragment.my_theme_list.MyThemeListFragment
 import com.summer.itis.curatorapp.ui.theme.theme_list.tab_fragment.suggestion_list.SuggestionListFragment
+import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.SUGGESTIONS_LIST
 import com.summer.itis.curatorapp.utils.Const.TAG_LOG
 import com.summer.itis.curatorapp.widget.FragViewPagerAdapter
@@ -101,8 +103,10 @@ class ThemeListFragment : BaseFragment<ThemeListPresenter>(), ThemeListView {
 
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = FragViewPagerAdapter(childFragmentManager)
-        fragments.add(SuggestionListFragment.newInstance(mainListener))
-        fragments.add(MyThemeListFragment.newInstance(mainListener))
+        val args = Bundle()
+        args.putString(ID_KEY, AppHelper.currentCurator.id)
+        fragments.add(SuggestionListFragment.newInstance(args, mainListener))
+        fragments.add(MyThemeListFragment.newInstance(args, mainListener))
         adapter.addFragment(fragments[0], getString(R.string.suggestions))
         adapter.addFragment(fragments[1], getString(R.string.my_themes))
         this.currentType = SUGGESTIONS_LIST

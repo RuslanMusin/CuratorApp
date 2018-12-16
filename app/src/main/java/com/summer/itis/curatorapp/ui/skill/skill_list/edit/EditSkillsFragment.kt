@@ -31,7 +31,6 @@ import java.util.regex.Pattern
 
 class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, View.OnClickListener {
 
-    lateinit var user: Curator
     var type: String = OWNER_TYPE
     lateinit override var mainListener: NavigationView
     private lateinit var adapter: EditSkillAdapter
@@ -64,7 +63,6 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        user = AppHelper.currentCurator
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -75,11 +73,12 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        loadSkills()
+        presenter.loadCuratorSkills(AppHelper.currentCurator.id)
+//        loadSkills()
     }
 
-    private fun loadSkills() {
-//        presenter.loadSkills(AppHelper.currentCurator.id)
+   /* private fun loadSkills() {
+//        presenter.loadWorks(AppHelper.currentCurator.id)
         if(user.skills.size == 0) {
             skills = ArrayList()
             for (i in 1..10) {
@@ -100,7 +99,7 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
         }
         changeDataSet(skills)
 
-    }
+    }*/
 
     private fun initViews() {
         setToolbarData()
@@ -175,13 +174,21 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
     }
 
     private fun saveChanges() {
-        user.skills = skills
-        val listJson = gsonConverter.toJson(user.skills)
+        AppHelper.currentCurator.skills = skills
+        presenter.updateCuratorSkills(AppHelper.currentCurator)
+    }
+
+    override fun showSkills(skills: List<Skill>) {
+        this.skills = skills.toMutableList()
+        changeDataSet(this.skills)
+    }
+
+    override fun returnAfterEdit() {
+        val listJson = gsonConverter.toJson(skills)
         val intent = Intent()
         intent.putExtra(SKILL_KEY, listJson)
         targetFragment?.onActivityResult(EDIT_SKILLS, Activity.RESULT_OK, intent)
         mainListener.hideFragment()
-//        backFragment()
     }
 
     private fun addSkill() {
@@ -251,8 +258,8 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
                 if(bool == true) {
                     Log.d(TAG_SKILLS, "skill added")
                     skills.add(0, skill)
-                    user.skills = skills
-                    this.activity?.let { it1 -> AppHelper.saveCurrentState(user, it1) }
+                    AppHelper.currentCurator.skills = skills
+                    saveCuratorState()
                     changeDataSet(skills)
                 }
             }

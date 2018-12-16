@@ -13,8 +13,14 @@ import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.student.student_item.StudentFragment
 import com.summer.itis.curatorapp.ui.work.progress_card.StepListFragment
+import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.Const.ID_KEY
+import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
 import com.summer.itis.curatorapp.utils.Const.TAB_NAME
+import com.summer.itis.curatorapp.utils.Const.TYPE
 import com.summer.itis.curatorapp.utils.Const.USER_ID
+import com.summer.itis.curatorapp.utils.Const.USER_KEY
+import com.summer.itis.curatorapp.utils.Const.WATCHER_TYPE
 import com.summer.itis.curatorapp.utils.Const.WORK_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import kotlinx.android.synthetic.main.fragment_work.*
@@ -61,14 +67,14 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            work = gsonConverter.fromJson(it.getString(WORK_KEY), Work::class.java)
+            val workId = it.getString(ID_KEY)
+            presenter.loadWork(workId)
         }
     }
 
     fun initViews() {
         setToolbarData()
         setListeners()
-        setData()
     }
 
     private fun setToolbarData() {
@@ -82,7 +88,8 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
         li_student.setOnClickListener(this)
     }
 
-    private fun setData() {
+    override fun showWork(work: Work) {
+        this.work = work
         tv_title.text = work.theme.title
         tv_curator.text = work.theme.curator?.getFullName()
         val name = work.theme.student?.getFullName()
@@ -116,8 +123,13 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
 
     private fun showSteps() {
         val args = Bundle()
-        args.putString(WORK_KEY, gsonConverter.toJson(work))
+        args.putString(WORK_KEY, work.id)
         args.putString(TAB_NAME, TAB_WORKS)
+        if(AppHelper.currentCurator.id.equals(work.theme.curator?.id)) {
+            args.putString(TYPE, OWNER_TYPE)
+        } else {
+            args.putString(TYPE, WATCHER_TYPE)
+        }
         val fragment = StepListFragment.newInstance(args, mainListener)
         mainListener.pushFragments(TAB_WORKS, fragment, true)
     }

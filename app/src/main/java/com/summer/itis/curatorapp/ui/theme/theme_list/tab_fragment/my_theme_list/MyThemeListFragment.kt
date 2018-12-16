@@ -5,16 +5,14 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.afollestad.materialdialogs.MaterialDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
-import com.summer.itis.curatorapp.model.skill.Skill
-import com.summer.itis.curatorapp.model.skill.Subject
 import com.summer.itis.curatorapp.model.theme.Theme
-import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
@@ -23,6 +21,9 @@ import com.summer.itis.curatorapp.ui.theme.theme_item.ThemeFragment
 import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.ALL_CHOOSED
+import com.summer.itis.curatorapp.utils.Const.ID_KEY
+import com.summer.itis.curatorapp.utils.Const.TAG_LOG
+import com.summer.itis.curatorapp.utils.FormatterUtil
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_theme_list.*
 import kotlinx.android.synthetic.main.layout_recycler_list.*
@@ -30,11 +31,11 @@ import java.util.regex.Pattern
 
 class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListView, View.OnClickListener {
 
-    lateinit var user: Curator
     lateinit override var mainListener: NavigationView
     private lateinit var adapter: ThemeAdapter
 
     lateinit var themes: MutableList<Theme>
+    lateinit var userId: String
 
     @InjectPresenter
     lateinit var presenter: MyThemeListPresenter
@@ -68,14 +69,24 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        user = AppHelper.currentCurator
-        initViews()
-        loadSkills()
+        arguments?.let {
+            userId = it.getString(ID_KEY)
+            initViews()
+            presenter.loadSkills(userId)
+
+        }
     }
 
-    private fun loadSkills() {
-//        presenter.loadSkills(AppHelper.currentCurator.id)
-        if(user.themes.size == 0) {
+    override fun showThemes(themes: List<Theme>) {
+        this.themes = themes.toMutableList()
+        Log.d(TAG_LOG, "date = ${themes[0].dateCreation}")
+        Log.d(TAG_LOG, "dateStr = ${FormatterUtil.getStringFromDate(themes[0].dateCreation)}")
+        changeDataSet(this.themes)
+    }
+
+  /*  private fun loadWorks() {
+//        presenter.loadWorks(AppHelper.currentCurator.id)
+        if(student.themes.size == 0) {
             themes = ArrayList()
             val skills = this.activity?.let { AppHelper.getSkillsList(it) }
             for (i in 1..10) {
@@ -108,14 +119,14 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
                 }
                 themes.add(theme)
             }
-            user.themes = themes
+            student.themes = themes
 
         } else {
-            themes = user.themes
+            themes = student.themes
         }
         changeDataSet(themes)
 
-    }
+    }*/
 
     private fun initViews() {
         initRecycler()
@@ -243,7 +254,7 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
             R.id.btn_add_theme -> {
 
                 val args = Bundle()
-                args.putString(Const.ID_KEY, user.id)
+                args.putString(Const.ID_KEY, userId)
                 val fragment = AddThemeFragment.newInstance(args, mainListener)
               /*  val tabLayout = parentFragment?.view?.findViewById<TabLayout>(R.id.tab_layout)
                 tabLayout?.visibility = View.GONE*/

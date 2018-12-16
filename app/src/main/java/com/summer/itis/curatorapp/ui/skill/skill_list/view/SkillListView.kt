@@ -5,4 +5,6 @@ import com.summer.itis.curatorapp.ui.base.base_first.BaseRecyclerView
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragView
 
 interface SkillListView: BaseFragView, BaseRecyclerView<Skill> {
+
+    fun showSkills(skills: List<Skill>)
 }

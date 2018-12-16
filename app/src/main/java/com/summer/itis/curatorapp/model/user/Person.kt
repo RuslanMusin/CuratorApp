@@ -28,7 +28,6 @@ abstract class Person: Identified {
     var isStandartPhoto: Boolean = true
     var status: String = OFFLINE_STATUS
 
-    @Expose
     var skills: MutableList<Skill> = ArrayList()
     @Transient
     var suggestions: MutableList<SuggestionTheme> = ArrayList()

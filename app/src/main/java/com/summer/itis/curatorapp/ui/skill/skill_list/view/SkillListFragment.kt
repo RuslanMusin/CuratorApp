@@ -35,12 +35,13 @@ import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import java.util.regex.Pattern
 import com.google.gson.reflect.TypeToken
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_PROFILE
+import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import java.util.*
 
 
 class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, View.OnClickListener {
 
-    lateinit var user: Person
+    lateinit var userId: String
     var personType: String = CURATOR_TYPE
     var type: String = OWNER_TYPE
     lateinit override var mainListener: NavigationView
@@ -78,12 +79,10 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
             personType = it.getString(PERSON_TYPE)
             if(personType.equals(STUDENT_TYPE)) {
                 type = WATCHER_TYPE
-                user = Const.gsonConverter.fromJson(it.getString(Const.USER_KEY), Student::class.java)
-            } else {
-                user = Const.gsonConverter.fromJson(it.getString(Const.USER_KEY), Curator::class.java)
             }
+            userId = it.getString(ID_KEY)
         }
-        if(user.id != AppHelper.currentCurator.id) {
+        if(!userId.equals(AppHelper.currentCurator.id)) {
             type = WATCHER_TYPE
         }
     }
@@ -96,14 +95,24 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        loadSkills()
+        if(personType.equals(STUDENT_TYPE)) {
+            presenter.loadStudentSkills(userId)
+        } else {
+            presenter.loadCuratorSkills(userId)
+        }
+//        loadSkills()
     }
 
-    private fun loadSkills() {
-//        presenter.loadSkills(AppHelper.currentCurator.id)
+    override fun showSkills(skills: List<Skill>) {
+        this.skills = skills.toMutableList()
+        changeDataSet(this.skills)
+    }
+
+    /*private fun loadSkills() {
+//        presenter.loadWorks(AppHelper.currentCurator.id)
         if(user.skills.size == 0) {
             this.activity?.let { skills = AppHelper.getMySkillList(it).toMutableList()}
-          /*  var skill: Skill = Skill()
+          *//*  var skill: Skill = Skill()
 
             skill.name = "Java"
             skill.id = "101"
@@ -119,7 +128,7 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
                 this.activity?.let { levelStr = AppHelper.getLevelStr(level, it) }
                 skill.level = levelStr
                 skills.add(skill)
-            }*/
+            }*//*
             AppHelper.currentCurator.skills = skills
             saveCuratorState()
 
@@ -128,7 +137,7 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
         }
         changeDataSet(skills)
 
-    }
+    }*/
 
     private fun initViews() {
         setToolbarData()

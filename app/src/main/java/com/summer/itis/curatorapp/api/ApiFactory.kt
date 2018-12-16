@@ -1,5 +1,6 @@
 package com.summer.itis.curatorapp.api
 
+import com.google.gson.GsonBuilder
 import com.summer.itis.curatorapp.BuildConfig
 import com.summer.itis.curatorapp.api.services.*
 import com.summer.itis.curatorapp.model.common.APIError
@@ -15,32 +16,50 @@ class ApiFactory {
     companion object {
 
         private fun buildRetrofit(): Retrofit {
+            val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create()
+
             return Retrofit.Builder()
                     .baseUrl(BuildConfig.API_ENDPOINT)
                     .client(OkHttpProvider.provideClient())
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .build()
+        }
+
+        val authService: AuthService by lazy {
+            buildRetrofit().create(AuthService::class.java)
         }
 
         val curatorService: CuratorService by lazy {
             buildRetrofit().create(CuratorService::class.java)
         }
 
-        val commonService: CommonService by lazy {
-            buildRetrofit().create(CommonService::class.java)
+        val studentService: StudentService by lazy {
+            buildRetrofit().create(StudentService::class.java)
         }
 
         val skillService: SkillService by lazy {
             buildRetrofit().create(SkillService::class.java)
         }
 
+        val subjectService: SubjectService by lazy {
+            buildRetrofit().create(SubjectService::class.java)
+        }
+
+        val themeService: ThemeService by lazy {
+            buildRetrofit().create(ThemeService::class.java)
+        }
+
+        val suggestionService: SuggestionService by lazy {
+            buildRetrofit().create(SuggestionService::class.java)
+        }
+
         val workService: WorkService by lazy {
             buildRetrofit().create(WorkService::class.java)
         }
 
-        val studentService: StudentService by lazy {
-            buildRetrofit().create(StudentService::class.java)
+        val workStepService: WorkStepService by lazy {
+            buildRetrofit().create(WorkStepService::class.java)
         }
 
         val errorConverter: Converter<ResponseBody, APIError> by lazy {

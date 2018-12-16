@@ -6,7 +6,7 @@ import com.arellomobile.mvp.InjectViewState
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.api_result.LoginBody
 import com.summer.itis.curatorapp.model.user.Curator
-import com.summer.itis.curatorapp.repository.RepositoryProvider.Companion.commonRepository
+import com.summer.itis.curatorapp.repository.RepositoryProvider.Companion.authRepository
 import com.summer.itis.curatorapp.repository.RepositoryProvider.Companion.curatorRepository
 import com.summer.itis.curatorapp.ui.base.base_first.activity.BasePresenter
 import com.summer.itis.curatorapp.ui.login.LoginActivity.Companion.TAG_LOGIN
@@ -14,7 +14,6 @@ import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const.TAG_LOG
 import io.reactivex.disposables.CompositeDisposable
 import com.summer.itis.curatorapp.utils.ErrorUtils
-import com.summer.itis.curatorapp.utils.Const.AUTH_VALUE
 import com.summer.itis.curatorapp.utils.Const.AUTH_VALUE_2
 
 
@@ -32,7 +31,12 @@ class LoginPresenter: BasePresenter<LoginActView>() {
         viewState.showProgressDialog(R.string.progress_message)
 
         val loginBody = LoginBody(email, password)
-        val disposable = commonRepository.login(loginBody).subscribe { res ->
+        val disposable = authRepository.login(loginBody).subscribe { res ->
+            val response = res?.response()
+            if(response == null) {
+                Log.d(TAG_LOG, "login response is null")
+                Log.d(TAG_LOG, "error = ${res?.error()?.message}")
+            }
             res?.response()?.let {
                 Log.d(TAG_LOGIN, res.response()?.body().toString())
                if(it.isSuccessful) {

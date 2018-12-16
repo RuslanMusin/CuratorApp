@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.summer.itis.curatorapp.R
+import com.summer.itis.curatorapp.model.skill.Subject
 import com.summer.itis.curatorapp.model.theme.Theme
 import kotlinx.android.synthetic.main.item_theme.view.*
+import java.util.*
 
 class ThemeItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -14,6 +16,7 @@ class ThemeItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(item: Theme) {
         itemView.tv_theme.text = item.title
+        item.subject = Subject(Integer.toString(Random().nextInt(100) + 1), "iOS")
         itemView.tv_subject.text = item.subject.name
         itemView.setOnLongClickListener {
             listener.openStudentAction(adapterPosition)

@@ -5,9 +5,11 @@ import com.google.gson.Gson
 //обычный класс констант и прочего общего кода
 object Const {
 
+    const val LOW_LEVEL = "Низкий"
+
     const val FILTER_YEAR = 1950
 
-    const val TAG_LOG = "TAG"
+    const val TAG_LOG = "TAG_LOG"
 
     const val TAB_NAME = "TAB_NAME"
 
@@ -28,6 +30,9 @@ object Const {
     const val ACCEPTED_CURATOR = "ACCEPTED_CURATOR"
     const val ACCEPTED_STUDENT = "ACCEPTED_STUDENT"
     const val ACCEPTED_BOTH = "ACCEPTED_BOTH"
+
+    const val CURATOR_KEY = "curator"
+    const val STUDENT_KEY = "student"
 
     const val SUBJECT_KEY = "subject"
     const val SKILL_KEY = "skill"

@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
+import com.summer.itis.curatorapp.model.theme.Status
 import com.summer.itis.curatorapp.model.theme.SuggestionTheme
 import com.summer.itis.curatorapp.model.theme.ThemeProgress
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_THEMES
@@ -135,7 +136,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
     }
 
     private fun setActionListeners() {
-        when (suggestionTheme.status) {
+        when (suggestionTheme.status.name) {
 
             WAITING_CURATOR -> {
                 if(!suggestionTheme.type.equals(STUDENT_TYPE)) {
@@ -197,7 +198,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
         tv_curator.text = suggestionTheme.curator?.name
         tv_student.text = suggestionTheme.student?.name
         tv_subject.text = suggestionTheme.theme?.subject?.name
-        setStatus(suggestionTheme.status)
+        setStatus(suggestionTheme.status.name)
         expand_text_view.text = suggestionTheme.themeProgress?.description
     }
 
@@ -247,7 +248,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
         }
 
         tv_status.text = uiStatus
-        suggestionTheme.status = status
+        suggestionTheme.status = Status(Integer.toString(Random().nextInt(100) + 1), status)
         setActionListeners()
     }
 
@@ -263,7 +264,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
 
     private fun editProfile() {
         val args = Bundle()
-        args.putString(THEME_KEY, gsonConverter.toJson(suggestionTheme.themeProgress))
+        args.putString(THEME_KEY, gsonConverter.toJson(suggestionTheme))
         val fragment = EditSuggestionFragment.newInstance(args, mainListener)
         fragment.setTargetFragment(this, EDIT_SUGGESTION)
         mainListener.showFragment(SHOW_THEMES, this, fragment)
@@ -278,12 +279,12 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
     }
 
     private fun acceptTheme() {
-        when (suggestionTheme.status) {
+        when (suggestionTheme.status.name) {
 
             WAITING_CURATOR -> {
                 for (sug in AppHelper.currentCurator.suggestions) {
                     if(sug.id.equals(suggestionTheme.id)) {
-                        sug.status = ACCEPTED_BOTH
+                        sug.status = Status(Integer.toString(Random().nextInt(100) + 1), ACCEPTED_BOTH)
                         for(theme in AppHelper.currentCurator.themes) {
                             if(theme.id.equals(suggestionTheme.theme?.id)) {
                                 theme.dateAcceptance = Date()
@@ -291,7 +292,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
                             }
                         }
                     } else if (suggestionTheme.theme?.id.equals(sug.theme?.id)) {
-                        sug.status = REJECTED_CURATOR
+                        sug.status = Status(Integer.toString(Random().nextInt(100) + 1), REJECTED_CURATOR)
                     }
                 }
 

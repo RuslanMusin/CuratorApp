@@ -21,6 +21,7 @@ import com.summer.itis.curatorapp.ui.theme.add_theme.AddThemeFragment.Companion.
 import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.COURSE_KEY
 import com.summer.itis.curatorapp.utils.Const.FILTERS
+import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.REQUEST_CODE
 import com.summer.itis.curatorapp.utils.Const.SEND_THEME
 import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
@@ -87,7 +88,12 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        loadStudents()
+        presenter.loadStudents()
+    }
+
+    override fun showStudents(students: List<Student>) {
+        this.students = students.toMutableList()
+        changeDataSet(this.students)
     }
 
     private fun loadStudents() {
@@ -122,7 +128,7 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
     }
 
     private fun loadSkills(): MutableList<Skill> {
-//        presenter.loadSkills(AppHelper.currentCurator.id)
+//        presenter.loadWorks(AppHelper.currentCurator.id)
         val skills: MutableList<Skill> = ArrayList()
         var skill: Skill = Skill()
 
@@ -201,7 +207,8 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
     }
 
     override fun onItemClick(item: Student) {
-        val args = argUser(item, STUDENT_TYPE)
+        val args = Bundle()
+        args.putString(ID_KEY, item.id)
         args.putInt(REQUEST_CODE, requestCode)
         args.putString(TAB_NAME, SHOW_THEMES)
         val fragment = StudentFragment.newInstance(args, mainListener)

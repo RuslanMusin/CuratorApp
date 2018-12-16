@@ -6,9 +6,7 @@ import com.summer.itis.curatorapp.model.theme.Theme
 import com.summer.itis.curatorapp.model.work.Work
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface WorkService {
 
@@ -18,19 +16,24 @@ interface WorkService {
     @GET("works")
     fun findAll(): Single<Result<List<Work>>>
 
-    @GET("works/{work_id}/steps")
-    fun findWorkSteps(@Path(value = "work_id") curatorId: String): Single<Result<List<Step>>>
+    @GET("curators/{curator_id}/works")
+    fun findCuratorWorks(@Path(value = "curator_id") curatorId: String): Single<Result<List<Work>>>
 
-    @GET("works/{work_id}/steps/{step_id}")
-    fun findWorkStep(@Path(value = "work_id") workId: String,
-                     @Path(value = "step_id") stepId: String): Single<Result<Step>>
+    @GET("curators/{curator_id}/works/{work_id}")
+    fun findCuratorWork(@Path(value = "curator_id") curatorId: String, @Path(value = "work_id") workId: String): Single<Result<Work>>
 
-    @GET("works/{work_id}/steps/{step_id}/comments")
-    fun findStepComments(@Path(value = "work_id") workId: String,
-                         @Path(value = "step_id") stepId: String): Single<Result<List<Comment>>>
+    @POST("curators/{curator_id}/works")
+    fun postCuratorWork(@Path(value = "curator_id") id: String,
+                        @Body work: Work): Single<Result<Work>>
 
-    @GET("works/{work_id}/steps/{step_id}/materials")
-    fun findStepMaterials(@Path(value = "work_id") workId: String,
-                          @Path(value = "step_id") stepId: String): Single<Result<List<String>>>
+    @DELETE("curators/{curator_id}/works/{work_id}")
+    fun deleteCuratorWork(@Path(value = "curator_id") curatorId: String,
+                          @Path(value = "work_id") workId: String): Single<Result<Work>>
+
+    @PUT("curators/{curator_id}/works/{work_id}")
+    fun updateCuratorWork(@Path(value = "curator_id") curatorId: String,
+                          @Path(value = "work_id") workId: String,
+                          @Body work: Work): Single<Result<Work>>
+
 
 }

@@ -73,7 +73,7 @@ class AddSkillFragment : BaseFragment<AddSkillPresenter>(), AddSkillView, View.O
     }
 
     private fun loadSkills() {
-//        presenter.loadSkills(AppHelper.currentCurator.id)
+//        presenter.loadWorks(AppHelper.currentCurator.id)
         this.activity?.let { skills = AppHelper.getSkillsList(it).toMutableList() }
        /* var skill: Skill = Skill()
 

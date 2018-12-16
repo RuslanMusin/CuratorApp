@@ -21,8 +21,7 @@ interface StudentService {
     @GET("students")
     fun findAll(): Single<Result<List<Student>>>
 
-    @GET("students/{student_id}/skills")
-    fun findSkills(@Path(value = "student_id") id: String): Single<Result<List<Skill>>>
+
 
     @GET("students/{student_id}/suggestions")
     fun findSuggestions(@Path(value = "student_id") id: String): Single<Result<List<SuggestionTheme>>>

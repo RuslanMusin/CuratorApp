@@ -21,13 +21,13 @@ import com.summer.itis.curatorapp.ui.work.one_work_list.OneWorkListFragment
 import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.DESC_KEY
+import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.MAX_LENGTH
 import com.summer.itis.curatorapp.utils.Const.REQUEST_CODE
 import com.summer.itis.curatorapp.utils.Const.SEND_THEME
 import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
 import com.summer.itis.curatorapp.utils.Const.TAB_NAME
 import com.summer.itis.curatorapp.utils.Const.TYPE
-import com.summer.itis.curatorapp.utils.Const.USER_ID
 import com.summer.itis.curatorapp.utils.Const.USER_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import kotlinx.android.synthetic.main.layout_student.*
@@ -36,7 +36,7 @@ import kotlinx.android.synthetic.main.toolbar_add.*
 class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnClickListener {
 
     lateinit var tabName: String
-    lateinit var user: Student
+    lateinit var student: Student
     override lateinit var mainListener: NavigationView
 
     @InjectPresenter
@@ -73,16 +73,19 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
         initViews()
         arguments?.let {
             tabName = it.getString(TAB_NAME)
-            val userJson = it.getString(USER_KEY)
+            requestNumber = it.getInt(REQUEST_CODE)
+            val studentId = it.getString(ID_KEY)
+            presenter.loadStudent(studentId)
+            /*val userJson = it.getString(USER_KEY)
             if(userJson == null) {
                 val id = it.getString(USER_ID)
                 presenter.findStudentById(id)
             } else {
-                user = gsonConverter.fromJson(it.getString(USER_KEY), Student::class.java)
+                student = gsonConverter.fromJson(it.getString(USER_KEY), Student::class.java)
                 requestNumber = it.getInt(REQUEST_CODE)
                 initViews()
-                setUserData(user)
-            }
+                setUserData(student)
+            }*/
         }
         super.onViewCreated(view, savedInstanceState)
     }
@@ -108,13 +111,13 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
         btn_back.setOnClickListener(this)
     }
 
-    override fun setUserData(student: Student) {
-        user = student
-        toolbar_add.title = "${user.name} ${user.lastname} ${user.patronymic}"
-        tv_username.text = "${user.name} ${user.lastname} ${user.patronymic}"
-        tv_group.text = "${user.groupNumber + Const.SPACE + "," + Const.SPACE + user.year + Const.SPACE + context?.getString(R.string.course)}"
-        tv_desc.text = AppHelper.cutLongDescription(user.description, MAX_LENGTH)
-        AppHelper.setUserPhoto(iv_user_photo, user, activity as Activity)
+    override fun showStudent(student: Student) {
+        this.student = student
+        toolbar_add.title = "${this.student.name} ${this.student.lastname} ${this.student.patronymic}"
+        tv_username.text = "${this.student.name} ${this.student.lastname} ${this.student.patronymic}"
+        tv_group.text = "${this.student.groupNumber + Const.SPACE + "," + Const.SPACE + this.student.year + Const.SPACE + context?.getString(R.string.course)}"
+        tv_desc.text = AppHelper.cutLongDescription(this.student.description, MAX_LENGTH)
+        AppHelper.setUserPhoto(iv_user_photo, this.student, activity as Activity)
     }
 
     override fun onClick(v: View) {
@@ -134,7 +137,7 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
 
     private fun showDesc() {
         val args = Bundle()
-        args.putString(DESC_KEY, user.description)
+        args.putString(DESC_KEY, student.description)
         args.putString(TYPE, STUDENT_TYPE)
         val fragment = DescriptionFragment.newInstance(args, mainListener)
         mainListener.showFragment(SHOW_THEMES, this, fragment)
@@ -144,7 +147,7 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
     private fun giveTheme() {
 
         val args = Intent()
-        val studentJson = gsonConverter.toJson(user)
+        val studentJson = gsonConverter.toJson(student)
         args.putExtra(USER_KEY, studentJson)
         when (requestNumber) {
 
@@ -157,13 +160,15 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
     }
 
     private fun showSkills() {
-        val fragment = SkillListFragment.newInstance(argUser(user, STUDENT_TYPE), mainListener)
+        val args = argUser(student, STUDENT_TYPE)
+        args.putString(ID_KEY, student.id)
+        val fragment = SkillListFragment.newInstance(args, mainListener)
         mainListener.showFragment(SHOW_THEMES, this, fragment)
 //        mainListener.pushFragments(TAB_STUDENTS, fragment, true)
     }
 
     private fun showWorks() {
-        val args = argUser(user, STUDENT_TYPE)
+        val args = argUser(student, STUDENT_TYPE)
         args.putString(TAB_NAME, tabName)
         val fragment = OneWorkListFragment.newInstance(args, mainListener)
         mainListener.showFragment(SHOW_THEMES, this, fragment)

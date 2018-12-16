@@ -166,7 +166,7 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
                     theme.title = et_theme_name.text.toString()
                     theme.description = et_theme_desc.text.toString()
                     theme.skills = skills
-                    presenter.saveThemeEdit(theme)
+                    presenter.updateTheme(theme)
                 } else {
                     mainListener.showSnackBar(getString(R.string.invalid_fields))
                 }

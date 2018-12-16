@@ -67,7 +67,7 @@ class MyWorkListFragment : BaseFragment<MyWorkListPresenter>(), MyWorkListView, 
     }
 
     private fun loadSkills() {
-//        presenter.loadSkills(AppHelper.currentCurator.id)
+//        presenter.loadWorks(AppHelper.currentCurator.id)
         if(AppHelper.currentCurator.works.size == 0) {
             works = ArrayList()
             val themes = AppHelper.getThemeList(AppHelper.currentCurator)

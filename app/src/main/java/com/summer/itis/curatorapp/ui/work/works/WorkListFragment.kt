@@ -19,6 +19,7 @@ import com.summer.itis.curatorapp.ui.work.work_item.WorkFragment
 import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.CURATOR_TYPE
+import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
 import com.summer.itis.curatorapp.utils.Const.PERSON_TYPE
 import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
@@ -39,6 +40,7 @@ class WorkListFragment : BaseFragment<WorkListPresenter>(), WorkListView, View.O
     private lateinit var adapter: WorkAdapter
 
     lateinit var works: MutableList<Work>
+    lateinit var userId: String
 
     @InjectPresenter
     lateinit var presenter: WorkListPresenter
@@ -76,12 +78,21 @@ class WorkListFragment : BaseFragment<WorkListPresenter>(), WorkListView, View.O
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViews()
-        loadSkills()
+        arguments?.let {
+            userId = it.getString(ID_KEY)
+            initViews()
+            presenter.loadWorks(userId)
+        }
+
+    }
+
+    override fun showWorks(works: List<Work>) {
+        this.works = works.toMutableList()
+        changeDataSet(this.works)
     }
 
     private fun loadSkills() {
-//        presenter.loadSkills(AppHelper.currentCurator.id)
+//        presenter.loadWorks(AppHelper.currentCurator.id)
         if(user.works.size == 0) {
             works = ArrayList()
             val themes = AppHelper.getThemeList(AppHelper.currentCurator)
@@ -156,7 +167,7 @@ class WorkListFragment : BaseFragment<WorkListPresenter>(), WorkListView, View.O
 
     override fun onItemClick(item: Work) {
         val args = Bundle()
-        args.putString(Const.WORK_KEY, Const.gsonConverter.toJson(item))
+        args.putString(Const.ID_KEY, item.id)
         val fragment = WorkFragment.newInstance(args, mainListener)
         mainListener.pushFragments(NavigationBaseActivity.TAB_WORKS, fragment, true)
     }

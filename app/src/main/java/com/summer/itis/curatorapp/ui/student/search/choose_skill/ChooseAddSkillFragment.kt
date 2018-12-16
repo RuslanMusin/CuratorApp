@@ -69,11 +69,16 @@ class ChooseAddSkillFragment : BaseFragment<ChooseSkilllPresenter>(), ChooseSkil
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        loadSkills()
+        presenter.loadSkills()
+    }
+
+    override fun showSkills(skills: List<Skill>) {
+        this.skills = skills.toMutableList()
+        changeDataSet(this.skills)
     }
 
     private fun loadSkills() {
-//        presenter.loadSkills(AppHelper.currentCurator.id)
+//        presenter.loadWorks(AppHelper.currentCurator.id)
         this.activity?.let { skills = AppHelper.getSkillsList(it).toMutableList() }
        /* var skill: Skill = Skill()
 

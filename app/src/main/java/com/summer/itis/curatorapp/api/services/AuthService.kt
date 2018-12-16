@@ -7,11 +7,11 @@ import retrofit2.adapter.rxjava2.Result
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-interface CommonService {
+interface AuthService {
 
     @POST("login")
     fun login(@Body loginBody: LoginBody): Single<Result<LoginResult>>
 
     @POST("logout")
-    fun logout(@Body loginBody: LoginBody): Single<Result<LoginResult>>
+    fun logout(): Single<Result<Unit>>
 }

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
+import com.summer.itis.curatorapp.model.theme.SuggestionTheme
 import com.summer.itis.curatorapp.model.theme.ThemeProgress
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
@@ -21,7 +22,7 @@ import kotlinx.android.synthetic.main.toolbar_back_done.*
 
 class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSuggestionView, View.OnClickListener {
 
-    private lateinit var themeProgress: ThemeProgress
+    private lateinit var suggestion: SuggestionTheme
 
     override lateinit var mainListener: NavigationView
 
@@ -50,7 +51,7 @@ class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSugg
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            themeProgress = gsonConverter.fromJson(it.getString(THEME_KEY), ThemeProgress::class.java)
+            suggestion = gsonConverter.fromJson(it.getString(THEME_KEY), SuggestionTheme::class.java)
         }
     }
 
@@ -71,8 +72,8 @@ class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSugg
     }
 
     private fun setThemeData() {
-        et_theme_name.setText(themeProgress.title)
-        et_theme_desc.setText(themeProgress.description)
+        et_theme_name.setText(suggestion.themeProgress?.title)
+        et_theme_desc.setText(suggestion.themeProgress?.description)
     }
 
     private fun setToolbarData() {
@@ -93,10 +94,10 @@ class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSugg
                     val title = et_theme_name.text.toString()
                     val desc = et_theme_desc.text.toString()
 
-                    themeProgress.title = title
-                    themeProgress.description = desc
+                    suggestion.themeProgress?.title = title
+                    suggestion.themeProgress?.description = desc
 
-                    presenter.saveSuggestionEdit(themeProgress)
+                    presenter.updateTheme(suggestion)
                 }
             }
 

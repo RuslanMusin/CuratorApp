@@ -14,4 +14,9 @@ interface SkillService {
     @GET("skills")
     fun findAll(): Single<Result<List<Skill>>>
 
+    @GET("curators/{curator_id}/skills")
+    fun findCuratorSkills(@Path(value = "curator_id") id: String): Single<Result<List<Skill>>>
+
+    @GET("students/{student_id}/skills")
+    fun findStudentSkills(@Path(value = "student_id") id: String): Single<Result<List<Skill>>>
 }

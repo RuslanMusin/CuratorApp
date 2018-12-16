@@ -1,6 +1,7 @@
 package com.summer.itis.curatorapp.ui.curator.curator_item.edit
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,8 +13,11 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
+import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.DescriptionFragment.Companion.EDIT_DESC
 import com.summer.itis.curatorapp.ui.curator.curator_item.view.CuratorFragment.Companion.EDIT_CURATOR
 import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.Const.CURATOR_KEY
+import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import kotlinx.android.synthetic.main.fragment_change_profile.*
 import kotlinx.android.synthetic.main.toolbar_edit.*
 
@@ -108,14 +112,14 @@ class EditCuratorFragment : BaseFragment<EditCuratorPresenter>(), EditCuratorVie
         user.name = et_name.text.toString()
         user.lastname = et_lastname.text.toString()
         user.patronymic = et_patronymic.text.toString()
-        val intent = Intent()
-        intent.putExtra(CURATOR_NAME, user.name)
-        intent.putExtra(CURATOR_NAME, user.lastname)
-        intent.putExtra(CURATOR_NAME, user.patronymic)
-        this.activity?.let { AppHelper.saveCurrentState(user, it) }
-        targetFragment?.onActivityResult(EDIT_CURATOR, Activity.RESULT_OK, intent)
-        backFragment()
+        presenter.updateCurator(user)
     }
 
-
+    override fun returnAfterEdit() {
+        saveCuratorState()
+        val intent = Intent()
+        intent.putExtra(CURATOR_KEY, gsonConverter.toJson(user))
+        targetFragment?.onActivityResult(EDIT_CURATOR, RESULT_OK, intent)
+        mainListener.hideFragment()
+    }
 }

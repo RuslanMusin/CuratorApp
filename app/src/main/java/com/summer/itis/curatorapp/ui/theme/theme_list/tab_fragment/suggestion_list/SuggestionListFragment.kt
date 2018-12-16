@@ -45,12 +45,12 @@ import kotlin.collections.ArrayList
 
 class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), SuggestionListView, View.OnClickListener {
 
-    lateinit var user: Curator
     lateinit override var mainListener: NavigationView
     lateinit var fragmentParent: ThemeListView
     private lateinit var adapter: SuggestionAdapter
 
     lateinit var suggestions: MutableList<SuggestionTheme>
+    lateinit var userId: String
 
     @InjectPresenter
     lateinit var presenter: SuggestionListPresenter
@@ -84,14 +84,21 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        user = AppHelper.currentCurator
-        initViews()
-        loadSkills()
+        arguments?.let {
+            userId = it.getString(ID_KEY)
+            initViews()
+            presenter.loadSkills(userId)
+        }
     }
 
-    private fun loadSkills() {
-//        presenter.loadSkills(AppHelper.currentCurator.id)
-        if(user.suggestions.size == 0) {
+    override fun showSuggestions(suggestions: List<SuggestionTheme>) {
+        this.suggestions = suggestions.toMutableList()
+        changeDataSet(this.suggestions)
+    }
+
+    /*private fun loadWorks() {
+//        presenter.loadWorks(AppHelper.currentCurator.id)
+        if(student.suggestions.size == 0) {
             suggestions = ArrayList()
 
             for (i in 1..10) {
@@ -149,14 +156,14 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
                 }
                 suggestions.add(suggestionTheme)
             }
-            user.suggestions = suggestions
+            student.suggestions = suggestions
 
         } else {
-            suggestions = user.suggestions
+            suggestions = student.suggestions
         }
         changeDataSet(suggestions)
 
-    }
+    }*/
 
     private fun initViews() {
         initRecycler()
@@ -227,7 +234,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
     override fun chooseUserFakeAction(pos: Int) {
         val suggestion = suggestions[pos]
         var listAction: MutableList<String> = ArrayList()
-        val status = suggestion.status
+        val status = suggestion.status.name
         when (status) {
 
             WAITING_STUDENT -> {
@@ -313,7 +320,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
 
             R.id.btn_add_theme -> {
                 val args = Bundle()
-                args.putString(ID_KEY, user.id)
+                args.putString(ID_KEY, userId)
                 val fragment = AddThemeFragment.newInstance(args, mainListener)
                 mainListener.pushFragments(TAB_THEMES, fragment, true)
             }

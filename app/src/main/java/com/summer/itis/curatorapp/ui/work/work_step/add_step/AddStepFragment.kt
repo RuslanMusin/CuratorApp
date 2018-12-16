@@ -9,6 +9,7 @@ import android.view.WindowManager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.step.Step
+import com.summer.itis.curatorapp.model.theme.Status
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
@@ -100,8 +101,9 @@ class AddStepFragment : BaseFragment<AddStepPresenter>(), AddStepView, View.OnCl
                 step.links = et_links.text.toString()
                 step.dateStart = dialogStart.getDate()
                 step.dateFinish = dialogFinish.getDate()
+                step.status = Status("1", "wait")
                 if(validateData()) {
-                    context?.let { presenter.addStep(step, workId, it) }
+                    context?.let { presenter.addStep(workId, step) }
                 } else {
                     mainListener.showSnackBar(getString(R.string.invalid_fields))
                 }

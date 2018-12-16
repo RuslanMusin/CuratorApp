@@ -1,6 +1,7 @@
 package com.summer.itis.curatorapp.ui.theme.suggestion_item
 
 import com.arellomobile.mvp.InjectViewState
+import com.summer.itis.curatorapp.model.theme.Status
 import com.summer.itis.curatorapp.model.theme.SuggestionTheme
 import com.summer.itis.curatorapp.ui.comment.CommentPresenter
 import com.summer.itis.curatorapp.utils.AppHelper
@@ -8,7 +9,9 @@ import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.CHANGED_CURATOR
 import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_CURATOR
 import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_STUDENT
+import com.summer.itis.curatorapp.utils.Const.REJECTED_CURATOR
 import com.summer.itis.curatorapp.utils.Const.WAITING_CURATOR
+import java.util.*
 
 @InjectViewState
 class  SuggestionPresenter(): CommentPresenter<SuggestionView>() {
@@ -16,15 +19,15 @@ class  SuggestionPresenter(): CommentPresenter<SuggestionView>() {
     fun rejectCurator(suggestionTheme: SuggestionTheme) {
         for (sug in AppHelper.currentCurator.suggestions) {
             if (sug.id.equals(suggestionTheme.id)) {
-                sug.status = Const.REJECTED_CURATOR
-                viewState.setStatus(sug.status)
+                sug.status = Status(Integer.toString(Random().nextInt(100) + 1), REJECTED_CURATOR)
+                viewState.setStatus(sug.status.name)
 
             }
         }
     }
 
     fun revisionTheme (suggestionTheme: SuggestionTheme) {
-        when (suggestionTheme.status) {
+        when (suggestionTheme.status.name) {
 
             IN_PROGRESS_CURATOR -> changeSuggestionStatus(suggestionTheme.id, CHANGED_CURATOR)
 
@@ -35,7 +38,7 @@ class  SuggestionPresenter(): CommentPresenter<SuggestionView>() {
     fun changeSuggestionStatus(id: String, status: String) {
         for (sug in AppHelper.currentCurator.suggestions) {
             if (sug.id.equals(id)) {
-                sug.status = status
+                sug.status = Status(Integer.toString(Random().nextInt(100) + 1), status)
                 viewState.setStatus(status)
             }
         }

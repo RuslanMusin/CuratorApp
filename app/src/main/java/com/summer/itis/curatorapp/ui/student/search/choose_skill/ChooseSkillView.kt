@@ -7,4 +7,6 @@ import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragView
 
 interface ChooseSkillView: BaseFragView, BaseRecyclerView<Skill>, View.OnClickListener {
 
+    fun showSkills(skills: List<Skill>)
+
 }

@@ -117,7 +117,7 @@ class EditStepFragment : BaseFragment<EditStepPresenter>(), EditStepView, View.O
                 step.dateStart = dialogStart.getDate()
                 step.dateFinish = dialogFinish.getDate()
                 if(validateData()) {
-                    context?.let { presenter.editStep(step, workId, it) }
+                    context?.let { presenter.updateStep(workId, step) }
                 } else {
                     mainListener.showSnackBar(getString(R.string.invalid_fields))
                 }

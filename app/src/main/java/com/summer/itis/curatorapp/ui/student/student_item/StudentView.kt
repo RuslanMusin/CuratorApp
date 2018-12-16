@@ -5,6 +5,6 @@ import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragView
 
 interface StudentView: BaseFragView {
 
-    fun setUserData(student: Student)
+    fun showStudent(student: Student)
 
 }

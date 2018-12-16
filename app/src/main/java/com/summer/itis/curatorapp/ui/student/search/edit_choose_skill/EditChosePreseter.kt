@@ -13,13 +13,13 @@ class EditChosePreseter(): BaseFragPresenter<EditChooseView>() {
 
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    fun loadSkills(userId: String) {
+   /* fun loadWorks(userId: String) {
         val disposable = skillRepository
                 .findMySkills(userId)
                 .doOnSubscribe(Consumer<Disposable> { viewState.showLoading(it) })
                 .doAfterTerminate(Action { viewState.hideLoading() })
                 .subscribe ({ viewState.changeDataSet(it) }, { viewState.handleError(it) })
         compositeDisposable.add(disposable)
-    }
+    }*/
 
 }

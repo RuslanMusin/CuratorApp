@@ -2,12 +2,14 @@ package com.summer.itis.curatorapp.ui.theme.theme_item
 
 import android.content.Context
 import com.arellomobile.mvp.InjectViewState
+import com.summer.itis.curatorapp.model.theme.Status
 import com.summer.itis.curatorapp.model.theme.SuggestionTheme
 import com.summer.itis.curatorapp.model.theme.Theme
 import com.summer.itis.curatorapp.model.theme.ThemeProgress
 import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
 import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.CURATOR_TYPE
 import com.summer.itis.curatorapp.utils.Const.WAITING_STUDENT
 import java.util.*
@@ -21,7 +23,7 @@ class  ThemePresenter(): BaseFragPresenter<ThemeView>() {
         suggestionTheme.type = CURATOR_TYPE
         suggestionTheme.student = student
         suggestionTheme.curator = AppHelper.currentCurator
-        suggestionTheme.status = WAITING_STUDENT
+        suggestionTheme.status = Status(Integer.toString(Random().nextInt(100) + 1), Const.WAITING_STUDENT)
         suggestionTheme.theme = theme
 
         val themeProgress = ThemeProgress()

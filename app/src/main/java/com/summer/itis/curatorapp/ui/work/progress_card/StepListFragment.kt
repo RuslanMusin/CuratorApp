@@ -24,7 +24,10 @@ import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
 import com.summer.itis.curatorapp.utils.Const.PERSON_TYPE
 import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
 import com.summer.itis.curatorapp.utils.Const.TAB_NAME
+import com.summer.itis.curatorapp.utils.Const.TYPE
+import com.summer.itis.curatorapp.utils.Const.USER_KEY
 import com.summer.itis.curatorapp.utils.Const.WATCHER_TYPE
+import com.summer.itis.curatorapp.utils.Const.WORK_KEY
 import com.summer.itis.curatorapp.utils.FormatterUtil
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.layout_recycler_list.*
@@ -35,7 +38,7 @@ import java.util.regex.Pattern
 class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.OnClickListener {
 
     lateinit var tabName: String
-    lateinit var work: Work
+    lateinit var workId: String
     var type: String = OWNER_TYPE
     lateinit override var mainListener: NavigationView
     private lateinit var adapter: StepAdapter
@@ -70,8 +73,8 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
         setHasOptionsMenu(true)
         arguments?.let {
             tabName = it.getString(TAB_NAME)
-            work = Const.gsonConverter.fromJson(it.getString(Const.WORK_KEY), Work::class.java)
-
+            workId = it.getString(WORK_KEY)
+            type = it.getString(TYPE)
         }
     }
 
@@ -83,11 +86,17 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        loadSkills()
+        presenter.loadSteps(workId)
+//        loadSkills()
     }
 
-    private fun loadSkills() {
-//        presenter.loadSkills(AppHelper.currentCurator.id)
+    override fun showSteps(steps: List<Step>) {
+        this.steps = steps.toMutableList()
+        changeDataSet(this.steps)
+    }
+
+  /*  private fun loadSkills() {
+//        presenter.loadWorks(AppHelper.currentCurator.id)
         if(work.steps.size == 0) {
             steps = ArrayList()
             val title = "Выбор темы"
@@ -106,7 +115,7 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
             steps = work.steps
         }
         changeDataSet(steps)
-    }
+    }*/
 
     private fun initViews() {
         setToolbarData()
@@ -120,7 +129,11 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
     }
 
     private fun setListeners() {
-        btn_add.setOnClickListener(this)
+        if(type.equals(WATCHER_TYPE)) {
+            btn_add.visibility = View.GONE
+        } else {
+            btn_add.setOnClickListener(this)
+        }
         btn_back.setOnClickListener(this)
     }
 
@@ -160,8 +173,8 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
 
     override fun onItemClick(item: Step) {
         val args = Bundle()
-        args.putString(ID_KEY, work.id)
-        args.putString(Const.STEP_KEY, Const.gsonConverter.toJson(item))
+        args.putString(WORK_KEY, workId)
+        args.putString(Const.STEP_KEY, item.id)
         val fragment = StepFragment.newInstance(args, mainListener)
         mainListener.pushFragments(tabName, fragment, true)
     }
@@ -178,7 +191,7 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
 
     private fun addStep() {
         val args = Bundle()
-        args.putString(Const.ID_KEY, work.id)
+        args.putString(Const.ID_KEY, workId)
         val fragment = AddStepFragment.newInstance(args, mainListener)
         mainListener.pushFragments(NavigationBaseActivity.TAB_WORKS, fragment, true)
     }

@@ -12,6 +12,7 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.DescriptionFragment.Companion.EDIT_DESC
+import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const.DESC_KEY
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.TYPE
@@ -101,12 +102,16 @@ class ChangeDescFragment : BaseFragment<ChangeDescPresenter>(), ChangeDescView, 
 
     private fun changeData() {
         description = et_description.text.toString()
+        AppHelper.currentCurator.description = description
+        presenter.saveCuratorDesc(AppHelper.currentCurator)
+       /* presenter.saveDescription(description, type, id)
+        mainListener.hideFragment()*/
+    }
+
+    override fun showChanges() {
         val intent = Intent()
         intent.putExtra(DESC_KEY, description)
         targetFragment?.onActivityResult(EDIT_DESC, RESULT_OK, intent)
-        presenter.saveDescription(description, type, id)
-//        this.activity?.let { AppHelper.saveCurrentState(step, it) }
-//        backFragment()
         mainListener.hideFragment()
     }
 }

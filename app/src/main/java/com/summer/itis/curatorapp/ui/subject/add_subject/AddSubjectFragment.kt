@@ -63,11 +63,12 @@ class AddSubjectFragment : BaseFragment<AddSubjectPresenter>(), AddSubjectView, 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        loadSkills()
+        presenter.loadSubjects()
     }
 
-    private fun loadSkills() {
-        changeDataSet(presenter.loadSubjects())
+    override fun showSubjects(subjects: List<Subject>) {
+        this.subjects = subjects.toMutableList()
+        changeDataSet(subjects)
     }
 
     private fun initViews() {

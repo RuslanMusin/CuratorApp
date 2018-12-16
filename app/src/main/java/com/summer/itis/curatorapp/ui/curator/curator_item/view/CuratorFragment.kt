@@ -10,6 +10,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
+import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_PROFILE
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.TAB_PROFILE
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.DescriptionFragment
@@ -18,21 +19,22 @@ import com.summer.itis.curatorapp.ui.login.LoginActivity
 import com.summer.itis.curatorapp.ui.skill.skill_list.view.SkillListFragment
 import com.summer.itis.curatorapp.ui.work.one_work_list.OneWorkListFragment
 import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.Const.CURATOR_KEY
 import com.summer.itis.curatorapp.utils.Const.CURATOR_TYPE
 import com.summer.itis.curatorapp.utils.Const.DESC_KEY
+import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.MAX_LENGTH
 import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
 import com.summer.itis.curatorapp.utils.Const.TAB_NAME
 import com.summer.itis.curatorapp.utils.Const.TYPE
 import com.summer.itis.curatorapp.utils.Const.USER_ID
-import com.summer.itis.curatorapp.utils.Const.USER_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.layout_personal.*
 
 class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnClickListener {
 
-    lateinit var user: Curator
+    lateinit var curator: Curator
     var type: String = OWNER_TYPE
     override lateinit var mainListener: NavigationView
 
@@ -64,20 +66,21 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initViews(type)
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
         arguments?.let {
-            user  = gsonConverter.fromJson(it.getString(USER_KEY), Curator::class.java)
+            val curatorId = it.getString(ID_KEY)
+            curatorId?.let {
+                presenter.findCurator(curatorId)
+            }
         }
     }
 
-    override fun initViews(type: String) {
+    override fun initViews(curator: Curator, type: String) {
         Log.d(TAG_CURATOR, "type = " + type)
         this.type = type
+        this.curator = curator
         findViews()
         setToolbarData()
         setListeners()
@@ -106,20 +109,14 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
     }
 
     private fun findViews() {
-        if (type == OWNER_TYPE) {
-            user = AppHelper.currentCurator
-            setUserData()
-        } else {
-            setUserData()
-        }
+        setUserData()
         li_works_vertical.visibility = View.GONE
     }
 
     private fun setUserData() {
-        tv_username.text = "${user.name} ${user.lastname} ${user.patronymic}"
-//        expand_text_view.text = step.description
-        tv_desc.text = AppHelper.cutLongDescription(user.description, MAX_LENGTH)
-        AppHelper.setUserPhoto(iv_user_photo, user, activity as Activity)
+        tv_username.text = "${curator.name} ${curator.lastname} ${curator.patronymic}"
+        tv_desc.text = AppHelper.cutLongDescription(curator.description, MAX_LENGTH)
+        AppHelper.setUserPhoto(iv_user_photo, curator, activity as Activity)
 //        setUserBtnText()
     }
 
@@ -161,9 +158,9 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
 
     private fun showDesc() {
         val args = Bundle()
-        args.putString(DESC_KEY, user.description)
+        args.putString(DESC_KEY, curator.description)
         args.putString(TYPE, CURATOR_TYPE)
-        args.putString(USER_ID, user.id)
+        args.putString(USER_ID, curator.id)
         val fragment = DescriptionFragment.newInstance(args, mainListener)
         mainListener.pushFragments(TAB_PROFILE, fragment, true)
     }
@@ -171,7 +168,9 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
     private fun editProfile() {
         val fragment = EditCuratorFragment.newInstance(mainListener)
         fragment.setTargetFragment(this, EDIT_CURATOR)
-        mainListener.pushFragments(TAB_PROFILE, fragment, true)
+        mainListener.showFragment(SHOW_PROFILE, this, fragment)
+
+//        mainListener.pushFragments(TAB_PROFILE, fragment, true)
         //        mainListener.loadFragment(fragment)
 
     }
@@ -186,12 +185,14 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
     }
 
     private fun showSkills() {
-        val fragment = SkillListFragment.newInstance(argUser(user), mainListener)
+        val args = argUser(curator)
+        args.putString(ID_KEY, curator.id)
+        val fragment = SkillListFragment.newInstance(args, mainListener)
         mainListener.pushFragments(TAB_PROFILE, fragment, true)
     }
 
     private fun showWorks() {
-        val args = argUser(user)
+        val args = argUser(curator)
         args.putString(TAB_NAME, TAB_PROFILE)
         val fragment = OneWorkListFragment.newInstance(args, mainListener)
         mainListener.pushFragments(TAB_PROFILE, fragment, true)
@@ -216,41 +217,13 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
         if (resultCode == Activity.RESULT_OK) {
             when(requestCode) {
 
-                EDIT_CURATOR -> changeData(data)
+                EDIT_CURATOR -> data?.let { changeData(it) }
             }
         }
     }
 
-    private fun changeData(data: Intent?) {
-       /* step.name = data.getStringExtra(CURATOR_NAME)
-        step.lastname = data.getStringExtra(CURATOR_LASTNAME)
-        step.patronymic = data.getStringExtra(CURATOR_PATRONYMIC)*/
-//        tv_username.text = "${step.name} ${step.lastname} ${step.patronymic}"
-
-        /* when (type) {
-             ADD_FRIEND -> {
-                 step.id.let { userRepository.addFriend(UserRepository.currentId, it) }
-                 type = REMOVE_FRIEND
-                 btn_add_friend.setText(R.string.remove_friend)
-             }
-
-             ADD_REQUEST -> {
-                 step.id.let { userRepository.addFriendRequest(UserRepository.currentId, it) }
-                 type = REMOVE_REQUEST
-                 btn_add_friend.setText(R.string.remove_request)
-             }
-
-             REMOVE_FRIEND -> {
-                 step.id.let { userRepository.removeFriend(UserRepository.currentId, it) }
-                 type = ADD_REQUEST
-                 btn_add_friend.setText(R.string.add_friend)
-             }
-
-             REMOVE_REQUEST -> {
-                 step.id.let { userRepository.removeFriendRequest(UserRepository.currentId, it) }
-                 type = ADD_REQUEST
-                 btn_add_friend.setText(R.string.add_friend)
-             }
-         }*/
+    private fun changeData(data: Intent) {
+        curator = gsonConverter.fromJson(data.getStringExtra(CURATOR_KEY), Curator::class.java)
+        tv_username.text = "${curator.name} ${curator.lastname} ${curator.patronymic}"
     }
 }

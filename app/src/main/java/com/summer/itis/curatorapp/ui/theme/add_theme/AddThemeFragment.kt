@@ -100,54 +100,12 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initViews()
-        val themeJson = arguments?.getString(THEME_KEY)
-        if(themeJson != null) {
-            arguments?.let {
-                type = it.getString(TYPE)
-                if(type.equals(SUGGESTION_TYPE)) {
-                    suggestionTheme = gsonConverter.fromJson(themeJson, SuggestionTheme::class.java)
-                    theme = suggestionTheme?.theme!!
-                    setProgressData()
-                } else {
-                    theme = gsonConverter.fromJson(themeJson, Theme::class.java)
-                    setStaticData()
-                }
-//                btn_create_questions.setText(getString(R.string.save_changes))
-                mainListener.setToolbarTitle(getString(R.string.edit))
-            }
-        } else {
-            theme = Theme()
-        }
         arguments?.getString(ID_KEY)?.let { studentId = it }
         super.onViewCreated(view, savedInstanceState)
     }
-
-
-    private fun setProgressData() {
-        tv_added_subject.text = suggestionTheme?.themeProgress?.subject?.name
-        et_theme_name.setText(suggestionTheme?.themeProgress?.title)
-        et_theme_desc.setText(suggestionTheme?.themeProgress?.description)
-    }
-
-    private fun setStaticData() {
-        tv_added_subject.text = theme?.subject?.name
-        et_theme_name.setText(theme.title)
-        et_theme_desc.setText(theme.description)
-    }
-
     private fun initViews() {
         setToolbarData()
         setListeners()
-
-
-     /*   spinner_student.setItems(getString(R.string.all_students_choosed))
-        spinner_student.setOnItemSelectedListener { view, position, id, item ->
-            if(!item.equals(getString(R.string.all_students_choosed))) {
-                studentType = ONE_CHOOSED
-            } else {
-                studentType = ALL_CHOOSED
-            }
-        }*/
     }
 
     private fun setToolbarData() {
@@ -155,9 +113,6 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
     }
 
     private fun setListeners() {
-       /* btn_create_questions.setOnClickListener(this)
-        btn_create_questions.visibility = View.GONE*/
-
         btn_ok.setOnClickListener(this)
         tv_add_student.setOnClickListener(this)
         iv_remove_student.setOnClickListener(this)
@@ -176,7 +131,6 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
                 liViews.removeAt(index)
                 imageViews.removeAt(index)
                 skills.removeAt(index)
-//                textViews.removeAt(index)
 
                 if(liViews.size == 0) {
                     tv_added_skills.visibility = View.VISIBLE
@@ -190,6 +144,7 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
 
             R.id.btn_ok -> {
                 if(validateData()) {
+                    theme = Theme()
                     theme.id = "${Random().nextInt(24000)}"
                     theme.title = et_theme_name.text.toString()
                     theme.description = et_theme_desc.text.toString()
@@ -201,9 +156,15 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
                         theme.subjectId = it.id
                         theme.subject = it
                     }
-                    theme.dateCreation = Date()
+                    val c = Calendar.getInstance()
+                    c.set(Calendar.YEAR, 2017)
+                    c.set(Calendar.MONTH, 12)
+                    c.set(Calendar.DAY_OF_YEAR, 30)
+                    theme.dateCreation = c.time
+                    c.set(Calendar.DAY_OF_YEAR, 31)
+                    theme.dateAcceptance = c.time //не должно быть
                     theme.skills = skills
-                    context?.let { presenter.addTheme(theme, it) }
+                    context?.let { presenter.addTheme(theme) }
 //                    backFragment()
                 } else {
                     mainListener.showSnackBar(getString(R.string.invalid_fields))
@@ -214,9 +175,6 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
                 val fragment = AddSubjectFragment.newInstance(mainListener)
                 fragment.setTargetFragment(this, ADD_SUBJECT)
                 mainListener.showFragment(SHOW_THEMES, this, fragment)
-//                mainListener.pushFragments(TAB_STUDENTS, fragment, false)
-//                mainListener.loadFragment(fragment)
-
             }
 
             R.id.tv_add_student -> {
@@ -235,8 +193,6 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
             R.id.btn_back -> backFragment()
 
             R.id.tv_add_skill -> addSkill()
-
-//            R.id.li_added_skills -> editSkills()
         }
     }
 
@@ -259,6 +215,7 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
     }
 
     override fun getResultAfterEdit(isEdit: Boolean, intent: Intent?) {
+        activity?.let { AppHelper.saveCurrentState(AppHelper.currentCurator, it) }
         if(isEdit) {
             targetFragment?.onActivityResult(EDIT_SUGGESTION, Activity.RESULT_OK, intent)
             mainListener.hideFragment()

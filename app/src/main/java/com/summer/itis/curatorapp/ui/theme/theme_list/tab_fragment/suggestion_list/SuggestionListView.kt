@@ -8,4 +8,6 @@ import com.summer.itis.curatorapp.ui.base.base_custom.SearchListener
 interface SuggestionListView: BaseFragView, BaseRecyclerView<SuggestionTheme>, SearchListener {
 
     fun chooseUserFakeAction(pos: Int)
+
+    fun showSuggestions(suggestions: List<SuggestionTheme>)
 }
