@@ -1,9 +1,14 @@
 package com.summer.itis.curatorapp.model.user
 
+import com.google.gson.annotations.SerializedName
+
 class Student: Person {
 
-    var year: Long = 1
-    var groupNumber: String = "11-603"
+    @SerializedName("course_number")
+    var courseNumber: Long = 1
+
+    lateinit var group: Group
+
     constructor() {}
 
     constructor(email: String, username: String) {

@@ -11,7 +11,7 @@ interface SuggestionRepository {
     fun findCuratorSuggestion(curatorId: String, suggestionsId: String): Single<Result<SuggestionTheme>>
     fun findCuratorSuggestionComments(curatorId: String, suggestionsId: String): Single<Result<List<Comment>>>
 
-    fun postCuratorSuggestion(id: String, suggestion: SuggestionApi): Single<Result<SuggestionTheme>>
+    fun postCuratorSuggestion(id: String, suggestion: SuggestionTheme): Single<Result<SuggestionTheme>>
     fun updateCuratorSuggestion(curatorId: String, suggestion: SuggestionApi): Single<Result<SuggestionTheme>>
     fun deleteCuratorSuggestion(curatorId: String, suggestionsId: String): Single<Result<SuggestionTheme>>
 }

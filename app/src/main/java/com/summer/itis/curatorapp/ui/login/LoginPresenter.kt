@@ -36,20 +36,24 @@ class LoginPresenter: BasePresenter<LoginActView>() {
             if(response == null) {
                 Log.d(TAG_LOG, "login response is null")
                 Log.d(TAG_LOG, "error = ${res?.error()?.message}")
+                viewState.showSnackBar(R.string.connection_reset)
+                viewState.hideProgressDialog()
             }
             res?.response()?.let {
-                Log.d(TAG_LOGIN, res.response()?.body().toString())
+                Log.d(TAG_LOG, res.response()?.body().toString())
                if(it.isSuccessful) {
                    val loginResult = it.body()
-                   Log.d(TAG_LOGIN, "signInWithEmail:success")
+                   Log.d(TAG_LOG, "signInWithEmail:success")
                    viewState.createCookie(email, password)
                    loginResult?.let {result ->
                        AUTH_VALUE_2 = "Token ${result.token}"
                        Log.d(TAG_LOGIN, "token = ${result.token} and id = ${result.userId}")
+                       Log.d(TAG_LOG, "auth_value (token) = ${AUTH_VALUE_2}")
                        updateUI(result.userId)
                        viewState.hideProgressDialog()
                    }
                } else {
+
                    // parse the response body …
                    val error = ErrorUtils.parseError(it)
                    // … and use it to show error information
@@ -57,7 +61,7 @@ class LoginPresenter: BasePresenter<LoginActView>() {
                    viewState.showSnackBar(R.string.error_authentication)
                    viewState.showError()
                    // … or just log the issue like we’re doing :)
-                   Log.d(TAG_LOGIN, error.error)
+                   Log.d(TAG_LOG, "err message =  ${it.message()}")
                }
 
             }

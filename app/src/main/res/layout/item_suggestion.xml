@@ -37,7 +37,7 @@
     </LinearLayout>
 
 
-    <LinearLayout
+    <!--<LinearLayout
         android:id="@+id/li_subject"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -50,9 +50,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin.normal"
-            android:text="@string/subject"
+            android:content="@string/subject"
             android:textColor="@color/primary_text"
-            android:textSize="@dimen/text.16" />
+            android:textSize="@dimen/content.16" />
 
         <TextView
             android:id="@+id/tv_subject"
@@ -60,10 +60,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin.small"
             android:textColor="@color/secondary_text"
-            android:textSize="@dimen/text.14"
-            tools:text="Authors" />
+            android:textSize="@dimen/content.14"
+            tools:content="Authors" />
 
-    </LinearLayout>
+    </LinearLayout>-->
 
 
     <LinearLayout

@@ -16,13 +16,11 @@ class ThemeItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(item: Theme) {
         itemView.tv_theme.text = item.title
-        item.subject = Subject(Integer.toString(Random().nextInt(100) + 1), "iOS")
-        itemView.tv_subject.text = item.subject.name
+//        itemView.tv_subject.content = item.subject.name
         itemView.setOnLongClickListener {
             listener.openStudentAction(adapterPosition)
             true
         }
-//        itemView.tv_curator.text = item.curator?.name
     }
 
 

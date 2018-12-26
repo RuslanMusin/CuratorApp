@@ -21,7 +21,7 @@ import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import io.reactivex.disposables.Disposable
 import com.google.gson.reflect.TypeToken
-import com.summer.itis.curatorapp.ui.student.search.search_filter.SearchFilterFragment.Companion.EDIT_CHOOSED_SKILLS
+import com.summer.itis.curatorapp.utils.Const.EDIT_CHOOSED_SKILLS
 import kotlinx.android.synthetic.main.fragment_edit_skills.*
 import kotlinx.android.synthetic.main.layout_recycler_list.*
 import kotlinx.android.synthetic.main.toolbar_choose.*

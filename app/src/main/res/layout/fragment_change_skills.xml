@@ -46,7 +46,7 @@
             android:layout_alignParentTop="true"
             android:background="@color/colorPrimary"
             android:textColor="@color/white"
-            android:text="@string/save_changes"/>-->
+            android:content="@string/save_changes"/>-->
 
         <LinearLayout
             android:layout_width="match_parent"

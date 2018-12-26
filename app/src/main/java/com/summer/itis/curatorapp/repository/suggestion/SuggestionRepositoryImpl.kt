@@ -25,7 +25,7 @@ class SuggestionRepositoryImpl(val apiService: SuggestionService): SuggestionRep
         return apiService.findCuratorSuggestionComments(curatorId, suggestionsId).compose(RxUtils.asyncSingle())
     }
 
-    override fun postCuratorSuggestion(id: String, suggestion: SuggestionApi): Single<Result<SuggestionTheme>> {
+    override fun postCuratorSuggestion(id: String, suggestion: SuggestionTheme): Single<Result<SuggestionTheme>> {
         return apiService.postCuratorSuggestion(id, suggestion).compose(RxUtils.asyncSingle())
     }
 

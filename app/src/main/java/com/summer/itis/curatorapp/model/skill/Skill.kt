@@ -9,13 +9,13 @@ class Skill: Identified {
 
     lateinit var name: String
 
-    var level: String = LOW_LEVEL
+//    var level: String = LOW_LEVEL
 
     override fun equals(other: Any?): Boolean {
         if(other != null) {
             if (other.javaClass.canonicalName.equals(this.javaClass.canonicalName)) {
                 val skill = other as Skill
-                if(skill.name.equals(this.name) && skill.level.equals(this.level)) {
+                if(skill.name.equals(this.name)) {
                     return true
                 }
                 return false
@@ -28,7 +28,6 @@ class Skill: Identified {
     override fun hashCode(): Int {
         var result = id.hashCode()
         result = 31 * result + name.hashCode()
-        result = 31 * result + level.hashCode()
         return result
     }
 

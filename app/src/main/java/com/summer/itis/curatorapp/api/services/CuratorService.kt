@@ -16,7 +16,7 @@ interface CuratorService {
 
     @PUT("curators/{curator_id}")
     fun update(@Path(value = "curator_id") id: String,
-               @Body curator: CuratorApi
+               @Body curator: Curator
     ): Single<Result<Curator>>
 
 }

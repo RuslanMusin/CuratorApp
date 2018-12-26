@@ -20,4 +20,12 @@ class Step: Identified {
     lateinit var dateFinish: Date
 
     lateinit var status: Status
+
+    @SerializedName("status_id")
+    var statusId: String? = null
+
+    fun setApiFields() {
+        statusId = status.id
+    }
+
 }

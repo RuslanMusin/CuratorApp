@@ -122,13 +122,13 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
 
     /*   private fun setUserBtnText() {
            when (type) {
-               ADD_FRIEND -> btn_add_friend.setText(R.string.add_friend)
+               ADD_FRIEND -> btn_add_friend.setContent(R.string.add_friend)
 
-               ADD_REQUEST -> btn_add_friend.setText(R.string.add_friend)
+               ADD_REQUEST -> btn_add_friend.setContent(R.string.add_friend)
 
-               REMOVE_FRIEND -> btn_add_friend.setText(R.string.remove_friend)
+               REMOVE_FRIEND -> btn_add_friend.setContent(R.string.remove_friend)
 
-               REMOVE_REQUEST -> btn_add_friend.setText(R.string.remove_request)
+               REMOVE_REQUEST -> btn_add_friend.setContent(R.string.remove_request)
 
                OWNER_TYPE -> {
                    btn_add_friend.visibility = View.GONE
@@ -176,7 +176,7 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
     }
 
     override fun logout() {
-        LoginActivity.start(requireActivity())
+        activity?.let { LoginActivity.start(it) }
     }
 
     private fun giveTheme() {

@@ -11,7 +11,7 @@ import java.util.*
 
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
-    var year = 2018
+    var year = 2017
     var month = 12
     var day = 30
 

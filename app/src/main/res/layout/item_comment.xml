@@ -52,8 +52,8 @@
                 android:layout_marginTop="@dimen/margin.small"
                 android:fontFamily="sans-serif"
                 android:textColor="@color/secondary_text"
-                android:textSize="@dimen/text.14"
-                tools:text="Secondary text" />-->
+                android:textSize="@dimen/content.14"
+                tools:content="Secondary content" />-->
 
             <com.ms.square.android.expandabletextview.ExpandableTextView
                 xmlns:android="http://schemas.android.com/apk/res/android"

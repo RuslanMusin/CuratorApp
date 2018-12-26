@@ -49,7 +49,7 @@
             android:layout_centerInParent="true"
             android:gravity="center"
             android:padding="@dimen/margin_normal"
-            android:text="
+            android:content="
     sample.sample.sample.sample.sample.sample.sample.sample.sample.sample.\n
     "
             android:textColor="@color/white"
@@ -72,9 +72,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="4dp"
-            android:textSize="@dimen/text.14"
+            android:textSize="@dimen/content.14"
             android:paddingBottom="8dp"
-            android:text="Content"
+            android:content="Content"
             android:textColor="@color/primary_dark_text" />-->
 
         <LinearLayout

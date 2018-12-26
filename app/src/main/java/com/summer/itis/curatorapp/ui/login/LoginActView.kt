@@ -14,4 +14,5 @@ interface LoginActView: BaseActView {
     fun createCookie(email: String, password: String)
 
     fun goToProfile(curator: Curator)
+
 }

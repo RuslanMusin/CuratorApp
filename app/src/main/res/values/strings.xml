@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Curator</string>
+    <string name="app_name">CuratorApp</string>
 
     <string name="progress_message">Загрузка…</string>
 
@@ -388,6 +388,17 @@
     <string name="date_start">Дата начала</string>
     <string name="date_finish">Дата завершения</string>
     <string name="links">Материалы</string>
+    <string name="suggestion">Предложение</string>
+    <string name="not_done">Не выполнен</string>
+    <string name="in_process">В процессе</string>
+    <string name="done">Выполнен</string>
+    <string name="materials">Материалы</string>
+    <string name="add_material">Добавление материала</string>
+    <string name="card_progress">Карта прогресса</string>
+    <string name="change_step">Изменение шага</string>
+    <string name="step">Шаг курсовой</string>
+    <string name="connection_reset">Ошибка подключения к серверу. Попробуйте переподключиться</string>
+    <string name="server_reset">Ошибка подключения</string>
 
 
     <string-array name="courses">

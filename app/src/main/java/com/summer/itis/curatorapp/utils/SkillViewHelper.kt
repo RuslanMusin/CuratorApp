@@ -26,7 +26,7 @@ class SkillViewHelper {
             if(skills.size != 0) {
                 val listSkills: MutableList<String> = ArrayList()
                 for(i in skills.indices) {
-                    listSkills.add("${skills[i].name} ${context.getString(R.string.level)} ${skills[i].level}")
+                    listSkills.add(skills[i].name)
                 }
                 return getListString(listSkills)
             } else {

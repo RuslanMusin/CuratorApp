@@ -1,7 +1,6 @@
 package com.summer.itis.curatorapp.api.services
 
 import com.summer.itis.curatorapp.model.comment.Comment
-import com.summer.itis.curatorapp.model.help.StepApi
 import com.summer.itis.curatorapp.model.step.Step
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
@@ -47,7 +46,7 @@ interface WorkStepService {
     @POST("curators/{curator_id}/works/{work_id}/steps")
     fun postCuratorWorkStep(@Path(value = "curator_id") id: String,
                             @Path(value = "work_id") workId: String,
-                            @Body step: StepApi
+                            @Body step: Step
     ): Single<Result<Step>>
 
     @DELETE("curators/{curator_id}/works/{work_id}/steps/{step_id}")
@@ -59,7 +58,7 @@ interface WorkStepService {
     fun updateCuratorWorkStep(@Path(value = "curator_id") curatorId: String,
                               @Path(value = "work_id") workId: String,
                               @Path(value = "step_id") stepId: String,
-                              @Body step: StepApi
+                              @Body step: Step
     ): Single<Result<Step>>
 
     @POST("curators/{curator_id}/works/{work_id}/steps/{step_id}/comments")

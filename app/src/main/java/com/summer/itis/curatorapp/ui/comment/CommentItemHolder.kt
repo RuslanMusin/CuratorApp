@@ -25,9 +25,9 @@ class CommentItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val authorId = comment.authorId
 
         itemView.tv_name.text = comment.authorName
-        itemView.expand_text_view.text = comment.text
+        itemView.expand_text_view.text = comment.content
 
-        val date = FormatterUtil.getRelativeTimeSpanString(itemView.context, comment.createdDate)
+        val date = FormatterUtil.getRelativeTimeSpanString(itemView.context, comment.createdDate.time)
         itemView.tv_date.setText(date)
 
         itemView.iv_reply.setOnClickListener { commentClickListener?.onReplyClick(adapterPosition) }

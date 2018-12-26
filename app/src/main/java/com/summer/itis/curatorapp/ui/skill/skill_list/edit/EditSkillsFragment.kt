@@ -14,11 +14,14 @@ import com.summer.itis.curatorapp.model.skill.Skill
 import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_PROFILE
+import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_THEMES
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.skill.skill_list.view.SkillListFragment.Companion.EDIT_SKILLS
+import com.summer.itis.curatorapp.ui.student.search.choose_skill.ChooseAddSkillFragment
 import com.summer.itis.curatorapp.ui.student.search.choose_skill_main.ChooseSkillFragment
 import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const.ADD_SKILL
+import com.summer.itis.curatorapp.utils.Const.CHOOSE_SKILL
 import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
 import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
 import com.summer.itis.curatorapp.utils.Const.TAG_LOG
@@ -175,6 +178,7 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
 
     private fun saveChanges() {
         AppHelper.currentCurator.skills = skills
+
         presenter.updateCuratorSkills(AppHelper.currentCurator)
     }
 
@@ -192,11 +196,11 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
     }
 
     private fun addSkill() {
-       /* val fragment = AddSkillFragment.newInstance(mainListener)
+        /*val fragment = ChooseSkillFragment.newInstance(mainListener)
         fragment.setTargetFragment(this, ADD_SKILL)
         mainListener.showFragment(SHOW_PROFILE, this, fragment)*/
-        val fragment = ChooseSkillFragment.newInstance(mainListener)
-        fragment.setTargetFragment(this, ADD_SKILL)
+        val fragment = ChooseAddSkillFragment.newInstance(mainListener)
+        fragment.setTargetFragment(this, CHOOSE_SKILL)
         mainListener.showFragment(SHOW_PROFILE, this, fragment)
     }
 
@@ -245,7 +249,7 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
     override fun onActivityResult(reqCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(reqCode, resultCode, data)
 
-        if (reqCode == ADD_SKILL && resultCode == Activity.RESULT_OK) {
+        if (reqCode == CHOOSE_SKILL && resultCode == Activity.RESULT_OK) {
             Log.d(TAG_LOG, "getResult")
             data?.getStringExtra(SKILL_KEY)?.let {
                 skill = gsonConverter.fromJson(it, Skill::class.java)
@@ -271,7 +275,7 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
         changeDataSet(skills)
     }
 
-    override fun chooseLevel(pos: Int, level: String) {
+  /*  override fun chooseLevel(pos: Int, level: String) {
         skills[pos].level = level
-    }
+    }*/
 }

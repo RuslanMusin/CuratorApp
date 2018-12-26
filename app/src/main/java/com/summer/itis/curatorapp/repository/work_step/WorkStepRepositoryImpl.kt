@@ -2,7 +2,6 @@ package com.summer.itis.curatorapp.repository.work_step
 
 import com.summer.itis.curatorapp.api.services.WorkStepService
 import com.summer.itis.curatorapp.model.comment.Comment
-import com.summer.itis.curatorapp.model.help.StepApi
 import com.summer.itis.curatorapp.model.step.Step
 import com.summer.itis.curatorapp.utils.RxUtils
 import io.reactivex.Single
@@ -34,11 +33,11 @@ class WorkStepRepositoryImpl(val apiService: WorkStepService): WorkStepRepositor
         return apiService.findCuratorStepMaterials(curatorId, workId, stepId).compose(RxUtils.asyncSingle())
     }
 
-    override fun postCuratorWorkStep(curatorId: String, workId: String, step: StepApi): Single<Result<Step>> {
+    override fun postCuratorWorkStep(curatorId: String, workId: String, step: Step): Single<Result<Step>> {
         return apiService.postCuratorWorkStep(curatorId, workId, step).compose(RxUtils.asyncSingle())
     }
 
-    override fun updateCuratorWorkStep(curatorId: String, workId: String, step: StepApi): Single<Result<Step>> {
+    override fun updateCuratorWorkStep(curatorId: String, workId: String, step: Step): Single<Result<Step>> {
         return apiService.updateCuratorWorkStep(curatorId, workId, step.id, step).compose(RxUtils.asyncSingle())
     }
 

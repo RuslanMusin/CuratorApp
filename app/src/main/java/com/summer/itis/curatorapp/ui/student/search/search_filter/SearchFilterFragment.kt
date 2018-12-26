@@ -21,6 +21,7 @@ import com.summer.itis.curatorapp.ui.student.search.choose_skill_main.ChooseSkil
 import com.summer.itis.curatorapp.ui.student.search.edit_choose_skill.EditChooseLIstFragment
 import com.summer.itis.curatorapp.utils.Const.ADD_SKILL
 import com.summer.itis.curatorapp.utils.Const.COURSE_KEY
+import com.summer.itis.curatorapp.utils.Const.EDIT_CHOOSED_SKILLS
 import com.summer.itis.curatorapp.utils.Const.FILTERS
 import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
@@ -49,7 +50,6 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
 
         const val TAG_SKILLS = "TAG_SKILLS"
 
-        const val EDIT_CHOOSED_SKILLS = 5
 
         const val ADD_COURSE = 3
 
@@ -220,7 +220,7 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
                         val skillJson = it.getStringExtra(SKILL_KEY)
                         val skill = gsonConverter.fromJson(skillJson, Skill::class.java)
                         skills.add(skill)
-                        val skillText = "${skill.name} ${getString(R.string.level)} ${skill.level}"
+                        val skillText = skill.name
                         listSkills.add(skillText)
                         tv_added_skills.text = getListString(listSkills)
                     }
@@ -236,7 +236,7 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
                             tv_added_skills.text = getString(R.string.doesnt_matter_for_all)
                         } else {
                             for (i in listSkills.indices) {
-                                listSkills[i] = "${skills[i].name} ${getString(R.string.level)} ${skills[i].level}"
+                                listSkills[i] = skills[i].name
                             }
                             tv_added_skills.text = getListString(listSkills)
                         }
@@ -262,7 +262,7 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
     private fun getSkillsText(): String {
         listSkills.clear()
         for(i in skills.indices) {
-            listSkills.add("${skills[i].name} ${getString(R.string.level)} ${skills[i].level}")
+            listSkills.add(skills[i].name)
         }
         return getListString(listSkills)
     }

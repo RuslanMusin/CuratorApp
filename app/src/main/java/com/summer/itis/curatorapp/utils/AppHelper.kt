@@ -55,22 +55,11 @@ class AppHelper {
         val dataReference: DatabaseReference = FirebaseDatabase.getInstance().reference*/
 
         fun setUserPhoto(photoView: ImageView, curator: Person, context: Context) {
-            if (curator.isStandartPhoto) {
+
                 Glide.with(context)
                         .load(R.drawable.teacher)
                         .into(photoView)
-              /*  val imageReference = curator.photoUrl?.let { AppHelper.storageReference.child(it) }
 
-                Log.d(TAG_LOG, "name " + (imageReference?.path ?: ""))
-
-                Glide.with(context)
-                        .load(imageReference)
-                        .into(photoView)*/
-            } else {
-                Glide.with(context)
-                        .load(curator.photoUrl)
-                        .into(photoView)
-            }
         }
 
         fun getLevelStr(level: Int, context: Context): String {
@@ -99,8 +88,8 @@ class AppHelper {
 
         fun saveCurrentState(curator: Curator, context: Context) {
             val editor = context.getSharedPreferences(curator.email, MODE_PRIVATE).edit()
-            val curatorJson = gsonConverter.toJson(curator)
-            editor.putString(USER_KEY, curatorJson)
+          /*  val curatorJson = gsonConverter.toJson(curator)
+            editor.putString(USER_KEY, curatorJson)*/
             editor.apply()
         }
 
@@ -227,7 +216,7 @@ class AppHelper {
                 val skill = Skill()
                 skill.id = skillNames[i]
                 skill.name = skillNames[i]
-                skill.level = getLevelStr(i % 3, context)
+//                skill.level = getLevelStr(i % 3, context)
                 skills.add(skill)
             }
             return skills
@@ -240,7 +229,7 @@ class AppHelper {
                 val skill = Skill()
                 skill.id = "$skillNames[i] $i"
                 skill.name = skillNames[i % 3] + "$i"
-                skill.level = getLevelStr(i % 3, context)
+//                skill.level = getLevelStr(i % 3, context)
                 skills.add(skill)
             }
             return skills
@@ -303,23 +292,23 @@ class AppHelper {
                 when (i % 4) {
 
                     0 -> {
-                        student.groupNumber = "11-601"
-                        student.year = 1
+                        student.group.name = "11-601"
+                        student.courseNumber = 1
                     }
 
                     1 -> {
-                        student.groupNumber = "11-602"
-                        student.year = 2
+                        student.group.name = "11-602"
+                        student.courseNumber = 2
                     }
 
                     2 -> {
-                        student.groupNumber = "11-603"
-                        student.year = 3
+                        student.group.name = "11-603"
+                        student.courseNumber = 3
                     }
 
                     3 -> {
-                        student.groupNumber = "11-604"
-                        student.year = 4
+                        student.group.name = "11-604"
+                        student.courseNumber = 4
                     }
                 }
                 studentList.add(student)
@@ -334,8 +323,8 @@ class AppHelper {
             when (number) {
 
                 0 -> {
-                    student.year = 1
-                    student.groupNumber = "11-603"
+                    student.courseNumber = 1
+                    student.group.name = "11-603"
                     student.name = "Ruslan"
                     student.lastname = "Nusin"
                     student.patronymic  = "Maratovich"
@@ -343,8 +332,8 @@ class AppHelper {
                 }
 
                 1 -> {
-                    student.year = 2
-                    student.groupNumber = "11-602"
+                    student.courseNumber = 2
+                    student.group.name = "11-602"
                     student.name = "Valery"
                     student.lastname = "Petrov"
                     student.patronymic  = "Rinatovich"
@@ -352,8 +341,8 @@ class AppHelper {
                 }
 
                 2 -> {
-                    student.year = 3
-                    student.groupNumber = "11-605"
+                    student.courseNumber = 3
+                    student.group.name = "11-605"
                     student.name = "Rinat"
                     student.lastname = "Muhametzyanov"
                     student.patronymic  = "Azatovich"

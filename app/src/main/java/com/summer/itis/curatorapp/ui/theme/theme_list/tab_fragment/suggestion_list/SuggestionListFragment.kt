@@ -308,7 +308,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
         val pattern: Pattern = Pattern.compile("${query.toLowerCase()}.*")
         val list: MutableList<SuggestionTheme> = java.util.ArrayList()
         for(skill in suggestions) {
-            if(pattern.matcher(skill.themeProgress?.title?.toLowerCase()).matches()) {
+            if(pattern.matcher(skill.theme?.title?.toLowerCase()).matches()) {
                 list.add(skill)
             }
         }

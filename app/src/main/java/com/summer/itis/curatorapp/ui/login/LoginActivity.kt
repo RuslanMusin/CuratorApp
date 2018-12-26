@@ -90,7 +90,7 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginActView, View.OnClick
     }
 
     override fun goToProfile(curator: Curator) {
-        AppHelper.setCurrentState(curator.email, this)
+//        AppHelper.setCurrentState(curator.email, this)
         NavigationBaseActivity.start(this)
     }
 

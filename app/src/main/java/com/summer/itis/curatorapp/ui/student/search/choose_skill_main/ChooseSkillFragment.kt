@@ -18,6 +18,7 @@ import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.student.search.choose_skill.ChooseAddSkillFragment
 import com.summer.itis.curatorapp.ui.student.student_list.StudentAdapter
 import com.summer.itis.curatorapp.utils.Const.ADD_SKILL
+import com.summer.itis.curatorapp.utils.Const.CHOOSE_SKILL
 import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import kotlinx.android.synthetic.main.fragment_choose_skill.*
@@ -41,9 +42,6 @@ class ChooseSkillFragment : BaseFragment<ChooseSkillMainPresenter>(), ChooseSkil
 
         const val TAG_SKILLS = "TAG_SKILLS"
 
-        const val CHOOSE_SKILL = 1
-
-        const val CHOOSE_LEVEL = 2
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
             val fragment = ChooseSkillFragment()
@@ -117,7 +115,7 @@ class ChooseSkillFragment : BaseFragment<ChooseSkillMainPresenter>(), ChooseSkil
 
     private fun addSkill() {
         val intent = Intent()
-        level?.let { skill?.level = it }
+//        level?.let { skill?.level = it }
         val skillJson = gsonConverter.toJson(skill)
         intent.putExtra(SKILL_KEY, skillJson)
         targetFragment?.onActivityResult(ADD_SKILL, RESULT_OK, intent)

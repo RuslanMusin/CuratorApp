@@ -22,7 +22,7 @@ class StudentPresenter(): BaseFragPresenter<StudentView>() {
          student.patronymic = "Martovich"
          student.description = "usual desc"
          student.groupNumber = "11-603"
-         student.year = 3
+         student.courseNumber = 3
          viewState.setUserData(student)
      }*/
 

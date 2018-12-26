@@ -79,13 +79,14 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_back)
-        mainListener.setToolbarTitle(getString(R.string.work))
+        toolbar_title.text = getString(R.string.work)
+//        mainListener.setToolbarTitle(getString(R.string.work))
     }
 
     private fun setListeners() {
         btn_back.setOnClickListener(this)
         li_skills.setOnClickListener(this)
-        li_student.setOnClickListener(this)
+//        li_student.setOnClickListener(this)
     }
 
     override fun showWork(work: Work) {
@@ -107,7 +108,7 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
 
             R.id.btn_back -> backFragment()
 
-            R.id.li_student -> showStudent()
+//            R.id.li_student -> showStudent()
 
             R.id.li_skills -> showSteps()
         }

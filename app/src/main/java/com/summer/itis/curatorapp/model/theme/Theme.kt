@@ -7,10 +7,12 @@ import com.summer.itis.curatorapp.utils.Const.ALL_CHOOSED
 import java.util.*
 
 class Theme: AbsTheme() {
-
-    lateinit var curatorId: String
-    lateinit var studentId: String
-    lateinit var subjectId: String
+    @SerializedName("curator_id")
+    var curatorId: String? = null
+    @SerializedName("student_id")
+    var studentId: String? = null
+    @SerializedName("subject_id")
+    var subjectId: String? = null
 
     @SerializedName("date_creation")
     lateinit var dateCreation: Date
@@ -21,4 +23,11 @@ class Theme: AbsTheme() {
     var student: Student? = null
 
     var targetType: String = ALL_CHOOSED
+
+    fun setApiFields() {
+        curatorId = curator?.id
+        studentId = student?.id
+        subjectId = subject.id
+        setSkillsIds()
+    }
 }

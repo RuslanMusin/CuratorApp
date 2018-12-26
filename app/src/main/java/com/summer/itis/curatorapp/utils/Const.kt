@@ -5,6 +5,27 @@ import com.google.gson.Gson
 //обычный класс констант и прочего общего кода
 object Const {
 
+    const val REQUEST_CODE = "REQUEST_CODE"
+
+    const val ADD_SUBJECT: Int = 1
+    const val ADD_STUDENT: Int = 2
+    //Edit
+    const val EDIT_SUGGESTION = 3
+    const val EDIT_THEME = 4
+    const val EDIT_STEP = 5
+    const val ADD_SKILL = 6
+    const val CHOOSE_SKILL = 7
+    const val CHOOSE_LEVEL = 8
+    const val EDIT_CHOOSED_SKILLS = 9
+    const val ADD_MATERIAL = 10
+
+    const val SEND_THEME = 100
+    const val FILTERS = 101
+
+    const val ADD_THEME_TYPE = "ADD_THEME"
+
+
+
     const val LOW_LEVEL = "Низкий"
 
     const val FILTER_YEAR = 1950
@@ -17,6 +38,7 @@ object Const {
     const val MORE_TEXT = "..."
 
     const val SPACE = " "
+
 
     //suggestion_theme_status
     const val WAITING_CURATOR = "WAITING_CURATOR"
@@ -31,6 +53,25 @@ object Const {
     const val ACCEPTED_STUDENT = "ACCEPTED_STUDENT"
     const val ACCEPTED_BOTH = "ACCEPTED_BOTH"
 
+    //suggestion_theme_status_num
+    const val WAITING_CURATOR_NUM = "1"
+    const val WAITING_STUDENT_NUM = "2"
+    const val IN_PROGRESS_CURATOR_NUM = "3"
+    const val IN_PROGRESS_STUDENT_NUM = "4"
+    const val CHANGED_CURATOR_NUM = "5"
+    const val CHANGED_STUDENT_NUM = "6"
+    const val REJECTED_CURATOR_NUM = "7"
+    const val REJECTED_STUDENT_NUM = "8"
+    const val ACCEPTED_BOTH_NUM = "9"
+    const val ACCEPTED_CURATOR_NUM = "10"
+    const val ACCEPTED_STUDENT_NUM = "11"
+
+    //step status_num
+    const val NOT_DONE = "1"
+    const val IN_PROCESS = "2"
+    const val DONE = "3"
+
+
     const val CURATOR_KEY = "curator"
     const val STUDENT_KEY = "student"
 
@@ -39,9 +80,12 @@ object Const {
     const val THEME_KEY = "suggestionTheme"
 
     const val COURSE_KEY = "course_key"
+
+    const val SUGGESTION_KEY = "suggestion_key"
+
     const val WORK_KEY = "work_key"
     const val STEP_KEY = "step_key"
-
+    const val MATERIAL_KEY = "material_key"
     const val DESC_KEY = "desc"
 
     const val PERSON_TYPE = "PERSON_TYPE"
@@ -49,6 +93,7 @@ object Const {
     const val STUDENT_TYPE = "STUDENT_TYPE"
 
     const val SUGGESTION_TYPE = "SUGGESTION_TYPE"
+    const val STEP_TYPE = "STEP_TYPE"
     const val THEME_TYPE = "THEME_TYPE"
 
     const val TYPE = "TYPE"
@@ -56,11 +101,7 @@ object Const {
     const val ALL_CHOOSED = "all_choosed"
     const val ONE_CHOOSED = "one_choosed"
 
-    const val ADD_SKILL = 6
-    const val SEND_THEME = 100
-    const val FILTERS = 101
 
-    const val REQUEST_CODE = "REQUEST_CODE"
 
 
     const val BOT_ID = "6n5OesjRMGN0jFAhP5jG9hxtaRg2"
@@ -101,7 +142,7 @@ object Const {
     const val CSRF_TOKEN = "X-CSRFToken"
     const val APP_JSON = "application/json"
     const val CSRF_TOKEN_VALUE = "l35FZP6OxS5ZgIpT1f3Qmv6h36N7qRptcSjAMZk6pebCUU7wm15YK3xLAZC9OcRj"
-    const val AUTH_VALUE = "Token 7693b0639732d984be86e310f955d0d2d8aef782"
+    const val AUTH_VALUE = "Token dsfasd"
 
     var AUTH_VALUE_2 = AUTH_VALUE
 
@@ -234,12 +275,7 @@ object Const {
         val MAX_NAME_LENGTH = 120
     }
 
-    //Edit
-    const val EDIT_SUGGESTION = 2
-    const val EDIT_THEME = 3
-    const val ADD_THEME_TYPE = "ADD_THEME"
 
-    const val EDIT_STEP = 4
 
 
 }

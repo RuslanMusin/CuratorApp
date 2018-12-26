@@ -13,6 +13,7 @@ import com.summer.itis.curatorapp.model.theme.Status
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
+import com.summer.itis.curatorapp.utils.Const.IN_PROCESS
 import com.summer.itis.curatorapp.widget.DatePickerFragment
 import kotlinx.android.synthetic.main.fragment_add_step.*
 import kotlinx.android.synthetic.main.fragment_step.*
@@ -71,6 +72,7 @@ class AddStepFragment : BaseFragment<AddStepPresenter>(), AddStepView, View.OnCl
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_back_done)
+        toolbar_title.text = getString(R.string.add_material)
     }
 
     private fun setListeners() {
@@ -98,10 +100,9 @@ class AddStepFragment : BaseFragment<AddStepPresenter>(), AddStepView, View.OnCl
                 step.id = "${Random().nextInt(24000)}"
                 step.title = et_title.text.toString()
                 step.description = et_description.text.toString()
-                step.links = et_links.text.toString()
                 step.dateStart = dialogStart.getDate()
                 step.dateFinish = dialogFinish.getDate()
-                step.status = Status("1", "wait")
+                step.status = Status(IN_PROCESS, getString(R.string.in_process))
                 if(validateData()) {
                     context?.let { presenter.addStep(workId, step) }
                 } else {

@@ -17,15 +17,14 @@ import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.student.search.search_filter.SearchFilterFragment
 import com.summer.itis.curatorapp.ui.student.student_item.StudentFragment
-import com.summer.itis.curatorapp.ui.theme.add_theme.AddThemeFragment.Companion.ADD_STUDENT
 import com.summer.itis.curatorapp.utils.Const
+import com.summer.itis.curatorapp.utils.Const.ADD_STUDENT
 import com.summer.itis.curatorapp.utils.Const.COURSE_KEY
 import com.summer.itis.curatorapp.utils.Const.FILTERS
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.REQUEST_CODE
 import com.summer.itis.curatorapp.utils.Const.SEND_THEME
 import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
-import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
 import com.summer.itis.curatorapp.utils.Const.TAB_NAME
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import io.reactivex.disposables.Disposable
@@ -109,16 +108,16 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
                 student.lastname = "Musin"
                 student.patronymic = "Martovich"
                 student.description = "usual desc"
-                student.groupNumber = "11-603"
-                student.year = 3
+                student.group.name = "11-603"
+                student.courseNumber = 3
                 student.skills = skillOther.subList(0, 4)
             } else {
                 student.name = "Azat"
                 student.lastname = "Alekbaev"
                 student.patronymic = "Azatovich"
                 student.description = "usual desc"
-                student.groupNumber = "11-605"
-                student.year = 1
+                student.group.name = "11-605"
+                student.courseNumber = 1
                 student.skills = skillOther.subList(5, 9)
             }
             students.add(student)
@@ -134,7 +133,7 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
 
         skill.name = "Java"
         skill.id = "101"
-        skill.level = getString(R.string.medium_level)
+//        skill.level = getString(R.string.medium_level)
         skills.add(skill)
 
         var level: Int
@@ -143,10 +142,10 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
             skill = Skill()
             skill.id = "$i"
             if(i % 2 == 0) {
-                skill.level = getString(R.string.low_level)
+//                skill.level = getString(R.string.low_level)
                 skill.name = "Machine Learning $i"
             } else {
-                skill.level = getString(R.string.high_level)
+//                skill.level = getString(R.string.high_level)
                 skill.name = "Android $i"
             }
            /* level = Random().nextInt(3)
@@ -324,7 +323,7 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
         if(courses.size != 0) {
             var yearFlag = false
             for (year in courses) {
-                if (student.year == year) {
+                if (student.courseNumber == year) {
                     yearFlag = true
                 }
             }

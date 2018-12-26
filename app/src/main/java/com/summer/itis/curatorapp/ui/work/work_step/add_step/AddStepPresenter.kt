@@ -2,7 +2,6 @@ package com.summer.itis.curatorapp.ui.work.work_step.add_step
 
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
-import com.summer.itis.curatorapp.model.help.StepApi
 import com.summer.itis.curatorapp.model.step.Step
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
@@ -16,9 +15,9 @@ class AddStepPresenter(): BaseFragPresenter<AddStepView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun addStep(workId: String, step: Step) {
-        val stepApi = StepApi(step)
+        step.setApiFields()
         val disposable = RepositoryProvider.workStepRepository
-            .postCuratorWorkStep(AppHelper.currentCurator.id, workId, stepApi).subscribe { res ->
+            .postCuratorWorkStep(AppHelper.currentCurator.id, workId, step).subscribe { res ->
             Log.d(Const.TAG_LOG, "receive work response")
             if(res == null) {
                 Log.d(Const.TAG_LOG, "work res == null")

@@ -12,23 +12,17 @@ import com.summer.itis.curatorapp.model.common.Identified
 
 abstract class Person: Identified {
 
-    @Expose
     override lateinit var id: String
-
+    @Transient
     lateinit var email: String
-    @Expose
     lateinit var name: String
     @SerializedName("last_name")
     lateinit var lastname: String
-    @Expose
     lateinit var patronymic: String
-    var photoUrl: String = STUB_PATH
-    @Expose
     var description: String = "standart description"
-    var isStandartPhoto: Boolean = true
-    var status: String = OFFLINE_STATUS
-
+    @Transient
     var skills: MutableList<Skill> = ArrayList()
+
     @Transient
     var suggestions: MutableList<SuggestionTheme> = ArrayList()
     @Transient
@@ -36,7 +30,24 @@ abstract class Person: Identified {
     @Transient
     var works: MutableList<Work> = ArrayList()
 
+    @SerializedName("skills_id")
+    var skillsIds: MutableList<String> = ArrayList()
+        /*get() {
+            val list: MutableList<String> = ArrayList()
+            for(skill in skills) {
+                list.add(skill.id)
+            }
+            skillsIds = list
+            return list
+        }*/
+
     fun getFullName(): String {
         return "$lastname $name $patronymic"
+    }
+
+    fun setSkillsIds() {
+        for(skill in skills) {
+            skillsIds.add(skill.id)
+        }
     }
 }

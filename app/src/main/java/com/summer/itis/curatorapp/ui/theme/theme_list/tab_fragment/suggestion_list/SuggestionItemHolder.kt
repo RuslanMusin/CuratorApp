@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.theme.SuggestionTheme
+import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const.ACCEPTED_BOTH
 import com.summer.itis.curatorapp.utils.Const.CHANGED_CURATOR
 import com.summer.itis.curatorapp.utils.Const.CHANGED_STUDENT
@@ -22,9 +23,10 @@ class SuggestionItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private lateinit var listener: SuggestionListView
 
     fun bind(item: SuggestionTheme) {
-        itemView.tv_theme.text = item.themeProgress?.title
-        itemView.tv_subject.text = item.theme?.subject?.name
-        itemView.tv_status.text = setStatus(item.status.name)
+//        itemView.tv_theme.content = item.themeProgress?.title
+        itemView.tv_theme.text = item.theme?.title
+//        itemView.tv_subject.content = item.theme?.subject?.name
+        itemView.tv_status.text = getStatus(item.status.name)
         itemView.setOnLongClickListener {
             listener.chooseUserFakeAction(adapterPosition)
             true
@@ -42,7 +44,7 @@ class SuggestionItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         }
     }
 
-    fun setStatus(status: String): String {
+    fun getStatus(status: String): String {
         var uiStatus = ""
         itemView.context.let {
             when (status) {

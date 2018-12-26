@@ -12,19 +12,31 @@ class SuggestionTheme: Identified {
 
     lateinit override var id: String
 
-    lateinit var themeId: String
-    lateinit var curatorId: String
-    lateinit var studentId: String
-    lateinit var themeProgressId: String
-    var status: Status = Status(Integer.toString(Random().nextInt(100) + 1), WAITING_CURATOR)
-    @SerializedName("date_creation")
-    lateinit var dateCreation: Date
-
-    lateinit var progress: String
-    var type: String = STUDENT_TYPE
-
     var curator: Curator? = null
     var student: Student? = null
     var themeProgress: ThemeProgress? = null
     var theme: Theme? = null
+    var status: Status = Status(Integer.toString(Random().nextInt(100) + 1), WAITING_CURATOR)
+    @SerializedName("theme_id")
+    var themeId: String? = theme?.id
+    @SerializedName("curator_id")
+    var curatorId: String? = curator?.id
+    @SerializedName("student_id")
+    var studentId: String? = student?.id
+    @SerializedName("status_id")
+    var statusId: String? = status?.id
+    lateinit var themeProgressId: String
+    @SerializedName("date_creation")
+    lateinit var dateCreation: Date
+    @SerializedName("progress_id")
+    lateinit var progressId: String
+    var type: String = STUDENT_TYPE
+
+    fun setApiFileds() {
+        themeId = theme?.id
+        curatorId = curator?.id
+        studentId = student?.id
+        statusId = status?.id
+    }
+
 }

@@ -253,8 +253,7 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
 
             override fun onQueryTextSubmit(query: String): Boolean {
 //                presenter.loadOfficialTestsByQUery(query)
-                findFromList(query)
-
+//                findFromList(query)
                 if (!finalSearchView.isIconified) {
                     finalSearchView.isIconified = true
                 }
@@ -263,6 +262,7 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
+                findFromList(newText)
                 return false
             }
         })

@@ -1,7 +1,6 @@
 package com.summer.itis.curatorapp.api.services
 
 import com.summer.itis.curatorapp.model.theme.Theme
-import com.summer.itis.curatorapp.model.help.ThemeApi
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
 import retrofit2.http.*
@@ -22,7 +21,7 @@ interface ThemeService {
 
     @POST("curators/{curator_id}/themes")
     fun postCuratorTheme(@Path(value = "curator_id") id: String,
-                         @Body theme: ThemeApi
+                         @Body theme: Theme
     ): Single<Result<Theme>>
 
     @DELETE("curators/{curator_id}/themes/{theme_id}")
@@ -32,7 +31,7 @@ interface ThemeService {
     @PUT("curators/{curator_id}/themes/{theme_id}")
     fun updateCuratorTheme(@Path(value = "curator_id") curatorId: String,
                            @Path(value = "theme_id") themeId: String,
-                           @Body theme: ThemeApi
+                           @Body theme: Theme
     ): Single<Result<Theme>>
 
 }

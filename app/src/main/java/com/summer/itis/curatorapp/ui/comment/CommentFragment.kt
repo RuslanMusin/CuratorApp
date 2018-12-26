@@ -17,6 +17,7 @@ import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.layout_add_comment.*
 import kotlinx.android.synthetic.main.layout_recycler_list.*
 import java.util.*
+import kotlin.collections.HashMap
 
 abstract class CommentFragment<Presenter: CommentPresenter<*>>: BaseFragment<Presenter>(), CommentView {
 
@@ -26,8 +27,8 @@ abstract class CommentFragment<Presenter: CommentPresenter<*>>: BaseFragment<Pre
 
     abstract var presenter: Presenter
 
-    protected abstract var entityId: String
-//    protected abstract var repository: CommentRepository
+    protected abstract var map: HashMap<String, String>
+    protected abstract var type: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,7 +59,7 @@ abstract class CommentFragment<Presenter: CommentPresenter<*>>: BaseFragment<Pre
 
         sendButton.setOnClickListener {
             if ((activity as BaseActivity<*>).hasInternetConnection()) {
-                sendComment(entityId)
+                sendComment()
             } else {
                 (activity as BaseActivity<*>).showSnackBar(R.string.internet_connection_failed)
             }
@@ -83,7 +84,7 @@ abstract class CommentFragment<Presenter: CommentPresenter<*>>: BaseFragment<Pre
     }
 
     override fun onAuthorClick(userId: String) {
-        presenter.openCommentAuthor(userId)
+//        presenter.openCommentAuthor(userId)
     }
 
     override fun goToCommentAuthor(user: Person) {
@@ -108,7 +109,7 @@ abstract class CommentFragment<Presenter: CommentPresenter<*>>: BaseFragment<Pre
         adapter.changeDataSet(comments)
     }
 
-    override fun sendComment(entityId: String) {
+    override fun sendComment() {
         Log.d(TAG_LOG, "focus down")
         val commentText = et_comment.getText().toString()
         Log.d(TAG_LOG, "send comment = $commentText")
@@ -116,12 +117,11 @@ abstract class CommentFragment<Presenter: CommentPresenter<*>>: BaseFragment<Pre
             val comment = Comment()
             val user = AppHelper.currentCurator
             user.let {
-                comment.text = commentText
+                comment.content = commentText
                 comment.authorId = user.id
-                comment.authorName = user.name
-                comment.authorPhotoUrl = user.photoUrl
-                comment.createdDate = (Date().time)
-                presenter.createComment(entityId, comment)
+                comment.authorName = "${user.lastname} ${user.name} ${user.patronymic}"
+                comment.createdDate = (Date())
+                presenter.createComment(map, type, comment)
             }
             addComment(comment)
         }

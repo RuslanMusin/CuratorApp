@@ -77,6 +77,7 @@ class EditStepFragment : BaseFragment<EditStepPresenter>(), EditStepView, View.O
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_back_done)
+        toolbar_title.text = getString(R.string.change_step)
     }
 
     private fun setListeners() {
@@ -101,7 +102,6 @@ class EditStepFragment : BaseFragment<EditStepPresenter>(), EditStepView, View.O
         et_date_start.setText(FormatterUtil.getStringFromDate(step.dateStart))
         et_date_finish.setText(FormatterUtil.getStringFromDate(step.dateFinish))
         et_description.setText(step.description)
-        et_links.setText(step.links)
         dialogStart.setDate(step.dateStart)
         dialogFinish.setDate(step.dateFinish)
     }
@@ -113,7 +113,6 @@ class EditStepFragment : BaseFragment<EditStepPresenter>(), EditStepView, View.O
 
                 step.title = et_title.text.toString()
                 step.description = et_description.text.toString()
-                step.links = et_links.text.toString()
                 step.dateStart = dialogStart.getDate()
                 step.dateFinish = dialogFinish.getDate()
                 if(validateData()) {

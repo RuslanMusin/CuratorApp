@@ -17,12 +17,16 @@ import com.summer.itis.curatorapp.model.skill.Subject
 import com.summer.itis.curatorapp.model.theme.SuggestionTheme
 import com.summer.itis.curatorapp.model.theme.Theme
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
+import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_THEMES
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
+import com.summer.itis.curatorapp.ui.student.search.choose_skill.ChooseAddSkillFragment
 import com.summer.itis.curatorapp.ui.student.search.choose_skill_main.ChooseSkillFragment
+import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.ADD_SKILL
 import com.summer.itis.curatorapp.utils.Const.ADD_THEME_TYPE
 import com.summer.itis.curatorapp.utils.Const.ALL_CHOOSED
+import com.summer.itis.curatorapp.utils.Const.CHOOSE_SKILL
 import com.summer.itis.curatorapp.utils.Const.EDIT_SUGGESTION
 import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
 import com.summer.itis.curatorapp.utils.Const.THEME_KEY
@@ -113,7 +117,7 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
             }
         }
 
-//        tv_added_skills.text = getSkillsText()
+//        tv_added_skills.content = getSkillsText()
     }
 
     private fun setToolbarData() {
@@ -144,14 +148,13 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
     }
 
     private fun addSkillView(skill: Skill) {
-        val view: View = layoutInflater.inflate(R.layout.layout_item_tv_with_clear, li_added_skills,false)
+        val view: View = layoutInflater.inflate(R.layout.item_skill_clear, li_added_skills,false)
         val ivRemoveSkill: ImageView = view.findViewById(R.id.iv_remove_skill)
         val tvAddedSkill: TextView = view.findViewById(R.id.tv_added_skill_name)
-        val tvAddedLevel: TextView = view.findViewById(R.id.tv_added_skill_level)
 
         ivRemoveSkill.setOnClickListener(checkListener)
         tvAddedSkill.text = skill.name
-        tvAddedLevel.text = getString(R.string.skill_level, skill.level)
+//        tvAddedLevel.content = getString(R.string.skill_level, skill.level)
         imageViews.add(ivRemoveSkill)
         liViews.add(view as LinearLayout)
 
@@ -179,9 +182,12 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
     }
 
     private fun addSkill() {
-        val fragment = ChooseSkillFragment.newInstance(mainListener)
+        /*val fragment = ChooseSkillFragment.newInstance(mainListener)
         fragment.setTargetFragment(this, ADD_SKILL)
-        mainListener.showFragment(SHOW_THEMES, this, fragment)
+        mainListener.showFragment(SHOW_THEMES, this, fragment)*/
+        val fragment = ChooseAddSkillFragment.newInstance(mainListener)
+        fragment.setTargetFragment(this, Const.CHOOSE_SKILL)
+        mainListener.showFragment(NavigationBaseActivity.SHOW_PROFILE, this, fragment)
     }
 
     override fun returnEditResult(intent: Intent?) {
@@ -195,14 +201,15 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
 
             when(reqCode) {
 
-                ADD_SKILL -> {
+                CHOOSE_SKILL -> {
                     data?.let {
                         val skillJson = it.getStringExtra(SKILL_KEY)
                         val skill = gsonConverter.fromJson(skillJson, Skill::class.java)
                         skills.add(skill)
                         /*val skillText = "${skill.name} ${getString(R.string.level)} ${skill.level}"
                         listSkills.add(skillText)
-                        tv_added_skills.text = getListString(listSkills)*/
+                        tv_added_skills.content = getListString(listSkills)*/
+                        tv_added_skills.visibility = View.GONE
                         addSkillView(skill)
                     }
                 }
@@ -237,7 +244,7 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
         if(skills.size != 0) {
             listSkills.clear()
             for (i in skills.indices) {
-                listSkills.add("${skills[i].name} ${getString(R.string.level)} ${skills[i].level}")
+                listSkills.add(skills[i].name)
             }
             return getListString(listSkills)
         } else {

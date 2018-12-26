@@ -95,28 +95,6 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
         changeDataSet(this.steps)
     }
 
-  /*  private fun loadSkills() {
-//        presenter.loadWorks(AppHelper.currentCurator.id)
-        if(work.steps.size == 0) {
-            steps = ArrayList()
-            val title = "Выбор темы"
-            for (i in 0..9) {
-                val step = Step()
-                step.id = "$i"
-                step.title = title + " $i"
-                step.description = step.title
-                step.dateStart = Date()
-                step.dateFinish = Date()
-                step.links = step.title
-                steps.add(step)
-            }
-            work.steps = steps
-        } else {
-            steps = work.steps
-        }
-        changeDataSet(steps)
-    }*/
-
     private fun initViews() {
         setToolbarData()
         initRecycler()
@@ -125,6 +103,7 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_add)
+        toolbar_title.text = getString(R.string.card_progress)
 
     }
 

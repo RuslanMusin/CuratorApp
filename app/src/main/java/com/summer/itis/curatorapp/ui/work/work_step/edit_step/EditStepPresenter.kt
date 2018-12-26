@@ -1,10 +1,8 @@
 package com.summer.itis.curatorapp.ui.work.work_step.edit_step
 
-import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
-import com.summer.itis.curatorapp.model.help.StepApi
 import com.summer.itis.curatorapp.model.step.Step
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
@@ -37,9 +35,10 @@ class EditStepPresenter(): BaseFragPresenter<EditStepView>() {
     }*/
 
     fun updateStep(workId: String, step: Step) {
-        val stepApi = StepApi(step)
+//        val stepApi = StepApi(step)
+        step.setApiFields()
         val disposable = RepositoryProvider.workStepRepository
-            .updateCuratorWorkStep(AppHelper.currentCurator.id, workId, stepApi).subscribe { res ->
+            .updateCuratorWorkStep(AppHelper.currentCurator.id, workId, step).subscribe { res ->
                 Log.d(Const.TAG_LOG, "receive work response")
                 if(res == null) {
                     Log.d(Const.TAG_LOG, "work res == null")

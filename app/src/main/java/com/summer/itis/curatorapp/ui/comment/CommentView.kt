@@ -22,7 +22,7 @@ interface CommentView: BaseFragView, BaseAdapter.OnItemClickListener<Comment>{
 
     fun addComment(comment: Comment)
 
-    fun sendComment(entityId: String)
+    fun sendComment()
 
     fun clearAfterSendComment()
 

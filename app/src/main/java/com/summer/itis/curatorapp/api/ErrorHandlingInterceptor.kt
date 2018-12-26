@@ -26,6 +26,8 @@ class ErrorHandlingInterceptor private constructor() : Interceptor {
 
             401 -> showLoginPage()
 
+            0 -> showConnectionError()
+
             200 -> return response
 
         }
@@ -38,6 +40,10 @@ class ErrorHandlingInterceptor private constructor() : Interceptor {
     }
 
     private fun showLoginPage() {
+
+    }
+
+    private fun showConnectionError() {
 
     }
 }

@@ -116,7 +116,7 @@ class EditCuratorFragment : BaseFragment<EditCuratorPresenter>(), EditCuratorVie
     }
 
     override fun returnAfterEdit() {
-        saveCuratorState()
+//        saveCuratorState()
         val intent = Intent()
         intent.putExtra(CURATOR_KEY, gsonConverter.toJson(user))
         targetFragment?.onActivityResult(EDIT_CURATOR, RESULT_OK, intent)

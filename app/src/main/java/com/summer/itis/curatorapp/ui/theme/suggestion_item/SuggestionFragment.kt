@@ -24,17 +24,22 @@ import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.Descr
 import com.summer.itis.curatorapp.ui.student.student_item.StudentFragment
 import com.summer.itis.curatorapp.ui.theme.edit_suggestion.EditSuggestionFragment
 import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.ACCEPTED_BOTH
+import com.summer.itis.curatorapp.utils.Const.ACCEPTED_BOTH_NUM
 import com.summer.itis.curatorapp.utils.Const.CHANGED_CURATOR
 import com.summer.itis.curatorapp.utils.Const.CHANGED_STUDENT
+import com.summer.itis.curatorapp.utils.Const.CURATOR_KEY
 import com.summer.itis.curatorapp.utils.Const.DESC_KEY
 import com.summer.itis.curatorapp.utils.Const.EDIT_SUGGESTION
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_CURATOR
 import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_STUDENT
 import com.summer.itis.curatorapp.utils.Const.REJECTED_CURATOR
+import com.summer.itis.curatorapp.utils.Const.REJECTED_CURATOR_NUM
 import com.summer.itis.curatorapp.utils.Const.REJECTED_STUDENT
 import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
+import com.summer.itis.curatorapp.utils.Const.SUGGESTION_KEY
 import com.summer.itis.curatorapp.utils.Const.SUGGESTION_TYPE
 import com.summer.itis.curatorapp.utils.Const.TAB_NAME
 import com.summer.itis.curatorapp.utils.Const.TAG_LOG
@@ -50,10 +55,12 @@ import kotlinx.android.synthetic.main.layout_expandable_text_view.*
 import kotlinx.android.synthetic.main.layout_suggestion.*
 import kotlinx.android.synthetic.main.toolbar_edit.*
 import java.util.*
+import kotlin.collections.HashMap
 
 class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionView, View.OnClickListener {
 
-    override lateinit var entityId: String
+    override var map: HashMap<String, String> = HashMap()
+    override var type: String = Const.SUGGESTION_TYPE
 
     override lateinit var mainListener: NavigationView
     lateinit var suggestionTheme: SuggestionTheme
@@ -89,8 +96,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        entityId = suggestionTheme.id
-        presenter.loadComments(entityId)
+        presenter.loadComments(map, type)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,6 +104,8 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
         mainListener.changeWindowsSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         arguments?.let {
             suggestionTheme = gsonConverter.fromJson(it.getString(THEME_KEY), SuggestionTheme::class.java)
+            map[CURATOR_KEY] = AppHelper.currentCurator.id
+            map[SUGGESTION_KEY] = suggestionTheme.id
         }
     }
 
@@ -105,7 +113,6 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
         setToolbarData()
         setListeners()
         setData()
-        setActionListeners()
         setBtnsVisibility()
     }
 
@@ -117,7 +124,8 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_edit)
-        suggestionTheme.themeProgress?.title?.let { mainListener.setToolbarTitle(it) }
+        toolbar_title.text = getString(R.string.suggestion)
+//        suggestionTheme.themeProgress?.title?.let { mainListener.setToolbarTitle(it) }
         btn_back.visibility = View.VISIBLE
 
     }
@@ -194,12 +202,15 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
         } else {
             tv_skills.text = this.activity?.let { suggestionTheme.theme?.skills?.let { it1 -> SkillViewHelper.getSkillsText(it1, it) } }
         }
-        tv_title.text = suggestionTheme.themeProgress?.title
+//        tv_title.content = suggestionTheme.themeProgress?.title
+        tv_title.text = suggestionTheme.theme?.title
         tv_curator.text = suggestionTheme.curator?.name
         tv_student.text = suggestionTheme.student?.name
         tv_subject.text = suggestionTheme.theme?.subject?.name
         setStatus(suggestionTheme.status.name)
-        expand_text_view.text = suggestionTheme.themeProgress?.description
+        expand_text_view.text = suggestionTheme.theme?.description
+//        setStatus(suggestionTheme.status.name)
+//        expand_text_view.content = suggestionTheme.themeProgress?.description
     }
 
     override fun onClick(v: View) {
@@ -246,10 +257,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
             CHANGED_STUDENT -> uiStatus = getString(R.string.changed_student)
 
         }
-
         tv_status.text = uiStatus
-        suggestionTheme.status = Status(Integer.toString(Random().nextInt(100) + 1), status)
-        setActionListeners()
     }
 
     private fun showDesc() {
@@ -284,7 +292,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
             WAITING_CURATOR -> {
                 for (sug in AppHelper.currentCurator.suggestions) {
                     if(sug.id.equals(suggestionTheme.id)) {
-                        sug.status = Status(Integer.toString(Random().nextInt(100) + 1), ACCEPTED_BOTH)
+                        sug.status = Status(ACCEPTED_BOTH_NUM, ACCEPTED_BOTH)
                         for(theme in AppHelper.currentCurator.themes) {
                             if(theme.id.equals(suggestionTheme.theme?.id)) {
                                 theme.dateAcceptance = Date()
@@ -292,7 +300,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
                             }
                         }
                     } else if (suggestionTheme.theme?.id.equals(sug.theme?.id)) {
-                        sug.status = Status(Integer.toString(Random().nextInt(100) + 1), REJECTED_CURATOR)
+                        sug.status = Status(REJECTED_CURATOR_NUM, REJECTED_CURATOR)
                     }
                 }
 
@@ -325,7 +333,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
             if(sug.id.equals(suggestionTheme.id)) {
                 if(suggestionTheme.status.equals(getString(R.string.theme_on_revision))) {
                     sug.status = suggestionTheme.status
-                    tv_status.text = sug.status
+                    tv_status.content = sug.status
                     btn_revision.visibility = View.GONE
                 } else {
                     if(suggestionTheme.status.equals(getString(R.string.accept_theme))){

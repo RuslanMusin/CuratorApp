@@ -15,7 +15,6 @@ class SkillItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(item: Skill) {
         itemView.tv_added_skill_name.text = item.name
-        itemView.tv_added_skill_level.text = itemView.context.getString(R.string.skill_level, item.level)
     }
 
 

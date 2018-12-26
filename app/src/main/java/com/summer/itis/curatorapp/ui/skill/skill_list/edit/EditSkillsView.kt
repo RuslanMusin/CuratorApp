@@ -9,7 +9,7 @@ interface EditSkillsView: BaseFragView, BaseRecyclerView<Skill>, View.OnClickLis
 
     fun remove(pos: Int)
 
-    fun chooseLevel(pos: Int, level: String)
+//    fun chooseLevel(pos: Int, level: String)
 
     fun showSkills(skills: List<Skill>)
 

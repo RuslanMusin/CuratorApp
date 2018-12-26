@@ -19,6 +19,7 @@ import com.summer.itis.curatorapp.ui.student.student_list.StudentListFragment
 import com.summer.itis.curatorapp.ui.theme.theme_list.ThemeListFragment
 import com.summer.itis.curatorapp.ui.work.works.WorkListFragment
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
+import com.summer.itis.curatorapp.utils.Const.TAG_LOG
 import com.summer.itis.curatorapp.utils.Const.USER_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import kotlinx.android.synthetic.main.activity_base.*
@@ -169,7 +170,7 @@ class NavigationBaseActivity : BaseActivity<NavigationPresenter>(), NavigationVi
     override fun onBackPressed() {
 //        super.onBackPressed()
         showBottomNavigation()
-        if(mStacks[mShowTab]?.size != 0) {
+        if(mStacks[mShowTab]?.size!! > 1) {
             hideFragment()
         } else {
             popCurrentFragment()
@@ -216,7 +217,9 @@ class NavigationBaseActivity : BaseActivity<NavigationPresenter>(), NavigationVi
     }
 
     override fun hideFragment() {
-        val fragment = mStacks[mShowTab]?.size?.minus(2)?.let { mStacks[mShowTab]?.elementAt(it) }
+        val num = mStacks[mShowTab]?.size?.minus(2)
+        Log.d(TAG_LOG, "num = ${num} and size = ${mStacks[mShowTab]?.size}")
+        val fragment = num?.let { mStacks[mShowTab]?.elementAt(it) }
 
         val fragmentBefore = mStacks[mShowTab]?.pop()
         val manager = supportFragmentManager

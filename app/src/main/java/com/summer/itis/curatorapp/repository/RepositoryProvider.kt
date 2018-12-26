@@ -1,6 +1,8 @@
 package com.summer.itis.curatorapp.repository
 
+import com.summer.itis.curatorapp.api.ApiFactory.Companion.commentService
 import com.summer.itis.curatorapp.api.ApiFactory.Companion.curatorService
+import com.summer.itis.curatorapp.api.ApiFactory.Companion.materialService
 import com.summer.itis.curatorapp.api.ApiFactory.Companion.skillService
 import com.summer.itis.curatorapp.api.ApiFactory.Companion.studentService
 import com.summer.itis.curatorapp.api.ApiFactory.Companion.subjectService
@@ -10,8 +12,11 @@ import com.summer.itis.curatorapp.api.ApiFactory.Companion.workService
 import com.summer.itis.curatorapp.api.ApiFactory.Companion.workStepService
 import com.summer.itis.curatorapp.repository.auth.AuthRepository
 import com.summer.itis.curatorapp.repository.auth.AuthRepositoryImpl
+import com.summer.itis.curatorapp.repository.comment.CommentRepositoryImpl
 import com.summer.itis.curatorapp.repository.curator.CuratorRepository
 import com.summer.itis.curatorapp.repository.curator.CuratorRepositoryImpl
+import com.summer.itis.curatorapp.repository.material.MaterialRepository
+import com.summer.itis.curatorapp.repository.material.MaterialRepositoryImpl
 import com.summer.itis.curatorapp.repository.skill.SkillRepository
 import com.summer.itis.curatorapp.repository.skill.SkillRepositoryImpl
 import com.summer.itis.curatorapp.repository.student.StudentRepositoryImpl
@@ -79,6 +84,14 @@ class RepositoryProvider {
 
         val workStepRepository: WorkStepRepository by lazy {
             WorkStepRepositoryImpl(workStepService)
+        }
+
+        val materialRepository: MaterialRepository by lazy {
+            MaterialRepositoryImpl(materialService)
+        }
+
+        val commentRepository: CommentRepositoryImpl by lazy {
+            CommentRepositoryImpl(commentService)
         }
 
     }

@@ -13,7 +13,7 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.skill.Subject
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.theme.add_theme.AddThemeFragment.Companion.ADD_SUBJECT
+import com.summer.itis.curatorapp.utils.Const.ADD_SUBJECT
 import com.summer.itis.curatorapp.utils.Const.SUBJECT_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import io.reactivex.disposables.Disposable

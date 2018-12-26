@@ -26,8 +26,18 @@ class ApiFactory {
                     .build()
         }
 
+        private fun buildLoginRetrofit(): Retrofit {
+
+            return Retrofit.Builder()
+                .baseUrl(BuildConfig.API_ENDPOINT)
+                .client(OkHttpProvider.provideLoginClient())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+        }
+
         val authService: AuthService by lazy {
-            buildRetrofit().create(AuthService::class.java)
+            buildLoginRetrofit().create(AuthService::class.java)
         }
 
         val curatorService: CuratorService by lazy {
@@ -60,6 +70,14 @@ class ApiFactory {
 
         val workStepService: WorkStepService by lazy {
             buildRetrofit().create(WorkStepService::class.java)
+        }
+
+        val materialService: MaterialService by lazy {
+            buildRetrofit().create(MaterialService::class.java)
+        }
+
+        val commentService: CommentService by lazy {
+            buildRetrofit().create(CommentService::class.java)
         }
 
         val errorConverter: Converter<ResponseBody, APIError> by lazy {

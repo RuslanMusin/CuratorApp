@@ -18,7 +18,7 @@ interface SuggestionService {
 
     @POST("curators/{curator_id}/suggestions")
     fun postCuratorSuggestion(@Path(value = "curator_id") id: String,
-                              @Body suggestionTheme: SuggestionApi
+                              @Body suggestionTheme: SuggestionTheme
     ): Single<Result<SuggestionTheme>>
 
     @GET("curators/{curator_id}/suggestions/{suggestion_id}/comments")

@@ -86,7 +86,7 @@ object FormatterUtil {
 
     fun getStringFromDate(date: Date): String {
         val cbDateFormat = SimpleDateFormat(usualDateTime)
-        cbDateFormat.timeZone = TimeZone.getTimeZone("UTC")
+//        cbDateFormat.timeZone = TimeZone.get("UTC")
         return cbDateFormat.format(date)
     }
 }

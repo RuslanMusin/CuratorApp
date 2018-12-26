@@ -8,8 +8,6 @@ import com.summer.itis.curatorapp.model.theme.Status
 import com.summer.itis.curatorapp.model.theme.SuggestionTheme
 import com.summer.itis.curatorapp.model.theme.Theme
 import com.summer.itis.curatorapp.model.theme.ThemeProgress
-import com.summer.itis.curatorapp.model.help.SuggestionApi
-import com.summer.itis.curatorapp.model.help.ThemeApi
 import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
@@ -22,6 +20,8 @@ import com.summer.itis.curatorapp.utils.Const.SUGGESTION_TYPE
 import com.summer.itis.curatorapp.utils.Const.TAG_LOG
 import com.summer.itis.curatorapp.utils.Const.THEME_KEY
 import com.summer.itis.curatorapp.utils.Const.THEME_TYPE
+import com.summer.itis.curatorapp.utils.Const.WAITING_STUDENT
+import com.summer.itis.curatorapp.utils.Const.WAITING_STUDENT_NUM
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
@@ -106,8 +106,8 @@ class AddThemePresenter(): BaseFragPresenter<AddThemeView>() {
             theme.targetType = ONE_CHOOSED
             theme.student = null
         }
-        val themeApi: ThemeApi = ThemeApi(theme)
-        val disposable = RepositoryProvider.themeRepository.postCuratorTheme(curatorId, themeApi).subscribe { res ->
+//        val themeApi: ThemeApi = ThemeApi(theme)
+        val disposable = RepositoryProvider.themeRepository.postCuratorTheme(curatorId, theme).subscribe { res ->
             Log.d(Const.TAG_LOG, "post theme response")
             if(res == null) {
                 Log.d(Const.TAG_LOG, "res == null")
@@ -145,18 +145,17 @@ class AddThemePresenter(): BaseFragPresenter<AddThemeView>() {
         suggestionTheme.theme = theme
         suggestionTheme.curator = theme.curator
         suggestionTheme.student = student
+        suggestionTheme.status = Status(WAITING_STUDENT_NUM, WAITING_STUDENT)
         suggestionTheme.type = CURATOR_TYPE
-        suggestionTheme.dateCreation = theme.dateCreation
 
         val themeProgress = ThemeProgress()
         themeProgress.title = theme.title
         themeProgress.description = theme.description
         suggestionTheme.themeProgress = themeProgress
-        suggestionTheme.status = Status(Integer.toString(Random().nextInt(3) + 1), Const.WAITING_STUDENT)
+        suggestionTheme.setApiFileds()
+//        val suggestionApi = SuggestionApi(suggestionTheme)
 
-        val suggestionApi = SuggestionApi(suggestionTheme)
-
-        val disposable = RepositoryProvider.suggestionRepository.postCuratorSuggestion(curatorId, suggestionApi).subscribe { res ->
+        val disposable = RepositoryProvider.suggestionRepository.postCuratorSuggestion(curatorId, suggestionTheme).subscribe { res ->
             Log.d(Const.TAG_LOG, "post suggestion response")
             if(res == null) {
                 Log.d(Const.TAG_LOG, "res == null")

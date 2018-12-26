@@ -92,7 +92,8 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_back_add_edit)
-        mainListener.setToolbarTitle(theme.title)
+        toolbar_title.text = getString(R.string.theme)
+//        mainListener.setToolbarTitle(theme.title)
     }
 
     private fun setListeners() {
@@ -115,7 +116,7 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
                 addSkillView(skill)
             }
 
-//            tv_content.text = this.activity?.let { SkillViewHelper.getSkillsText(theme.skills, it) }
+//            tv_content.content = this.activity?.let { SkillViewHelper.getSkillsText(theme.skills, it) }
         }
         tv_title.text = theme.title
         tv_curator.text = theme.curator?.getFullName()
@@ -157,10 +158,8 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
     private fun addSkillView(skill: Skill) {
         val view: View = layoutInflater.inflate(R.layout.layout_item_skill, li_added_skills,false)
         val tvAddedSkill: TextView = view.findViewById(R.id.tv_added_skill_name)
-        val tvAddedLevel: TextView = view.findViewById(R.id.tv_added_skill_level)
 
         tvAddedSkill.text = skill.name
-        tvAddedLevel.text = getString(R.string.skill_level, skill.level)
 
         li_added_skills.addView(view)
     }
@@ -260,9 +259,9 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
                     val studentJson = data?.getStringExtra(USER_KEY)
                     studentJson?.let {
                         val student = gsonConverter.fromJson(studentJson, Student::class.java)
-                        context?.let { it1 -> presenter.sendSuggestion(theme, student, it1) }
-
+                        presenter.sendSuggestion(theme, student)
                         mainListener.showSnackBar(getString(R.string.suggestion_was_sended))
+
                     }
                 }
             }

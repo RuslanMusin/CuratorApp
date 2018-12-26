@@ -13,7 +13,7 @@ class CuratorApi {
     var patronymic: String? = null
 
     var description: String? = null
-    @SerializedName("skills")
+    @SerializedName("skills_id")
     var skillsIds: MutableList<String> = ArrayList()
 
     constructor()

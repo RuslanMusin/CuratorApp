@@ -16,10 +16,10 @@ import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.DescriptionFragment
 import com.summer.itis.curatorapp.ui.skill.skill_list.view.SkillListFragment
 import com.summer.itis.curatorapp.ui.theme.add_theme.AddThemeFragment
-import com.summer.itis.curatorapp.ui.theme.add_theme.AddThemeFragment.Companion.ADD_STUDENT
 import com.summer.itis.curatorapp.ui.work.one_work_list.OneWorkListFragment
 import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const
+import com.summer.itis.curatorapp.utils.Const.ADD_STUDENT
 import com.summer.itis.curatorapp.utils.Const.DESC_KEY
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.MAX_LENGTH
@@ -115,7 +115,7 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
         this.student = student
         toolbar_add.title = "${this.student.name} ${this.student.lastname} ${this.student.patronymic}"
         tv_username.text = "${this.student.name} ${this.student.lastname} ${this.student.patronymic}"
-        tv_group.text = "${this.student.groupNumber + Const.SPACE + "," + Const.SPACE + this.student.year + Const.SPACE + context?.getString(R.string.course)}"
+        tv_group.text = "${this.student.group.name + Const.SPACE + "," + Const.SPACE + this.student.courseNumber + Const.SPACE + context?.getString(R.string.course)}"
         tv_desc.text = AppHelper.cutLongDescription(this.student.description, MAX_LENGTH)
         AppHelper.setUserPhoto(iv_user_photo, this.student, activity as Activity)
     }
@@ -151,7 +151,7 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
         args.putExtra(USER_KEY, studentJson)
         when (requestNumber) {
 
-            ADD_STUDENT ->  targetFragment?.onActivityResult(AddThemeFragment.ADD_STUDENT, Activity.RESULT_OK, args)
+            ADD_STUDENT ->  targetFragment?.onActivityResult(ADD_STUDENT, Activity.RESULT_OK, args)
 
             SEND_THEME -> targetFragment?.onActivityResult(SEND_THEME, Activity.RESULT_OK, args)
         }

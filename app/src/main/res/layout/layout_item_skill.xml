@@ -7,8 +7,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:layout_marginTop="8dp"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,22 +20,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1"
+            android:paddingStart="@dimen/margin.normal"
+            android:paddingEnd="@dimen/margin.normal"
+
             >
 
             <TextView
                 android:id="@+id/tv_added_skill_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/secondary_text"
-                android:textSize="@dimen/text.16"
-                android:text="@string/all_students_choosed"
-                />
-
-            <TextView
-                android:id="@+id/tv_added_skill_level"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:textColor="@color/secondary_text"
                 android:textSize="@dimen/text.16"
                 android:text="@string/all_students_choosed"
