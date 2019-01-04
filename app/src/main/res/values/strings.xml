@@ -123,7 +123,7 @@
     <string name="duration_hours_shortest">%1$d h</string>
     <string name="duration_days_shortest">%1$d d</string>
     <string name="duration_week_shortest">%1$d w</string>
-    <string name="comments">Comments</string>
+    <string name="comments">Комментарии</string>
 
     <string name="text_take_photo">Take photo</string>
     <string name="text_pick_photo">Pick from Gallery</string>

@@ -98,7 +98,7 @@ class AddMaterialFragment : BaseFragment<AddMaterialPresenter>(), AddMaterialVie
 
     private fun changeData() {
         material.content = et_description.text.toString()
-        presenter.postMaterial(AppHelper.currentCurator.id, stepId, workId, material)
+        presenter.postMaterial(AppHelper.currentCurator.id, workId, stepId, material)
     }
 
     override fun showChanges(material: Material) {

@@ -35,7 +35,7 @@
             android:textSize="@dimen/text.18"
             android:layout_toEndOf="@id/btn_back"
             android:layout_marginStart="16dp"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
             />
 
         <ImageButton

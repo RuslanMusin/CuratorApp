@@ -306,6 +306,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
 
             }
         }
+        presenter.acceptTheme(suggestionTheme)
         setStatus(ACCEPTED_BOTH)
         saveCuratorState()
 //        suggestionTheme.status = getString(R.string.accept_theme)
@@ -322,7 +323,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
     }
 
     private fun revisionTheme() {
-
+//        presenter.revisionTheme()
         /*suggestionTheme.status = getString(R.string.theme_on_revision)
         saveStatus()*/
     }

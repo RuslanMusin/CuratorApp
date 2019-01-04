@@ -239,7 +239,7 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
 
             override fun onQueryTextSubmit(query: String): Boolean {
 //                presenter.loadOfficialTestsByQUery(query)
-                findFromList(query)
+//                findFromList(query)
 
                 if (!finalSearchView.isIconified) {
                     finalSearchView.isIconified = true

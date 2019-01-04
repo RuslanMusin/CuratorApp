@@ -112,6 +112,7 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_add_done)
+        toolbar_title.text = getString(R.string.skills)
         btn_back.visibility = View.VISIBLE
         btn_add.visibility = View.VISIBLE
         btn_ok.visibility = View.VISIBLE

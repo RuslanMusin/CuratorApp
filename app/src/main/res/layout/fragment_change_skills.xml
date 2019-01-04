@@ -52,8 +52,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_below="@id/divider"
             >
             <include layout="@layout/layout_recycler_list"/>

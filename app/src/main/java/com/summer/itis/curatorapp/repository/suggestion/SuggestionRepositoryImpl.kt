@@ -4,7 +4,6 @@ import android.util.Log
 import com.summer.itis.curatorapp.api.services.SuggestionService
 import com.summer.itis.curatorapp.model.comment.Comment
 import com.summer.itis.curatorapp.model.theme.SuggestionTheme
-import com.summer.itis.curatorapp.model.help.SuggestionApi
 import com.summer.itis.curatorapp.utils.Const.TAG_LOG
 import com.summer.itis.curatorapp.utils.RxUtils
 import io.reactivex.Single
@@ -29,7 +28,7 @@ class SuggestionRepositoryImpl(val apiService: SuggestionService): SuggestionRep
         return apiService.postCuratorSuggestion(id, suggestion).compose(RxUtils.asyncSingle())
     }
 
-    override fun updateCuratorSuggestion(curatorId: String, suggestion: SuggestionApi): Single<Result<SuggestionTheme>> {
+    override fun updateCuratorSuggestion(curatorId: String, suggestion: SuggestionTheme): Single<Result<SuggestionTheme>> {
         return apiService.updateCuratorSuggestion(curatorId, suggestion.id, suggestion).compose(RxUtils.asyncSingle())
     }
 

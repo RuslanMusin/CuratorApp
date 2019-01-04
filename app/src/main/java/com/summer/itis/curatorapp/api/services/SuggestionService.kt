@@ -2,7 +2,6 @@ package com.summer.itis.curatorapp.api.services
 
 import com.summer.itis.curatorapp.model.comment.Comment
 import com.summer.itis.curatorapp.model.theme.SuggestionTheme
-import com.summer.itis.curatorapp.model.help.SuggestionApi
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
 import retrofit2.http.*
@@ -32,7 +31,7 @@ interface SuggestionService {
     @PUT("curators/{curator_id}/suggestions/{suggestion_id}")
     fun updateCuratorSuggestion(@Path(value = "curator_id") curatorId: String,
                                 @Path(value = "suggestion_id") suggestionId: String,
-                                @Body suggestionTheme: SuggestionApi
+                                @Body suggestionTheme: SuggestionTheme
     ): Single<Result<SuggestionTheme>>
 
     @POST("curators/{curator_id}/suggestions/{suggestion_id}/comments")

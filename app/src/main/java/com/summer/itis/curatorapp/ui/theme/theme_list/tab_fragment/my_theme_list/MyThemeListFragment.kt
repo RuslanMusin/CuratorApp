@@ -13,6 +13,7 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.theme.Theme
+import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
@@ -36,6 +37,8 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
 
     lateinit var themes: MutableList<Theme>
     lateinit var userId: String
+
+    lateinit var fakeStudents: List<Student>
 
     @InjectPresenter
     lateinit var presenter: MyThemeListPresenter
@@ -73,8 +76,21 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
             userId = it.getString(ID_KEY)
             initViews()
             presenter.loadSkills(userId)
+            presenter.loadFakeStudents()
 
         }
+    }
+
+    override fun updateFakeStudents(students: List<Student>) {
+        this.fakeStudents = students
+    }
+
+    private fun getFakeNames(): List<String> {
+        val names: MutableList<String> = ArrayList()
+        for(student in fakeStudents) {
+            names.add(student.getFullName())
+        }
+        return names.toList()
     }
 
     override fun showThemes(themes: List<Theme>) {
@@ -83,50 +99,6 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
         Log.d(TAG_LOG, "dateStr = ${FormatterUtil.getStringFromDate(themes[0].dateCreation)}")
         changeDataSet(this.themes)
     }
-
-  /*  private fun loadWorks() {
-//        presenter.loadWorks(AppHelper.currentCurator.id)
-        if(student.themes.size == 0) {
-            themes = ArrayList()
-            val skills = this.activity?.let { AppHelper.getSkillsList(it) }
-            for (i in 1..10) {
-                val theme = Theme()
-                theme.id = "$i"
-                val curator = AppHelper.currentCurator
-                theme.curator = curator
-                theme.curatorId = curator.id
-//                suggestionTheme.curatorName = step.name
-                theme.student = null
-                theme.studentId = i.toString()
-                val lastNum = if(10 - i > 3)  i + 3 else i + 10 - i
-                theme.skills = skills?.subList(i, lastNum) as MutableList<Skill>
-
-                theme.description = "Simple App for students"
-                if(i % 2 == 0) {
-                    theme.title = "Web-платформа для создания интеллектуальных систем"
-                    val subject = Subject()
-                    subject.name = "Интеллектуальные системы"
-                    subject.id = "$i"
-                    theme.subject = subject
-                    theme.subjectId = subject.id
-                } else {
-                    theme.title = "Приложение для обмена книгами"
-                    val subject = Subject()
-                    subject.name = "Android"
-                    subject.id = "$i"
-                    theme.subject = subject
-                    theme.subjectId = subject.id
-                }
-                themes.add(theme)
-            }
-            student.themes = themes
-
-        } else {
-            themes = student.themes
-        }
-        changeDataSet(themes)
-
-    }*/
 
     private fun initViews() {
         initRecycler()
@@ -199,7 +171,7 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
             this.activity?.let {
                 MaterialDialog.Builder(it)
                         .title(R.string._should_user_fake_choose_theme)
-                        .items(R.array.fake_students)
+                        .items(getFakeNames())
                         .itemsCallbackSingleChoice(0, MaterialDialog.ListCallbackSingleChoice { dialog, view, which, text ->
                             fakeStudentNum = which
                             true
@@ -212,7 +184,7 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
                         }
                         .onPositive { dialog, which ->
                             this.context?.let { it1 ->
-                                presenter.addFakeSuggestion(themes[adapterPosition], AppHelper.getFakeStudent(fakeStudentNum, it1))
+                                presenter.addFakeSuggestion(themes[adapterPosition], fakeStudents.get(fakeStudentNum))
                             }
                         }
                         .show()
@@ -229,7 +201,7 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
                         }
                         .onPositive { dialog, which ->
                             this.context?.let { it1 ->
-                                presenter.addFakeStudentSuggestion(themes[adapterPosition], AppHelper.getFakeStudent(fakeStudentNum, it1))
+                                presenter.addFakeStudentSuggestion(themes[adapterPosition], fakeStudents.get(fakeStudentNum))
                             }
                         }
                         .show()

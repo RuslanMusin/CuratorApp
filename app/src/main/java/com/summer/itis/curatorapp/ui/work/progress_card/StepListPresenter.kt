@@ -2,6 +2,7 @@ package com.summer.itis.curatorapp.ui.work.progress_card
 
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
+import com.summer.itis.curatorapp.model.step.Step
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.repository.RepositoryProvider.Companion.worksRepository
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
@@ -32,7 +33,7 @@ class StepListPresenter(): BaseFragPresenter<StepListView>() {
                 if (it.isSuccessful) {
                     Log.d(Const.TAG_LOG, "successful work")
                     it.body()?.let { steps ->
-                        viewState.showSteps(steps)
+                        viewState.showSteps(steps.sortedWith(compareBy (Step::dateFinish)))
                     }
                 } else {
                     Log.d(Const.TAG_LOG, "failed get steps = ${it.code()} and ${it.errorBody()?.string()} and ${it.message()}")

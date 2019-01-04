@@ -156,7 +156,7 @@ class AddSubjectFragment : BaseFragment<AddSubjectPresenter>(), AddSubjectView, 
 
             override fun onQueryTextSubmit(query: String): Boolean {
 //                presenter.loadOfficialTestsByQUery(query)
-                findFromList(query)
+
 
                 if (!finalSearchView.isIconified) {
                     finalSearchView.isIconified = true
@@ -166,6 +166,7 @@ class AddSubjectFragment : BaseFragment<AddSubjectPresenter>(), AddSubjectView, 
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
+                findFromList(newText)
                 return false
             }
         })

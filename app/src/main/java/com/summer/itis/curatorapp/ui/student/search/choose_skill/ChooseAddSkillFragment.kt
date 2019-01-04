@@ -190,17 +190,15 @@ class ChooseAddSkillFragment : BaseFragment<ChooseSkilllPresenter>(), ChooseSkil
 
             override fun onQueryTextSubmit(query: String): Boolean {
 //                presenter.loadOfficialTestsByQUery(query)
-
+                if (!finalSearchView.isIconified) {
+                    finalSearchView.isIconified = true
+                }
+                searchItem.collapseActionView()
                 return false
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
                 findFromList(newText)
-
-                if (!finalSearchView.isIconified) {
-                    finalSearchView.isIconified = true
-                }
-                searchItem.collapseActionView()
                 return false
             }
         })

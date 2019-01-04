@@ -14,15 +14,34 @@ import com.bumptech.glide.Glide
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.skill.Skill
 import com.summer.itis.curatorapp.model.skill.Subject
+import com.summer.itis.curatorapp.model.theme.Status
 import com.summer.itis.curatorapp.model.theme.Theme
 import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.model.user.Person
 import com.summer.itis.curatorapp.model.user.Student
+import com.summer.itis.curatorapp.utils.Const.ACCEPTED_BOTH
+import com.summer.itis.curatorapp.utils.Const.ACCEPTED_BOTH_NUM
+import com.summer.itis.curatorapp.utils.Const.CHANGED_CURATOR
+import com.summer.itis.curatorapp.utils.Const.CHANGED_CURATOR_NUM
+import com.summer.itis.curatorapp.utils.Const.CHANGED_STUDENT
+import com.summer.itis.curatorapp.utils.Const.CHANGED_STUDENT_NUM
+import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_CURATOR
+import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_CURATOR_NUM
+import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_STUDENT
+import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_STUDENT_NUM
 import com.summer.itis.curatorapp.utils.Const.MAX_LENGTH
 import com.summer.itis.curatorapp.utils.Const.MORE_TEXT
 import com.summer.itis.curatorapp.utils.Const.OFFLINE_STATUS
+import com.summer.itis.curatorapp.utils.Const.REJECTED_CURATOR
+import com.summer.itis.curatorapp.utils.Const.REJECTED_CURATOR_NUM
+import com.summer.itis.curatorapp.utils.Const.REJECTED_STUDENT
+import com.summer.itis.curatorapp.utils.Const.REJECTED_STUDENT_NUM
 import com.summer.itis.curatorapp.utils.Const.TAG_LOG
 import com.summer.itis.curatorapp.utils.Const.USER_KEY
+import com.summer.itis.curatorapp.utils.Const.WAITING_CURATOR
+import com.summer.itis.curatorapp.utils.Const.WAITING_CURATOR_NUM
+import com.summer.itis.curatorapp.utils.Const.WAITING_STUDENT
+import com.summer.itis.curatorapp.utils.Const.WAITING_STUDENT_NUM
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import java.io.BufferedReader
 import java.io.IOException
@@ -354,7 +373,26 @@ class AppHelper {
             return student
         }
 
+        fun getStatus(statusStr: String): Status {
+            var status = Status()
+            when (statusStr) {
+
+                WAITING_CURATOR -> status = Status(WAITING_CURATOR_NUM, statusStr)
+                WAITING_STUDENT -> status = Status(WAITING_STUDENT_NUM, statusStr)
+                IN_PROGRESS_CURATOR -> status = Status(IN_PROGRESS_CURATOR_NUM, statusStr)
+                IN_PROGRESS_STUDENT -> status = Status(IN_PROGRESS_STUDENT_NUM, statusStr)
+                CHANGED_CURATOR -> status = Status(CHANGED_CURATOR_NUM, statusStr)
+                CHANGED_STUDENT -> status = Status(CHANGED_STUDENT_NUM, statusStr)
+                REJECTED_CURATOR -> status = Status(REJECTED_CURATOR_NUM, statusStr)
+                REJECTED_STUDENT -> status = Status(REJECTED_STUDENT_NUM, statusStr)
+                ACCEPTED_BOTH -> status = Status(ACCEPTED_BOTH_NUM, statusStr)
+            }
+            return status
+        }
+
     }
+
+
 
 
 

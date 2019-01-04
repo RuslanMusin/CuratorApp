@@ -147,6 +147,7 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_edit)
+        toolbar_title.text = getString(R.string.skills)
         btn_back.visibility = View.VISIBLE
         if(type.equals(WATCHER_TYPE)) {
             btn_edit.visibility = View.GONE
@@ -229,6 +230,7 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
                         val skills: List<Skill> = gsonConverter.fromJson(it, founderListType)
                        /* steps.add(0, skill)*/
                         AppHelper.currentCurator.skills = skills.toMutableList()
+                        this.skills = skills.toMutableList()
                         saveCuratorState()
                         changeDataSet(skills)
                     }
