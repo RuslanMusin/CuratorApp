@@ -64,10 +64,16 @@ class AddStepFragment : BaseFragment<AddStepPresenter>(), AddStepView, View.OnCl
     }
 
     private fun initViews() {
-        dialogStart = DatePickerFragment()
-        dialogFinish = DatePickerFragment()
+        setTime()
         setToolbarData()
         setListeners()
+    }
+
+    private fun setTime() {
+        dialogStart = DatePickerFragment()
+        dialogFinish = DatePickerFragment()
+        dialogStart.setDate(Date())
+        dialogFinish.setDate(Date())
     }
 
     private fun setToolbarData() {
@@ -124,7 +130,8 @@ class AddStepFragment : BaseFragment<AddStepPresenter>(), AddStepView, View.OnCl
     }
 
     private fun validateData(): Boolean{
-        if(step.title.equals("") || step.description.equals("") || step.dateStart.equals(step.dateFinish) || step.links.equals("")) {
+        if(step.title.equals("") || step.description.equals("")
+            || step.dateStart.equals(step.dateFinish) || step.links.equals("")) {
             return false
         } else {
             return true

@@ -254,8 +254,6 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String): Boolean {
-//                presenter.loadOfficialTestsByQUery(query)
-//                findFromList(query)
                 if (!finalSearchView.isIconified) {
                     finalSearchView.isIconified = true
                 }
