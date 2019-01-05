@@ -27,9 +27,9 @@ class EditThemePresenter(): BaseFragPresenter<EditThemeView>() {
                 for(suggestion  in suggestionIterator) {
                     if(suggestion.theme?.id.equals(themeNew.id)) {
                         suggestion.theme = themeNew
-                        suggestion.themeProgress?.title = themeNew.title
-                        suggestion.themeProgress?.description = themeNew.description
-                        suggestion.themeProgress?.skills = themeNew.skills
+                        suggestion.progress?.title = themeNew.title
+                        suggestion.progress?.description = themeNew.description
+                        suggestion.progress?.skills = themeNew.skills
                     }
                 }
                 viewState.saveCuratorState()

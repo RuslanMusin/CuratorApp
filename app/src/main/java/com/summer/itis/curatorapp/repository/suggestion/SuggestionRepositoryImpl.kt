@@ -4,6 +4,7 @@ import android.util.Log
 import com.summer.itis.curatorapp.api.services.SuggestionService
 import com.summer.itis.curatorapp.model.comment.Comment
 import com.summer.itis.curatorapp.model.theme.SuggestionTheme
+import com.summer.itis.curatorapp.model.theme.ThemeProgress
 import com.summer.itis.curatorapp.utils.Const.TAG_LOG
 import com.summer.itis.curatorapp.utils.RxUtils
 import io.reactivex.Single
@@ -34,5 +35,9 @@ class SuggestionRepositoryImpl(val apiService: SuggestionService): SuggestionRep
 
     override fun deleteCuratorSuggestion(curatorId: String, suggestionsId: String): Single<Result<SuggestionTheme>> {
         return apiService.deleteCuratorSuggestion(curatorId, suggestionsId).compose(RxUtils.asyncSingle())
+    }
+
+    override fun updateCuratorProgress(curatorId: String, suggestion: SuggestionTheme): Single<Result<ThemeProgress>> {
+        return apiService.updateCuratorProgress(curatorId, suggestion.id, suggestion.progress).compose(RxUtils.asyncSingle())
     }
 }

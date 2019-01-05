@@ -23,9 +23,7 @@ class SuggestionItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private lateinit var listener: SuggestionListView
 
     fun bind(item: SuggestionTheme) {
-//        itemView.tv_theme.content = item.themeProgress?.title
         itemView.tv_theme.text = item.theme?.title
-//        itemView.tv_subject.content = item.theme?.subject?.name
         itemView.tv_status.text = getStatus(item.status.name)
         itemView.setOnLongClickListener {
             listener.chooseUserFakeAction(adapterPosition)

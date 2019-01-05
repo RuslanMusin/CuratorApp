@@ -46,6 +46,7 @@ class  SuggestionPresenter(): CommentPresenter<SuggestionView>() {
 
             IN_PROGRESS_CURATOR -> {
                 sug.status = AppHelper.getStatus(CHANGED_CURATOR)
+                viewState.hideEdit(sug.status)
                 changeSuggestionStatus(curatorId, sug)
             }
 

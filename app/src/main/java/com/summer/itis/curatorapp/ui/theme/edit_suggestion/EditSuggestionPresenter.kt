@@ -21,7 +21,7 @@ class EditSuggestionPresenter(): BaseFragPresenter<EditSuggestionView>() {
 //        val suggestionApi: SuggestionApi = SuggestionApi(suggestion)
         suggestion.setApiFileds()
         val disposable = RepositoryProvider.suggestionRepository.
-            updateCuratorSuggestion(AppHelper.currentCurator.id, suggestion).subscribe { res ->
+            updateCuratorProgress(AppHelper.currentCurator.id, suggestion).subscribe { res ->
             Log.d(Const.TAG_LOG, "post suggestion response")
             if(res == null) {
                 Log.d(Const.TAG_LOG, "res == null")
@@ -36,7 +36,7 @@ class EditSuggestionPresenter(): BaseFragPresenter<EditSuggestionView>() {
                 if (it.isSuccessful) {
                     Log.d(Const.TAG_LOG, "successful post suggestion")
                     val intent = Intent()
-                    intent.putExtra(THEME_KEY , gsonConverter.toJson(suggestion.themeProgress))
+                    intent.putExtra(THEME_KEY , gsonConverter.toJson(suggestion.progress))
                     viewState.returnEditResult(intent)
                 } else {
                     Log.d(Const.TAG_LOG, "failed post suggestion = ${it.code()} and ${it.errorBody()?.string()} and ${it.message()}")
@@ -47,14 +47,14 @@ class EditSuggestionPresenter(): BaseFragPresenter<EditSuggestionView>() {
         compositeDisposable.add(disposable)
     }
 
-  /*  fun saveSuggestionEdit(themeProgress: ThemeProgress) {
+  /*  fun saveSuggestionEdit(progress: ThemeProgress) {
         for(suggestion in AppHelper.currentCurator.suggestions) {
-            if(suggestion.themeProgress?.id.equals(themeProgress.id)) {
-                suggestion.themeProgress = themeProgress
+            if(suggestion.progress?.id.equals(progress.id)) {
+                suggestion.progress = progress
                 viewState.saveCuratorState()
 
                 val intent = Intent()
-                intent.putExtra(THEME_KEY , gsonConverter.toJson(themeProgress))
+                intent.putExtra(THEME_KEY , gsonConverter.toJson(progress))
                 viewState.returnEditResult(intent)
 
                 break

@@ -6,6 +6,7 @@ import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
 import com.summer.itis.curatorapp.utils.Const.WAITING_CURATOR
 import com.summer.itis.curatorapp.model.common.Identified
+import com.summer.itis.curatorapp.utils.Const.WAITING_CURATOR_NUM
 import java.util.*
 
 class SuggestionTheme: Identified {
@@ -14,9 +15,8 @@ class SuggestionTheme: Identified {
 
     var curator: Curator? = null
     var student: Student? = null
-    var themeProgress: ThemeProgress? = null
     var theme: Theme? = null
-    var status: Status = Status(Integer.toString(Random().nextInt(100) + 1), WAITING_CURATOR)
+    var status: Status = Status(WAITING_CURATOR_NUM, WAITING_CURATOR)
     @SerializedName("theme_id")
     var themeId: String? = theme?.id
     @SerializedName("curator_id")
@@ -25,11 +25,10 @@ class SuggestionTheme: Identified {
     var studentId: String? = student?.id
     @SerializedName("status_id")
     var statusId: String? = status?.id
-    lateinit var themeProgressId: String
     @SerializedName("date_creation")
     lateinit var dateCreation: Date
-    @SerializedName("progress_id")
-    lateinit var progressId: String
+    @SerializedName("progress")
+    var progress: ThemeProgress? = null
     var type: String = STUDENT_TYPE
 
     fun setApiFileds() {

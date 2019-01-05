@@ -1,9 +1,7 @@
 package com.summer.itis.curatorapp.ui.theme.theme_item
 
-import android.content.Context
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
-import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.theme.Status
 import com.summer.itis.curatorapp.model.theme.SuggestionTheme
 import com.summer.itis.curatorapp.model.theme.Theme
@@ -14,7 +12,6 @@ import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
 import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.CURATOR_TYPE
-import com.summer.itis.curatorapp.utils.Const.WAITING_STUDENT
 import com.summer.itis.curatorapp.utils.Const.WAITING_STUDENT_NUM
 import io.reactivex.disposables.CompositeDisposable
 import java.util.*
@@ -38,7 +35,7 @@ class  ThemePresenter(): BaseFragPresenter<ThemeView>() {
         themeProgress.title = theme.title
         themeProgress.description = theme.description
 
-        suggestionTheme.themeProgress = themeProgress
+        suggestionTheme.progress = themeProgress
 
         val disposable =
                 RepositoryProvider.suggestionRepository.postCuratorSuggestion(AppHelper.currentCurator.id, suggestionTheme).subscribe { res ->

@@ -44,10 +44,9 @@ class AddThemePresenter(): BaseFragPresenter<AddThemeView>() {
     fun saveSuggestionEdit(theme: Theme, context: Context) {
         for(suggestion in AppHelper.currentCurator.suggestions) {
             if(suggestion.themeId.equals(theme.id)) {
-                val themeProgress = suggestion.themeProgress
+                val themeProgress = suggestion.progress
                 themeProgress?.title = theme.title
                 themeProgress?.description = theme.description
-                themeProgress?.subject = theme.subject
                 AppHelper.saveCurrentState(AppHelper.currentCurator, context)
 
                 val intent = Intent()
@@ -82,10 +81,10 @@ class AddThemePresenter(): BaseFragPresenter<AddThemeView>() {
             suggestionTheme.student = theme.student
             suggestionTheme.type = CURATOR_TYPE
 
-            val themeProgress = ThemeProgress()
-            themeProgress.title = theme.title
-            themeProgress.description = theme.description
-            suggestionTheme.themeProgress = themeProgress
+            val progress = ThemeProgress()
+            progress.title = theme.title
+            progress.description = theme.description
+            suggestionTheme.progress = progress
             suggestionTheme.status = Status(Integer.toString(Random().nextInt(100) + 1), Const.WAITING_STUDENT)
 
             theme.targetType = ONE_CHOOSED
@@ -151,7 +150,7 @@ class AddThemePresenter(): BaseFragPresenter<AddThemeView>() {
         val themeProgress = ThemeProgress()
         themeProgress.title = theme.title
         themeProgress.description = theme.description
-        suggestionTheme.themeProgress = themeProgress
+        suggestionTheme.progress = themeProgress
         suggestionTheme.setApiFileds()
 //        val suggestionApi = SuggestionApi(suggestionTheme)
 

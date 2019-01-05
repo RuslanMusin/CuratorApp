@@ -35,7 +35,7 @@ class MyThemeListPresenter(): BaseFragPresenter<MyThemeListView>() {
         val themeProgress = ThemeProgress()
         themeProgress.title = theme.title
         themeProgress.description = theme.description
-        suggestionTheme.themeProgress = themeProgress
+        suggestionTheme.progress = themeProgress
         suggestionTheme.status = Status(WAITING_CURATOR_NUM, WAITING_CURATOR)
         suggestionTheme.setApiFileds()
 
@@ -53,7 +53,7 @@ class MyThemeListPresenter(): BaseFragPresenter<MyThemeListView>() {
         val themeProgress = ThemeProgress()
         themeProgress.title = theme.title
         themeProgress.description = theme.description
-        suggestionTheme.themeProgress = themeProgress
+        suggestionTheme.progress = themeProgress
         suggestionTheme.status = Status(WAITING_CURATOR_NUM, WAITING_CURATOR)
         suggestionTheme.setApiFileds()
 

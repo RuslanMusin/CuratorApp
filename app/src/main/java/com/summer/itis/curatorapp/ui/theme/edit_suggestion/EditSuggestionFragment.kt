@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.theme.SuggestionTheme
-import com.summer.itis.curatorapp.model.theme.ThemeProgress
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.utils.Const.ALL_CHOOSED
@@ -72,8 +71,8 @@ class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSugg
     }
 
     private fun setThemeData() {
-        et_theme_name.setText(suggestion.themeProgress?.title)
-        et_theme_desc.setText(suggestion.themeProgress?.description)
+        et_theme_name.setText(suggestion.progress?.title)
+        et_theme_desc.setText(suggestion.progress?.description)
     }
 
     private fun setToolbarData() {
@@ -94,8 +93,8 @@ class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSugg
                     val title = et_theme_name.text.toString()
                     val desc = et_theme_desc.text.toString()
 
-                    suggestion.themeProgress?.title = title
-                    suggestion.themeProgress?.description = desc
+                    suggestion.progress?.title = title
+                    suggestion.progress?.description = desc
 
                     presenter.updateTheme(suggestion)
                 }

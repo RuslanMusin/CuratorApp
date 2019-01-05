@@ -2,6 +2,7 @@ package com.summer.itis.curatorapp.api.services
 
 import com.summer.itis.curatorapp.model.comment.Comment
 import com.summer.itis.curatorapp.model.theme.SuggestionTheme
+import com.summer.itis.curatorapp.model.theme.ThemeProgress
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
 import retrofit2.http.*
@@ -39,5 +40,12 @@ interface SuggestionService {
                                      @Path(value = "suggestion_id") suggestionId: String,
                                      @Body comment: Comment
     ): Single<Result<Comment>>
+
+    @PUT("curators/{curator_id}/suggestions/{suggestion_id}/progress")
+    fun updateCuratorProgress(@Path(value = "curator_id") curatorId: String,
+                              @Path(value = "suggestion_id") suggestionId: String,
+                              @Body progress: ThemeProgress?
+    ): Single<Result<ThemeProgress>>
+
 
 }

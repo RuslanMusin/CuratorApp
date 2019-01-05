@@ -117,15 +117,13 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
     }
 
     private fun setBtnsVisibility() {
-        if(suggestionTheme.type.equals(STUDENT_TYPE)) {
-            btn_edit.visibility = View.GONE
-        }
+        hideEdit(suggestionTheme.status)
     }
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_edit)
         toolbar_title.text = getString(R.string.suggestion)
-//        suggestionTheme.themeProgress?.title?.let { mainListener.setToolbarTitle(it) }
+//        suggestionTheme.progress?.title?.let { mainListener.setToolbarTitle(it) }
         btn_back.visibility = View.VISIBLE
 
     }
@@ -196,21 +194,17 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
     }
 
     private fun setData() {
-
         if(suggestionTheme.theme?.skills?.size == 0) {
             li_skills.visibility = View.GONE
         } else {
             tv_skills.text = this.activity?.let { suggestionTheme.theme?.skills?.let { it1 -> SkillViewHelper.getSkillsText(it1, it) } }
         }
-//        tv_title.content = suggestionTheme.themeProgress?.title
-        tv_title.text = suggestionTheme.theme?.title
+        tv_title.text = suggestionTheme.progress?.title
         tv_curator.text = suggestionTheme.curator?.name
         tv_student.text = suggestionTheme.student?.name
         tv_subject.text = suggestionTheme.theme?.subject?.name
         setStatus(suggestionTheme.status.name)
-        expand_text_view.text = suggestionTheme.theme?.description
-//        setStatus(suggestionTheme.status.name)
-//        expand_text_view.content = suggestionTheme.themeProgress?.description
+        expand_text_view.text = suggestionTheme.progress?.description
     }
 
     override fun onClick(v: View) {
@@ -231,6 +225,12 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
             R.id.btn_revision -> {
                 presenter.revisionTheme(suggestionTheme)
             }
+        }
+    }
+
+    override fun hideEdit(status: Status) {
+        if(!status.name.equals(IN_PROGRESS_CURATOR)) {
+            btn_edit.visibility = View.GONE
         }
     }
 
@@ -262,7 +262,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
 
     private fun showDesc() {
         val args = Bundle()
-        args.putString(DESC_KEY, suggestionTheme.themeProgress?.description)
+        args.putString(DESC_KEY, suggestionTheme.progress?.description)
         args.putString(TYPE, SUGGESTION_TYPE)
         args.putString(USER_ID, AppHelper.currentCurator.id)
         args.putString(ID_KEY, suggestionTheme.id)
@@ -308,53 +308,12 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
         }
         presenter.acceptTheme(suggestionTheme)
         setStatus(ACCEPTED_BOTH)
-        saveCuratorState()
-//        suggestionTheme.status = getString(R.string.accept_theme)
-//        saveStatus()
-//        backFragment()
     }
 
     private fun rejectTheme() {
         presenter.rejectCurator(suggestionTheme)
         saveCuratorState()
-       /* suggestionTheme.status = getString(R.string.reject_theme)
-        saveStatus()
-        backFragment()*/
     }
-
-    private fun revisionTheme() {
-//        presenter.revisionTheme()
-        /*suggestionTheme.status = getString(R.string.theme_on_revision)
-        saveStatus()*/
-    }
-
-   /* private fun saveStatus() {
-        val iterator = AppHelper.currentCurator.suggestions.iterator()
-        for(sug in iterator) {
-            if(sug.id.equals(suggestionTheme.id)) {
-                if(suggestionTheme.status.equals(getString(R.string.theme_on_revision))) {
-                    sug.status = suggestionTheme.status
-                    tv_status.content = sug.status
-                    btn_revision.visibility = View.GONE
-                } else {
-                    if(suggestionTheme.status.equals(getString(R.string.accept_theme))){
-                        val step = Work()
-                        step.id = sug.id
-                        step.dateStart = Date()
-                        sug.theme?.let {
-                            it.student = sug.student
-                            it.curator = sug.curator
-                            step.theme = it
-                        }
-                        AppHelper.currentCurator.steps.add(0, step)
-                    }
-                    iterator.remove()
-                }
-
-            }
-        }
-        context?.let { AppHelper.saveCurrentState(AppHelper.currentCurator, it) }
-    }*/
 
     override fun clearAfterSendComment() {
         scrollView.fullScroll(FOCUS_DOWN)
@@ -375,11 +334,10 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
                     val json = data?.getStringExtra(THEME_KEY)
                     json?.let {
                         val themeProgress = gsonConverter.fromJson(json, ThemeProgress::class.java)
-                        tv_subject.text = themeProgress.subject.name
                         tv_title.text = themeProgress.title
                         expand_text_view.text = themeProgress.description
 
-                        suggestionTheme.themeProgress = themeProgress
+                        suggestionTheme.progress = themeProgress
 
                         mainListener.showSnackBar(getString(R.string.changes_updated))
                     }

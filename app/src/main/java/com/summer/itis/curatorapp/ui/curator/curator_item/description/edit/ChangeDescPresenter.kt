@@ -43,7 +43,7 @@ class ChangeDescPresenter(): BaseFragPresenter<ChangeDescView>() {
         val suggestions = AppHelper.currentCurator.suggestions
         for(suggestionTheme in suggestions) {
             if(suggestionTheme.id.equals(id)) {
-                suggestionTheme.themeProgress?.description = description
+                suggestionTheme.progress?.description = description
                 viewState.saveCuratorState()
             }
         }
