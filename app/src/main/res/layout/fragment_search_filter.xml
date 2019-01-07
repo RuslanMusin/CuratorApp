@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_content"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    >
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                 android:id="@+id/main_content"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="match_parent"
+                                                 android:fitsSystemWindows="true"
+>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -40,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="16dp">
+                >
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -55,22 +54,32 @@
                     android:id="@+id/tv_added_courses"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin.small"
+                    android:layout_marginTop="@dimen/margin.normal"
                     android:textColor="@color/secondary_text"
                     android:textSize="@dimen/text.16"
                     android:text="@string/doesnt_matter"
                     />
 
+                <TextView
+                        android:id="@+id/tv_choose_course"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/choose_course"
+                        android:textSize="@dimen/text.16"
+                        android:textColor="@color/primary"
+                        android:layout_marginTop="8dp"/>
+
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/li_edit_skills"
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginBottom="24dp">
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+        >
 
-                <TextView
+            <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/skills"
@@ -79,25 +88,35 @@
                     android:focusableInTouchMode="true"
                     android:textSize="@dimen/text.18" />
 
-                <TextView
-                    android:id="@+id/tv_added_skills"
-                    android:layout_width="wrap_content"
+            <LinearLayout
+                    android:id="@+id/li_added_skills"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin.small"
-                    android:textColor="@color/secondary_text"
-                    android:textSize="@dimen/text.16"
-                    android:text="@string/doesnt_matter_for_all"
-                    />
+                    android:orientation="vertical"
+            >
+
+                <TextView
+                        android:id="@+id/tv_added_skills"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="@dimen/text.16"
+                        android:text="@string/doesnt_matter_for_all"
+                />
+
             </LinearLayout>
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btn_add_skill"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:padding="12dp"
-                android:background="@color/primary"
-                android:textColor="@color/white"
-                android:text="@string/add_skill"/>
+            <TextView
+                    android:id="@+id/tv_add_skill"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_skill"
+                    android:textSize="@dimen/text.16"
+                    android:textColor="@color/primary"
+                    android:layout_marginTop="8dp"/>
+
+        </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

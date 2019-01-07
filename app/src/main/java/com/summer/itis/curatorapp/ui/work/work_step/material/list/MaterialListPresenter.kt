@@ -2,10 +2,8 @@ package com.summer.itis.curatorapp.ui.work.work_step.material.list
 
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
-import com.summer.itis.curatorapp.model.material.Material
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
-import com.summer.itis.curatorapp.ui.skill.skill_list.view.SkillListView
 import com.summer.itis.curatorapp.utils.Const
 import io.reactivex.disposables.CompositeDisposable
 

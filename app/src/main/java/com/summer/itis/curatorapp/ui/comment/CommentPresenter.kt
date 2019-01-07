@@ -13,11 +13,7 @@ import com.summer.itis.curatorapp.utils.Const.SUGGESTION_TYPE
 import com.summer.itis.curatorapp.utils.Const.WORK_KEY
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.functions.Action
-import io.reactivex.functions.Consumer
 import retrofit2.adapter.rxjava2.Result
-import kotlin.collections.HashMap
 
 open class CommentPresenter<View: CommentView>: BaseFragPresenter<View>() {
 

@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_PROFILE
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.TAB_PROFILE
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.TAB_STUDENTS
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.TAB_THEMES
@@ -69,17 +68,6 @@ class DescriptionFragment : BaseFragment<DescriptionPresenter>(), DescriptionVie
             if(userId != null && AppHelper.currentCurator.id.equals(userId)) {
                 isOwner = true
             }
-
-         /*   personType = it.getString(PERSON_TYPE)
-            if(personType.equals(STUDENT_TYPE)) {
-                type = WATCHER_TYPE
-                step = Const.gsonConverter.fromJson(it.getString(Const.USER_KEY), Student::class.java)
-            } else {
-                step = Const.gsonConverter.fromJson(it.getString(Const.USER_KEY), Curator::class.java)
-                if(step.id != AppHelper.currentCurator.id) {
-                    type = WATCHER_TYPE
-                }
-            }*/
         }
 
     }
@@ -137,7 +125,7 @@ class DescriptionFragment : BaseFragment<DescriptionPresenter>(), DescriptionVie
         id?.let { args.putString(ID_KEY, id) }
         val fragment = ChangeDescFragment.newInstance(args, mainListener)
         fragment.setTargetFragment(this, EDIT_DESC)
-        mainListener.showFragment(SHOW_PROFILE, this, fragment)
+        mainListener.showFragment(this, fragment)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -150,19 +138,6 @@ class DescriptionFragment : BaseFragment<DescriptionPresenter>(), DescriptionVie
                 }
             }
         }
-    }
-
-    private fun getTab(): String {
-        if(type.equals(SUGGESTION_TYPE) || type.equals(THEME_TYPE)) {
-            return TAB_THEMES
-        }
-        if(type.equals(STUDENT_TYPE)) {
-            return TAB_STUDENTS
-        }
-        if(type.equals(CURATOR_TYPE)) {
-            return TAB_PROFILE
-        }
-        return TAB_PROFILE
     }
 
 }

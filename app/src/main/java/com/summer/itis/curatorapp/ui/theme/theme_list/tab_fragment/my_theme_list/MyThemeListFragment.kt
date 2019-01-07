@@ -15,11 +15,9 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.theme.Theme
 import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.theme.add_theme.AddThemeFragment
 import com.summer.itis.curatorapp.ui.theme.theme_item.ThemeFragment
-import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.ALL_CHOOSED
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
@@ -162,7 +160,7 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
         val args = Bundle()
         args.putString(Const.THEME_KEY, Const.gsonConverter.toJson(item))
         val fragment = ThemeFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(NavigationBaseActivity.TAB_THEMES, fragment, true)
+        mainListener.pushFragments(fragment, true)
     }
 
     override fun openStudentAction(adapterPosition: Int) {
@@ -230,7 +228,7 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
                 val fragment = AddThemeFragment.newInstance(args, mainListener)
               /*  val tabLayout = parentFragment?.view?.findViewById<TabLayout>(R.id.tab_layout)
                 tabLayout?.visibility = View.GONE*/
-                mainListener.pushFragments(NavigationBaseActivity.TAB_THEMES, fragment, true)            }
+                mainListener.pushFragments(fragment, true)            }
         }
     }
 }

@@ -4,7 +4,6 @@ import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
-import com.summer.itis.curatorapp.ui.work.work_item.WorkView
 import com.summer.itis.curatorapp.utils.Const
 import io.reactivex.disposables.CompositeDisposable
 

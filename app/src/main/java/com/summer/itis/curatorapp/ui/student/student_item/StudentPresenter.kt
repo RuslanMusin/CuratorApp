@@ -2,7 +2,6 @@ package com.summer.itis.curatorapp.ui.student.student_item
 
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
-import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
 import com.summer.itis.curatorapp.utils.Const
@@ -12,19 +11,6 @@ import io.reactivex.disposables.CompositeDisposable
 class StudentPresenter(): BaseFragPresenter<StudentView>() {
 
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
-
-
-    /* fun findStudentById(id: String) {
-         val student = Student()
-         student.id = id
-         student.name = "Ruslan"
-         student.lastname = "Musin"
-         student.patronymic = "Martovich"
-         student.description = "usual desc"
-         student.groupNumber = "11-603"
-         student.courseNumber = 3
-         viewState.setUserData(student)
-     }*/
 
     fun loadStudent(studentId: String) {
         val disposable = RepositoryProvider.studentRepository.findById(studentId).subscribe { res ->

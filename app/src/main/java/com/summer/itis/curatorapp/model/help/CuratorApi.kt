@@ -1,7 +1,6 @@
 package com.summer.itis.curatorapp.model.help
 
 import com.google.gson.annotations.SerializedName
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
 import com.summer.itis.curatorapp.model.user.Curator
 import java.util.*
 

@@ -5,8 +5,7 @@ import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.theme.Status
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
-import com.summer.itis.curatorapp.model.work.Work
+import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.repository.RepositoryProvider.Companion.suggestionRepository
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
@@ -57,7 +56,7 @@ class SuggestionListPresenter(): BaseFragPresenter<SuggestionListView>() {
         compositeDisposable.add(disposable)
     }
 
-    fun setFakeResponse(sug: SuggestionTheme, action: String, context: Context) {
+    fun setFakeResponse(sug: Suggestion, action: String, context: Context) {
         val curatorId = AppHelper.currentCurator.id
         when(action) {
 
@@ -115,9 +114,6 @@ class SuggestionListPresenter(): BaseFragPresenter<SuggestionListView>() {
                     Log.d(TAG_LOG, "changed status to in progress")
                     checkResponse(e)
                     loadSkills(curatorId)
-
-//                    viewState.changeDataSet(AppHelper.currentCurator.suggestions)
-                    viewState.saveCuratorState()
                 }
             }
 
@@ -129,9 +125,6 @@ class SuggestionListPresenter(): BaseFragPresenter<SuggestionListView>() {
                     Log.d(TAG_LOG, "changed status to save changes")
                     checkResponse(e)
                     loadSkills(curatorId)
-
-//                    viewState.changeDataSet(AppHelper.currentCurator.suggestions)
-                    viewState.saveCuratorState()
                 }
             }
 
@@ -155,7 +148,7 @@ class SuggestionListPresenter(): BaseFragPresenter<SuggestionListView>() {
          }*/
     }
 
-    fun checkResponse(res: Result<SuggestionTheme>) {
+    fun checkResponse(res: Result<Suggestion>) {
         if(res == null) {
             Log.d(Const.TAG_LOG, "res == null")
         } else {
@@ -179,7 +172,7 @@ class SuggestionListPresenter(): BaseFragPresenter<SuggestionListView>() {
         }
     }
 
-   /* fun createWork(sug: SuggestionTheme) {
+   /* fun createWork(sug: Suggestion) {
           val work = Work()
                work.id = sug.id
                work.dateStart = Date()

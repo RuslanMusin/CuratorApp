@@ -5,10 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.summer.itis.curatorapp.R
-import com.summer.itis.curatorapp.model.skill.Subject
 import com.summer.itis.curatorapp.model.theme.Theme
 import kotlinx.android.synthetic.main.item_theme.view.*
-import java.util.*
 
 class ThemeItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -16,7 +14,7 @@ class ThemeItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(item: Theme) {
         itemView.tv_theme.text = item.title
-//        itemView.tv_subject.content = item.subject.name
+        itemView.tv_student.text = getStudentName(itemView, item)
         itemView.setOnLongClickListener {
             listener.openStudentAction(adapterPosition)
             true
@@ -32,5 +30,13 @@ class ThemeItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             holder.listener = listener
             return holder
         }
+    }
+
+    private fun getStudentName(view: View, theme: Theme): String? {
+        var name = theme.student?.name
+        if(name == null) {
+            name = view.context.getString(R.string.theme_not_choosed)
+        }
+        return name
     }
 }

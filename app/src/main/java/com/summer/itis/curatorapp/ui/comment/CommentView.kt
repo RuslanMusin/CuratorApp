@@ -1,7 +1,7 @@
 package com.summer.itis.curatorapp.ui.comment
 
 import com.summer.itis.curatorapp.model.comment.Comment
-import com.summer.itis.curatorapp.model.user.Person
+import com.summer.itis.curatorapp.model.user.User
 import com.summer.itis.curatorapp.ui.base.base_first.BaseAdapter
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragView
 import io.reactivex.disposables.Disposable
@@ -26,7 +26,7 @@ interface CommentView: BaseFragView, BaseAdapter.OnItemClickListener<Comment>{
 
     fun clearAfterSendComment()
 
-    fun goToCommentAuthor(user: Person)
+    fun goToCommentAuthor(user: User)
 
     fun setCommentListeners()
 

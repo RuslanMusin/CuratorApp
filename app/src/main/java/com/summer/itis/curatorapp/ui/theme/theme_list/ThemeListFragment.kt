@@ -9,9 +9,9 @@ import android.util.Log
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
+import com.summer.itis.curatorapp.ui.base.base_custom.SearchListener
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.base.base_custom.SearchListener
 import com.summer.itis.curatorapp.ui.theme.theme_list.tab_fragment.my_theme_list.MyThemeListFragment
 import com.summer.itis.curatorapp.ui.theme.theme_list.tab_fragment.suggestion_list.SuggestionListFragment
 import com.summer.itis.curatorapp.utils.AppHelper

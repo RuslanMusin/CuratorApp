@@ -24,30 +24,33 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/li_top"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                    android:id="@+id/li_title"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin.normal"
+                    android:layout_marginBottom="@dimen/margin.normal"
+            >
 
                 <TextView
-                    android:id="@+id/tv_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="@dimen/large_intrinsic_padding"
-                    android:paddingTop="@dimen/intrinsic_padding"
-                    android:text="@string/test_name"
-                    android:textColor="@color/primary_text"
-                    android:textSize="@dimen/text.20"
-                    android:textStyle="bold"
-                    />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/theme_name"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/text.16" />
+
+                <TextView
+                        android:id="@+id/tv_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin.small"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="@dimen/text.14"
+                        tools:text="Authors" />
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
+            <include layout="@layout/layout_divider"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,12 +61,14 @@
                     android:id="@+id/li_curator"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin.normal"
+                    android:layout_marginBottom="@dimen/margin.normal"
+                >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin.normal"
                         android:text="@string/curator"
                         android:textColor="@color/primary_text"
                         android:textSize="@dimen/text.16" />
@@ -85,12 +90,14 @@
                     android:id="@+id/li_student"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin.normal"
+                    android:layout_marginBottom="@dimen/margin.normal"
+                >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin.normal"
                         android:text="@string/student_name"
                         android:textColor="@color/primary_text"
                         android:textSize="@dimen/text.16" />
@@ -112,12 +119,14 @@
                     android:id="@+id/li_subject"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin.normal"
+                    android:layout_marginBottom="@dimen/margin.normal"
+                >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin.normal"
                         android:text="@string/subject"
                         android:textColor="@color/primary_text"
                         android:textSize="@dimen/text.16" />
@@ -135,10 +144,18 @@
 
                 <include layout="@layout/layout_divider"/>
 
+                <LinearLayout
+                    android:id="@+id/li_status"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin.normal"
+                    android:layout_marginBottom="@dimen/margin.normal"
+                >
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin.normal"
                     android:text="@string/theme_status"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/text.16" />
@@ -151,6 +168,8 @@
                     android:textColor="@color/secondary_text"
                     android:textSize="@dimen/text.14"
                     tools:text="Authors" />
+
+                </LinearLayout>
 
                 <include layout="@layout/layout_divider"/>
 
@@ -204,6 +223,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin.normal"
+                    android:layout_marginBottom="@dimen/margin.normal"
                     android:orientation="vertical">
 
                     <TextView
@@ -259,7 +279,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin.normal"
-                android:text="@string/comments"
+                android:layout_marginBottom="@dimen/margin.normal"                android:text="@string/comments"
                 android:textColor="@color/primary_text"
                 android:textSize="@dimen/text.16" />
 

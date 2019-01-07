@@ -14,8 +14,6 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.ms.square.android.expandabletextview.ExpandableTextView
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.step.Step
-import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_WORKS
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.comment.CommentFragment
 import com.summer.itis.curatorapp.ui.work.work_step.edit_step.EditStepFragment
@@ -29,7 +27,6 @@ import com.summer.itis.curatorapp.utils.Const.STEP_KEY
 import com.summer.itis.curatorapp.utils.Const.WORK_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import com.summer.itis.curatorapp.utils.FormatterUtil
-import kotlinx.android.synthetic.main.fragment_step.*
 import kotlinx.android.synthetic.main.layout_add_comment.*
 import kotlinx.android.synthetic.main.layout_step.*
 import kotlinx.android.synthetic.main.toolbar_edit_back.*
@@ -47,10 +44,6 @@ class StepFragment: CommentFragment<StepPresenter>(), StepView, View.OnClickList
     override lateinit var presenter: StepPresenter
 
     companion object {
-
-        const val TAG_CURATOR = "TAG_CURATOR"
-
-        const val EDIT_CURATOR = 1
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
             val fragment = StepFragment()
@@ -133,7 +126,7 @@ class StepFragment: CommentFragment<StepPresenter>(), StepView, View.OnClickList
         args.putString(WORK_KEY, workId)
         args.putString(Const.STEP_KEY, step.id)
         val fragment = MaterialListFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(SHOW_WORKS, fragment, true)
+        mainListener.pushFragments(fragment, true)
     }
 
     private fun editStep() {
@@ -142,7 +135,7 @@ class StepFragment: CommentFragment<StepPresenter>(), StepView, View.OnClickList
         args.putString(ID_KEY, workId)
         val fragment = EditStepFragment.newInstance(args, mainListener)
         fragment.setTargetFragment(this, EDIT_STEP)
-        mainListener.showFragment(SHOW_WORKS,this, fragment)
+        mainListener.showFragment(this, fragment)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

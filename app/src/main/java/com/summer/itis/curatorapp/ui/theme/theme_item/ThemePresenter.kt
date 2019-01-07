@@ -3,9 +3,9 @@ package com.summer.itis.curatorapp.ui.theme.theme_item
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.summer.itis.curatorapp.model.theme.Status
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
+import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.model.theme.Theme
-import com.summer.itis.curatorapp.model.theme.ThemeProgress
+import com.summer.itis.curatorapp.model.theme.Progress
 import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
@@ -22,7 +22,7 @@ class  ThemePresenter(): BaseFragPresenter<ThemeView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun sendSuggestion(theme: Theme, student: Student) {
-        val suggestionTheme = SuggestionTheme()
+        val suggestionTheme = Suggestion()
         suggestionTheme.id = "${Random().nextInt(24000)}"
         suggestionTheme.type = CURATOR_TYPE
         suggestionTheme.student = student
@@ -31,7 +31,7 @@ class  ThemePresenter(): BaseFragPresenter<ThemeView>() {
         suggestionTheme.theme = theme
         suggestionTheme.setApiFileds()
 
-        val themeProgress = ThemeProgress()
+        val themeProgress = Progress()
         themeProgress.title = theme.title
         themeProgress.description = theme.description
 
@@ -54,7 +54,6 @@ class  ThemePresenter(): BaseFragPresenter<ThemeView>() {
                             Log.d(Const.TAG_LOG, "successful post suggestion")
                             it.body()?.let { skills ->
                                 AppHelper.currentCurator.suggestions.add(0, suggestionTheme)
-                                viewState.saveCuratorState()
 
                             }
                         } else {

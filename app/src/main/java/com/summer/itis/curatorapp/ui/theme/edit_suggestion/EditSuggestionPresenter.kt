@@ -3,7 +3,7 @@ package com.summer.itis.curatorapp.ui.theme.edit_suggestion
 import android.content.Intent
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
+import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
 import com.summer.itis.curatorapp.utils.AppHelper
@@ -17,7 +17,7 @@ class EditSuggestionPresenter(): BaseFragPresenter<EditSuggestionView>() {
 
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    fun updateTheme(suggestion: SuggestionTheme) {
+    fun updateTheme(suggestion: Suggestion) {
 //        val suggestionApi: SuggestionApi = SuggestionApi(suggestion)
         suggestion.setApiFileds()
         val disposable = RepositoryProvider.suggestionRepository.
@@ -47,7 +47,7 @@ class EditSuggestionPresenter(): BaseFragPresenter<EditSuggestionView>() {
         compositeDisposable.add(disposable)
     }
 
-  /*  fun saveSuggestionEdit(progress: ThemeProgress) {
+  /*  fun saveSuggestionEdit(progress: Progress) {
         for(suggestion in AppHelper.currentCurator.suggestions) {
             if(suggestion.progress?.id.equals(progress.id)) {
                 suggestion.progress = progress

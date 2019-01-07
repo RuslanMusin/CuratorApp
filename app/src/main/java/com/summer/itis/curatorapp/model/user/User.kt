@@ -1,20 +1,18 @@
 package com.summer.itis.curatorapp.model.user
 
-import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
+import com.summer.itis.curatorapp.model.common.Identified
 import com.summer.itis.curatorapp.model.skill.Skill
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
+import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.model.theme.Theme
 import com.summer.itis.curatorapp.model.work.Work
-import com.summer.itis.curatorapp.utils.Const.OFFLINE_STATUS
-import com.summer.itis.curatorapp.utils.Const.STUB_PATH
-import com.summer.itis.curatorapp.model.common.Identified
 
-abstract class Person: Identified {
+abstract class User: Identified {
 
     override lateinit var id: String
-    @Transient
+    @SerializedName("username")
     lateinit var email: String
+    lateinit var password: String
     lateinit var name: String
     @SerializedName("last_name")
     lateinit var lastname: String
@@ -24,7 +22,7 @@ abstract class Person: Identified {
     var skills: MutableList<Skill> = ArrayList()
 
     @Transient
-    var suggestions: MutableList<SuggestionTheme> = ArrayList()
+    var suggestions: MutableList<Suggestion> = ArrayList()
     @Transient
     var themes: MutableList<Theme> = ArrayList()
     @Transient
@@ -32,14 +30,13 @@ abstract class Person: Identified {
 
     @SerializedName("skills_id")
     var skillsIds: MutableList<String> = ArrayList()
-        /*get() {
-            val list: MutableList<String> = ArrayList()
-            for(skill in skills) {
-                list.add(skill.id)
-            }
-            skillsIds = list
-            return list
-        }*/
+
+    constructor() {}
+
+    constructor(email: String, password: String) {
+        this.email = email
+        this.password = password
+    }
 
     fun getFullName(): String {
         return "$lastname $name $patronymic"

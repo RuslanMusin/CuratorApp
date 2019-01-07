@@ -12,9 +12,6 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.material.Material
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.curator.curator_item.description.edit.ChangeDescPresenter
-import com.summer.itis.curatorapp.ui.curator.curator_item.description.edit.ChangeDescView
-import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.DescriptionFragment
 import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.ADD_MATERIAL

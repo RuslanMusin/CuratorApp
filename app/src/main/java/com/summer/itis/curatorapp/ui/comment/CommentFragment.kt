@@ -8,7 +8,7 @@ import android.util.Log
 import android.view.View
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.comment.Comment
-import com.summer.itis.curatorapp.model.user.Person
+import com.summer.itis.curatorapp.model.user.User
 import com.summer.itis.curatorapp.ui.base.base_first.activity.BaseActivity
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.utils.AppHelper
@@ -17,7 +17,6 @@ import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.layout_add_comment.*
 import kotlinx.android.synthetic.main.layout_recycler_list.*
 import java.util.*
-import kotlin.collections.HashMap
 
 abstract class CommentFragment<Presenter: CommentPresenter<*>>: BaseFragment<Presenter>(), CommentView {
 
@@ -87,7 +86,7 @@ abstract class CommentFragment<Presenter: CommentPresenter<*>>: BaseFragment<Pre
 //        presenter.openCommentAuthor(userId)
     }
 
-    override fun goToCommentAuthor(user: Person) {
+    override fun goToCommentAuthor(user: User) {
 //        PersonalActivity.start(activity as Activity, step)
     }
 

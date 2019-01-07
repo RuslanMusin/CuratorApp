@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.material.Material
-import com.summer.itis.curatorapp.model.skill.Skill
 import kotlinx.android.synthetic.main.item_material.view.*
 
 class MaterialItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

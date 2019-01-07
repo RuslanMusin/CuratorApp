@@ -16,20 +16,15 @@ import com.google.gson.reflect.TypeToken
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.skill.Skill
 import com.summer.itis.curatorapp.model.skill.Subject
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
+import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.model.theme.Theme
 import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_THEMES
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.student.search.choose_skill.ChooseAddSkillFragment
-import com.summer.itis.curatorapp.ui.student.search.choose_skill_main.ChooseSkillFragment
-import com.summer.itis.curatorapp.ui.student.search.edit_choose_skill.EditChooseLIstFragment
 import com.summer.itis.curatorapp.ui.student.student_list.StudentListFragment
 import com.summer.itis.curatorapp.ui.subject.add_subject.AddSubjectFragment
 import com.summer.itis.curatorapp.utils.AppHelper
-import com.summer.itis.curatorapp.utils.Const.ADD_SKILL
 import com.summer.itis.curatorapp.utils.Const.ADD_STUDENT
 import com.summer.itis.curatorapp.utils.Const.ADD_SUBJECT
 import com.summer.itis.curatorapp.utils.Const.ADD_THEME_TYPE
@@ -52,7 +47,7 @@ import kotlin.collections.ArrayList
 class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.OnClickListener {
 
     private lateinit var theme: Theme
-    private var suggestionTheme: SuggestionTheme? = null
+    private var suggestion: Suggestion? = null
 
     private var type = ADD_THEME_TYPE
 
@@ -94,7 +89,6 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        mainListener.hideBottomNavigation()
         val view = inflater.inflate(R.layout.fragment_add_theme, container, false)
         return view
     }
@@ -157,16 +151,9 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
                         theme.subjectId = it.id
                         theme.subject = it
                     }
-                   /* val c = Calendar.getInstance()
-                    c.set(Calendar.YEAR, 2017)
-                    c.set(Calendar.MONTH, 12)
-                    c.set(Calendar.DAY_OF_YEAR, 30)
-                    theme.dateCreation = c.time
-                    c.set(Calendar.DAY_OF_YEAR, 31)*/
                     theme.skills = skills
                     theme.setSkillsIds()
-                    context?.let { presenter.addTheme(theme) }
-//                    backFragment()
+                    context?.let { presenter.postTheme(theme) }
                 } else {
                     mainListener.showSnackBar(getString(R.string.invalid_fields))
                 }
@@ -175,13 +162,13 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
             R.id.tv_add_subject -> {
                 val fragment = AddSubjectFragment.newInstance(mainListener)
                 fragment.setTargetFragment(this, ADD_SUBJECT)
-                mainListener.showFragment(SHOW_THEMES, this, fragment)
+                mainListener.showFragment(this, fragment)
             }
 
             R.id.tv_add_student -> {
                 val fragment = StudentListFragment.newInstance(mainListener)
                 fragment.setTargetFragment(this, ADD_STUDENT)
-                mainListener.showFragment(SHOW_THEMES, this, fragment)
+                mainListener.showFragment(this, fragment)
             }
 
             R.id.iv_remove_student -> {
@@ -198,34 +185,14 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
     }
 
     private fun addSkill() {
-        /*val fragment = ChooseSkillFragment.newInstance(mainListener)
-        fragment.setTargetFragment(this, ADD_SKILL)
-        mainListener.showFragment(SHOW_THEMES, this, fragment)*/
         val fragment = ChooseAddSkillFragment.newInstance(mainListener)
         fragment.setTargetFragment(this, CHOOSE_SKILL)
-        mainListener.showFragment(NavigationBaseActivity.SHOW_PROFILE, this, fragment)
+        mainListener.showFragment(this, fragment)
     }
 
 
-    private fun editSkills() {
-        if(!tv_added_skills.text.equals(getString(R.string.doesnt_matter_for_all))) {
-            val args = Bundle()
-            val listJson = gsonConverter.toJson(skills)
-            args.putString(SKILL_KEY, listJson)
-            val fragment = EditChooseLIstFragment.newInstance(args, mainListener)
-            fragment.setTargetFragment(this, EDIT_CHOOSED_SKILLS)
-            mainListener.showFragment(SHOW_THEMES, this, fragment)
-        }
-    }
-
-    override fun getResultAfterEdit(isEdit: Boolean, intent: Intent?) {
-        activity?.let { AppHelper.saveCurrentState(AppHelper.currentCurator, it) }
-        if(isEdit) {
-            targetFragment?.onActivityResult(EDIT_SUGGESTION, Activity.RESULT_OK, intent)
-            mainListener.hideFragment()
-        } else {
-            backFragment()
-        }
+    override fun getResultAfterAdd() {
+        backFragment()
     }
     override fun onActivityResult(reqCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(reqCode, resultCode, data)
@@ -248,9 +215,6 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
                     data?.getStringExtra(USER_KEY)?.let {
                         student = gsonConverter.fromJson(it, Student::class.java)
                         studentType = ONE_CHOOSED
-//                        tv_added_student.content = student?.getFullName()
-                       /* spinner_student.setItems(getString(R.string.all_students_choosed), student?.getFullName())
-                        spinner_student.selectedIndex = 1*/
                         tv_added_students.text =  student?.getFullName()
                         iv_remove_student.visibility = View.VISIBLE
                     }
@@ -261,13 +225,10 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
                         val skillJson = it.getStringExtra(SKILL_KEY)
                         val skill = gsonConverter.fromJson(skillJson, Skill::class.java)
                         skills.add(skill)
-//                        val skillText = "${skill.name}
                         if(liViews.size == 0) {
                             tv_added_skills.visibility = View.GONE
                         }
                         addSkillView(skill)
-                     /*   listSkills.add(skillText)
-                        tv_added_skills.content = getListString(listSkills)*/
                     }
                 }
 
@@ -292,7 +253,7 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
     }
 
     private fun addSkillView(skill: Skill) {
-        val view: View = layoutInflater.inflate(R.layout.item_skill_clear, li_added_skills,false)
+        val view: View = layoutInflater.inflate(R.layout.item_skill_clear_margin_off, li_added_skills,false)
         val ivRemoveSkill: ImageView = view.findViewById(R.id.iv_remove_skill)
         val tvAddedSkill: TextView = view.findViewById(R.id.tv_added_skill_name)
 

@@ -1,7 +1,6 @@
 package com.summer.itis.curatorapp.repository.material
 
 import com.summer.itis.curatorapp.model.material.Material
-import com.summer.itis.curatorapp.model.skill.Skill
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
 

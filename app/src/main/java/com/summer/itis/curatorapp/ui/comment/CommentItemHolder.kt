@@ -12,7 +12,6 @@ import com.bumptech.glide.Glide
 import com.ms.square.android.expandabletextview.ExpandableTextView
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.comment.Comment
-import com.summer.itis.curatorapp.utils.Const.STUB_PATH
 import com.summer.itis.curatorapp.utils.FormatterUtil
 import kotlinx.android.synthetic.main.item_comment.view.*
 
@@ -39,18 +38,9 @@ class CommentItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     private fun fillComment(comment: Comment) {
-
-        if(!comment.authorPhotoUrl.equals(STUB_PATH)) {
-//            val imageReference = comment.authorPhotoUrl?.let { FirebaseStorage.getInstance().reference.child(it) }
-
-            Glide.with(itemView.getContext())
-                    .load(R.drawable.teacher)
-                    .into(itemView.iv_cover)
-        } else {
-            Glide.with(itemView.getContext())
-                    .load(R.drawable.student)
-                    .into(itemView.iv_cover)
-        }
+        Glide.with(itemView.getContext())
+            .load(R.drawable.student)
+            .into(itemView.iv_cover)
     }
 
     private fun cutLongDescription(description: String): String {

@@ -21,7 +21,6 @@ import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import com.summer.itis.curatorapp.utils.FormatterUtil
 import com.summer.itis.curatorapp.widget.DatePickerFragment
 import kotlinx.android.synthetic.main.fragment_add_step.*
-import kotlinx.android.synthetic.main.fragment_step.*
 import kotlinx.android.synthetic.main.toolbar_back_done.*
 
 class EditStepFragment : BaseFragment<EditStepPresenter>(), EditStepView, View.OnClickListener {

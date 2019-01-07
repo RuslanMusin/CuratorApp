@@ -4,5 +4,4 @@ import com.arellomobile.mvp.MvpView
 
 interface BaseFragView: MvpView {
 
-    fun saveCuratorState()
 }

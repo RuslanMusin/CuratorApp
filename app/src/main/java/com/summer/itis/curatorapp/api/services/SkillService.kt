@@ -9,14 +9,20 @@ import retrofit2.http.Path
 interface SkillService {
 
     @GET("skills/{skill_id}")
-    fun findById(@Path(value = "skill_id") id: String): Single<Result<Skill>>
+    fun findById(
+        @Path(value = "skill_id") id: String
+    ): Single<Result<Skill>>
 
     @GET("skills")
     fun findAll(): Single<Result<List<Skill>>>
 
     @GET("curators/{curator_id}/skills")
-    fun findCuratorSkills(@Path(value = "curator_id") id: String): Single<Result<List<Skill>>>
+    fun findCuratorSkills(
+        @Path(value = "curator_id") id: String
+    ): Single<Result<List<Skill>>>
 
     @GET("students/{student_id}/skills")
-    fun findStudentSkills(@Path(value = "student_id") id: String): Single<Result<List<Skill>>>
+    fun findStudentSkills(
+        @Path(value = "student_id") id: String
+    ): Single<Result<List<Skill>>>
 }

@@ -13,9 +13,9 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import com.arellomobile.mvp.MvpAppCompatActivity
+import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const
-import com.summer.itis.curatorapp.R
 import kotlinx.android.synthetic.main.activity_base.*
 
 //СТАНДАРТНЫЙ БАЗОВЫЙ АКТИВИТИ ДЛЯ ТЕХ,КОМУ НЕ НУЖНА НАВИГАЦИЯ, НО ЕСТЬ СТРЕЛКА НАЗАД И ПРОГРЕСС БАР.

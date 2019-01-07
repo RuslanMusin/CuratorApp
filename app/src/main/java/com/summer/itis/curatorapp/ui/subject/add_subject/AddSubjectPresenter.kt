@@ -2,7 +2,6 @@ package com.summer.itis.curatorapp.ui.subject.add_subject
 
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
-import com.summer.itis.curatorapp.model.skill.Subject
 import com.summer.itis.curatorapp.repository.RepositoryProvider.Companion.subjectRepository
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
 import com.summer.itis.curatorapp.utils.Const

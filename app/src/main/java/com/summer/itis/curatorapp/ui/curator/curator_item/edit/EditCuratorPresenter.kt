@@ -2,7 +2,6 @@ package com.summer.itis.curatorapp.ui.curator.curator_item.edit
 
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
-import com.summer.itis.curatorapp.model.help.CuratorApi
 import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
@@ -15,7 +14,6 @@ class EditCuratorPresenter(): BaseFragPresenter<EditCuratorView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun updateCurator(curator: Curator) {
-//        val curatorApi = CuratorApi(curator)
         val disposable = RepositoryProvider.curatorRepository.update(curator.id, curator).subscribe { res ->
             Log.d(Const.TAG_LOG, "receive subjects response")
             if(res == null) {

@@ -14,7 +14,7 @@ class StudentItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(item: Student) {
         itemView.tv_name.text = "${item.lastname + SPACE + item.name + SPACE + item.patronymic}"
 
-        itemView.tv_group.text = "${item.group.name + SPACE + "," + SPACE + item.courseNumber + SPACE + itemView.context.getString(R.string.course)}"
+        itemView.tv_group.text = "${item.group.name + SPACE + "," + SPACE + item.course + SPACE + itemView.context.getString(R.string.course)}"
     }
 
 

@@ -12,7 +12,6 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.model.work.Work
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.work.one_work_list.WorkAdapter
 import com.summer.itis.curatorapp.ui.work.work_item.WorkFragment
@@ -63,27 +62,6 @@ class PastWorkListFragment : BaseFragment<PastWorkListPresenter>(), PastWorkList
         super.onViewCreated(view, savedInstanceState)
         user = AppHelper.currentCurator
         initViews()
-        loadSkills()
-    }
-
-    private fun loadSkills() {
-//        presenter.loadWorks(AppHelper.currentCurator.id)
-        works = ArrayList()
-        val themes = AppHelper.getThemeList(AppHelper.otherCurator)
-        val calendarFirst = Calendar.getInstance()
-        calendarFirst.set(2017, 9, 10)
-        val calendarFinish = Calendar.getInstance()
-        calendarFinish.set(2017, 12, 15)
-        for (i in 0..9) {
-            val work = Work()
-            work.id = "$i"
-            val curator = AppHelper.otherCurator
-            work.theme = themes[i]
-            work.dateStart = calendarFirst.time
-            work.dateFinish = calendarFinish.time
-            works.add(work)
-        }
-        changeDataSet(works)
     }
 
     private fun initViews() {
@@ -133,7 +111,7 @@ class PastWorkListFragment : BaseFragment<PastWorkListPresenter>(), PastWorkList
         val args = Bundle()
         args.putString(Const.WORK_KEY, Const.gsonConverter.toJson(item))
         val fragment = WorkFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(NavigationBaseActivity.TAB_WORKS, fragment, true)
+        mainListener.pushFragments(fragment, true)
     }
 
     override fun findByQuery(query: String) {

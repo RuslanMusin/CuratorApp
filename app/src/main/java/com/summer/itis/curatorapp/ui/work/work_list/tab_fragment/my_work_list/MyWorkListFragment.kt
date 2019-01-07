@@ -12,7 +12,6 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.model.work.Work
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.work.one_work_list.WorkAdapter
 import com.summer.itis.curatorapp.ui.work.work_item.WorkFragment
@@ -63,30 +62,6 @@ class MyWorkListFragment : BaseFragment<MyWorkListPresenter>(), MyWorkListView, 
         super.onViewCreated(view, savedInstanceState)
         user = AppHelper.currentCurator
         initViews()
-        loadSkills()
-    }
-
-    private fun loadSkills() {
-//        presenter.loadWorks(AppHelper.currentCurator.id)
-        if(AppHelper.currentCurator.works.size == 0) {
-            works = ArrayList()
-            val themes = AppHelper.getThemeList(AppHelper.currentCurator)
-            val calendarFirst = Calendar.getInstance()
-            calendarFirst.set(2017, 9, 10)
-            for (i in 0..9) {
-                val work = Work()
-                work.id = "$i"
-                val curator = AppHelper.currentCurator
-                work.theme = themes[i]
-                work.dateStart = calendarFirst.time
-                work.dateFinish = null
-                works.add(work)
-            }
-            AppHelper.currentCurator.works = works
-        } else {
-            works = AppHelper.currentCurator.works
-        }
-        changeDataSet(works)
     }
 
     private fun initViews() {
@@ -136,7 +111,7 @@ class MyWorkListFragment : BaseFragment<MyWorkListPresenter>(), MyWorkListView, 
         val args = Bundle()
         args.putString(Const.WORK_KEY, Const.gsonConverter.toJson(item))
         val fragment = WorkFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(NavigationBaseActivity.TAB_WORKS, fragment, true)
+        mainListener.pushFragments(fragment, true)
     }
 
     override fun findByQuery(query: String) {

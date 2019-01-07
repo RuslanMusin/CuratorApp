@@ -2,6 +2,7 @@ package com.summer.itis.curatorapp.ui.curator.curator_item.description.edit
 
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
+import com.summer.itis.curatorapp.R.string.curator
 import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
@@ -17,42 +18,10 @@ class ChangeDescPresenter(): BaseFragPresenter<ChangeDescView>() {
 
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    fun saveDescription(description: String, type: String, id: String?) {
-
-        when(type) {
-
-//            CURATOR_TYPE -> saveCuratorDesc(description)
-
-            SUGGESTION_TYPE -> id?.let { saveSuggestionDesc(description, it) }
-
-            THEME_TYPE -> id?.let { saveThemeDesc(description, it) }
-        }
-    }
-
-    fun saveThemeDesc(description: String, id: String) {
-        val themes = AppHelper.currentCurator.themes
-        for(theme in themes) {
-            if(theme.id.equals(id)) {
-                theme.description = description
-                viewState.saveCuratorState()
-            }
-        }
-    }
-
-    fun saveSuggestionDesc(description: String, id: String) {
-        val suggestions = AppHelper.currentCurator.suggestions
-        for(suggestionTheme in suggestions) {
-            if(suggestionTheme.id.equals(id)) {
-                suggestionTheme.progress?.description = description
-                viewState.saveCuratorState()
-            }
-        }
-    }
-
     fun saveCuratorDesc(curator: Curator) {
-//        val curatorApi = CuratorApi(curator)
         val disposable = RepositoryProvider.curatorRepository.update(curator.id, curator).subscribe { res ->
-            Log.d(Const.TAG_LOG, "receive subjects response")
+            interceptResponse(res, saveChanges())
+           /* Log.d(Const.TAG_LOG, "receive subjects response")
             if(res == null) {
                 Log.d(Const.TAG_LOG, "res == null")
             } else {
@@ -66,22 +35,23 @@ class ChangeDescPresenter(): BaseFragPresenter<ChangeDescView>() {
                 if (it.isSuccessful) {
                     Log.d(Const.TAG_LOG, "successful subjects")
                     it.body()?.let { students ->
-                        AppHelper.currentCurator.description = curator.description
-                        viewState.saveCuratorState()
-                        viewState.showChanges()
+
                     }
                 } else {
                     Log.d(Const.TAG_LOG, "failed desc changes")
                     Log.d(TAG_LOG, "mes = ${it.message()}")
 
                 }
-            }
+            }*/
         }
         compositeDisposable.add(disposable)
-
     }
 
-    fun loadStudent(studentId: String) {
-
+    private fun saveChanges(): (curator: Curator) -> Unit {
+        return {
+            AppHelper.currentCurator.description = it.description
+            viewState.showChanges()
+        }
     }
+
 }

@@ -16,7 +16,6 @@ import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.IN_PROCESS
 import com.summer.itis.curatorapp.widget.DatePickerFragment
 import kotlinx.android.synthetic.main.fragment_add_step.*
-import kotlinx.android.synthetic.main.fragment_step.*
 import kotlinx.android.synthetic.main.toolbar_back_done.*
 import java.util.*
 

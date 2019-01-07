@@ -104,8 +104,6 @@ class ChangeDescFragment : BaseFragment<ChangeDescPresenter>(), ChangeDescView, 
         description = et_description.text.toString()
         AppHelper.currentCurator.description = description
         presenter.saveCuratorDesc(AppHelper.currentCurator)
-       /* presenter.saveDescription(description, type, id)
-        mainListener.hideFragment()*/
     }
 
     override fun showChanges() {

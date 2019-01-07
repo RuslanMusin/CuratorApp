@@ -6,37 +6,28 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.google.gson.reflect.TypeToken
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.skill.Skill
-import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.utils.Const
-import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
-import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.layout_recycler_list.*
-import kotlinx.android.synthetic.main.toolbar_edit.*
-import android.view.MenuInflater
-import com.summer.itis.curatorapp.model.user.Person
-import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.ui.skill.skill_list.edit.EditSkillsFragment
 import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const.CURATOR_TYPE
+import com.summer.itis.curatorapp.utils.Const.ID_KEY
+import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
 import com.summer.itis.curatorapp.utils.Const.PERSON_TYPE
 import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
 import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
 import com.summer.itis.curatorapp.utils.Const.WATCHER_TYPE
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
-import java.util.regex.Pattern
-import com.google.gson.reflect.TypeToken
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_PROFILE
-import com.summer.itis.curatorapp.utils.Const.ID_KEY
+import io.reactivex.disposables.Disposable
+import kotlinx.android.synthetic.main.layout_recycler_list.*
+import kotlinx.android.synthetic.main.toolbar_edit.*
 import java.util.*
+import java.util.regex.Pattern
 
 
 class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, View.OnClickListener {
@@ -110,7 +101,7 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
 
     /*private fun loadSkills() {
 //        presenter.loadWorks(AppHelper.currentCurator.id)
-        if(user.skills.size == 0) {
+        if(curator.skills.size == 0) {
             this.activity?.let { skills = AppHelper.getMySkillList(it).toMutableList()}
           *//*  var skill: Skill = Skill()
 
@@ -133,7 +124,7 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
             saveCuratorState()
 
         } else {
-            skills = user.skills
+            skills = curator.skills
         }
         changeDataSet(skills)
 
@@ -214,7 +205,7 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
         fragment.setTargetFragment(this, EDIT_SKILLS)
 //        mainListener.loadFragment(fragment)
 //        mainListener.pushFragments(TAB_PROFILE, fragment, true)
-        mainListener.showFragment(SHOW_PROFILE, this, fragment)
+        mainListener.showFragment(this, fragment)
 
     }
 
@@ -224,14 +215,13 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
             when(requestCode) {
 
                 EDIT_SKILLS -> {
-//                    step = AppHelper.currentCurator as Person
+//                    step = AppHelper.currentCurator as User
                     data?.getStringExtra(SKILL_KEY)?.let {
                         val founderListType = object : TypeToken<ArrayList<Skill>>(){}.type
                         val skills: List<Skill> = gsonConverter.fromJson(it, founderListType)
                        /* steps.add(0, skill)*/
                         AppHelper.currentCurator.skills = skills.toMutableList()
                         this.skills = skills.toMutableList()
-                        saveCuratorState()
                         changeDataSet(skills)
                     }
 //                    changeDataSet(step.subjects)

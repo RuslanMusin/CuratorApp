@@ -2,7 +2,6 @@ package com.summer.itis.curatorapp.ui.work.progress_card
 
 import android.view.ViewGroup
 import com.summer.itis.curatorapp.model.step.Step
-import com.summer.itis.curatorapp.model.work.Work
 import com.summer.itis.curatorapp.ui.base.base_first.BaseAdapter
 
 

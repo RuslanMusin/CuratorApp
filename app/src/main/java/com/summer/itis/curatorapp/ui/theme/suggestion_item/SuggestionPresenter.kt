@@ -2,32 +2,29 @@ package com.summer.itis.curatorapp.ui.theme.suggestion_item
 
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
-import com.summer.itis.curatorapp.model.theme.Status
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
+import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.comment.CommentPresenter
 import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.ACCEPTED_BOTH
-import com.summer.itis.curatorapp.utils.Const.ACCEPTED_BOTH_NUM
 import com.summer.itis.curatorapp.utils.Const.CHANGED_CURATOR
 import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_CURATOR
 import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_STUDENT
 import com.summer.itis.curatorapp.utils.Const.REJECTED_CURATOR
 import com.summer.itis.curatorapp.utils.Const.WAITING_CURATOR
 import retrofit2.adapter.rxjava2.Result
-import java.util.*
 
 @InjectViewState
 class  SuggestionPresenter(): CommentPresenter<SuggestionView>() {
 
-    fun acceptTheme(sug: SuggestionTheme) {
+    fun acceptTheme(sug: Suggestion) {
         val curatorId = AppHelper.currentCurator.id
         sug.status = AppHelper.getStatus(ACCEPTED_BOTH)
         changeSuggestionStatus(curatorId, sug)
     }
 
-    fun rejectCurator(sug: SuggestionTheme) {
+    fun rejectCurator(sug: Suggestion) {
        /* for (sug in AppHelper.currentCurator.suggestions) {
             if (sug.id.equals(sug.id)) {
                 sug.status = Status(Integer.toString(Random().nextInt(100) + 1), REJECTED_CURATOR)
@@ -40,7 +37,7 @@ class  SuggestionPresenter(): CommentPresenter<SuggestionView>() {
         changeSuggestionStatus(curatorId, sug)
     }
 
-    fun revisionTheme (sug: SuggestionTheme) {
+    fun revisionTheme (sug: Suggestion) {
         val curatorId = AppHelper.currentCurator.id
         when (sug.status.name) {
 
@@ -56,7 +53,7 @@ class  SuggestionPresenter(): CommentPresenter<SuggestionView>() {
         }
     }
 
-    fun changeSuggestionStatus(curatorId: String, sug: SuggestionTheme) {
+    fun changeSuggestionStatus(curatorId: String, sug: Suggestion) {
         /*for (sug in AppHelper.currentCurator.suggestions) {
             if (sug.id.equals(id)) {
                 sug.status = Status(Integer.toString(Random().nextInt(100) + 1), status)
@@ -71,7 +68,7 @@ class  SuggestionPresenter(): CommentPresenter<SuggestionView>() {
         }
     }
 
-    fun checkResponse(res: Result<SuggestionTheme>) {
+    fun checkResponse(res: Result<Suggestion>) {
         if(res == null) {
             Log.d(Const.TAG_LOG, "res == null")
         } else {

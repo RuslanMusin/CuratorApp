@@ -33,7 +33,6 @@ import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.layout_recycler_list.*
 import kotlinx.android.synthetic.main.toolbar_add.*
 import java.util.regex.Pattern
-import kotlin.collections.ArrayList
 
 class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListView, View.OnClickListener {
 
@@ -153,7 +152,7 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
         args.putString(TAB_NAME, SHOW_THEMES)
         val fragment = StudentFragment.newInstance(args, mainListener)
         fragment.setTargetFragment(this, requestCode)
-        mainListener.showFragment(SHOW_THEMES, this, fragment)
+        mainListener.showFragment(this, fragment)
 //        mainListener.pushFragments(TAB_STUDENTS, fragment, true)
     }
 
@@ -201,7 +200,7 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
             args.putString(COURSE_KEY, yearsJson)
             val fragment = SearchFilterFragment.newInstance(args, mainListener)
             fragment.setTargetFragment(this, FILTERS)
-            mainListener.showFragment(SHOW_THEMES, this, fragment)
+            mainListener.showFragment(this, fragment)
             false
         }
 
@@ -262,7 +261,7 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
         if(courses.size != 0) {
             var yearFlag = false
             for (year in courses) {
-                if (student.courseNumber == year) {
+                if (student.course == year) {
                     yearFlag = true
                 }
             }

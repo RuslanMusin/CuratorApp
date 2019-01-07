@@ -5,8 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.summer.itis.curatorapp.R
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
-import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.utils.Const.ACCEPTED_BOTH
 import com.summer.itis.curatorapp.utils.Const.CHANGED_CURATOR
 import com.summer.itis.curatorapp.utils.Const.CHANGED_STUDENT
@@ -22,9 +21,10 @@ class SuggestionItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private lateinit var listener: SuggestionListView
 
-    fun bind(item: SuggestionTheme) {
-        itemView.tv_theme.text = item.theme?.title
+    fun bind(item: Suggestion) {
+        itemView.tv_theme.text = item.getCorrectTitle()
         itemView.tv_status.text = getStatus(item.status.name)
+        itemView.tv_student.text = item.student?.getFullName()
         itemView.setOnLongClickListener {
             listener.chooseUserFakeAction(adapterPosition)
             true

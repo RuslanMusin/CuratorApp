@@ -12,13 +12,11 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.material.Material
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_WORKS
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.work.work_step.material.add_material.AddMaterialFragment
 import com.summer.itis.curatorapp.utils.Const.ADD_MATERIAL
 import com.summer.itis.curatorapp.utils.Const.MATERIAL_KEY
 import com.summer.itis.curatorapp.utils.Const.STEP_KEY
-import com.summer.itis.curatorapp.utils.Const.WATCHER_TYPE
 import com.summer.itis.curatorapp.utils.Const.WORK_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import io.reactivex.disposables.Disposable
@@ -147,7 +145,7 @@ class MaterialListFragment : BaseFragment<MaterialListPresenter>(), MaterialList
         args.putString(STEP_KEY, stepId)
         val fragment = AddMaterialFragment.newInstance(args, mainListener)
         fragment.setTargetFragment(this, ADD_MATERIAL)
-        mainListener.showFragment(SHOW_WORKS, this, fragment)
+        mainListener.showFragment(this, fragment)
 
     }
 

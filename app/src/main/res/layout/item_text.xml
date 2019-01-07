@@ -10,16 +10,14 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         android:orientation="horizontal"
-        android:padding="@dimen/margin.large">
+        android:padding="@dimen/margin.normal">
 
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
             android:textColor="@color/primary_text"
-            android:textSize="@dimen/text.20"
-            android:textStyle="bold"
+            android:textSize="@dimen/text.18"
             tools:text="Iron Man" />
 
     </LinearLayout>

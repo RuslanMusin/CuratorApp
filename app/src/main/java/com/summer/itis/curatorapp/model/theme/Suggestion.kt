@@ -1,15 +1,15 @@
 package com.summer.itis.curatorapp.model.theme
 
 import com.google.gson.annotations.SerializedName
+import com.summer.itis.curatorapp.model.common.Identified
 import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
 import com.summer.itis.curatorapp.utils.Const.WAITING_CURATOR
-import com.summer.itis.curatorapp.model.common.Identified
 import com.summer.itis.curatorapp.utils.Const.WAITING_CURATOR_NUM
 import java.util.*
 
-class SuggestionTheme: Identified {
+class Suggestion: Identified {
 
     lateinit override var id: String
 
@@ -28,7 +28,7 @@ class SuggestionTheme: Identified {
     @SerializedName("date_creation")
     lateinit var dateCreation: Date
     @SerializedName("progress")
-    var progress: ThemeProgress? = null
+    var progress: Progress? = null
     var type: String = STUDENT_TYPE
 
     fun setApiFileds() {
@@ -36,6 +36,22 @@ class SuggestionTheme: Identified {
         curatorId = curator?.id
         studentId = student?.id
         statusId = status?.id
+    }
+
+    fun getCorrectTitle(): String? {
+        var title = theme?.title
+        if(progress != null) {
+            title = progress?.title
+        }
+        return title
+    }
+
+    fun getCorrectDesc(): String? {
+        var title = theme?.description
+        if(progress != null) {
+            title = progress?.description
+        }
+        return title
     }
 
 }

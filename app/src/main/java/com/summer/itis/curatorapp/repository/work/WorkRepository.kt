@@ -1,9 +1,6 @@
 package com.summer.itis.curatorapp.repository.work
 
-import com.summer.itis.curatorapp.model.comment.Comment
-import com.summer.itis.curatorapp.model.step.Step
 import com.summer.itis.curatorapp.model.work.Work
-import com.summer.itis.curatorapp.repository.base.BaseRepository
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
 

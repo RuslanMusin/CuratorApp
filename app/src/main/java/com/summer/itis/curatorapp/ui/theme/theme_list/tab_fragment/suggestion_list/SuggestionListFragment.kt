@@ -4,33 +4,22 @@ import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.view.*
-import com.arellomobile.mvp.presenter.InjectPresenter
-import com.summer.itis.curatorapp.R
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
-import com.summer.itis.curatorapp.model.theme.Theme
-import com.summer.itis.curatorapp.model.theme.ThemeProgress
-import com.summer.itis.curatorapp.model.user.Curator
-import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.theme.theme_list.ThemeListView
-
-import com.summer.itis.curatorapp.utils.AppHelper
-
-import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.layout_recycler_list.*
-import java.util.regex.Pattern
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.afollestad.materialdialogs.MaterialDialog
-import com.summer.itis.curatorapp.model.skill.Subject
-import com.summer.itis.curatorapp.model.user.Student
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.TAB_THEMES
+import com.arellomobile.mvp.presenter.InjectPresenter
+import com.summer.itis.curatorapp.R
+import com.summer.itis.curatorapp.model.theme.Suggestion
+import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
+import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.theme.add_theme.AddThemeFragment
 import com.summer.itis.curatorapp.ui.theme.suggestion_item.SuggestionFragment
+import com.summer.itis.curatorapp.ui.theme.theme_list.ThemeListView
 import com.summer.itis.curatorapp.utils.Const.CHANGED_CURATOR
 import com.summer.itis.curatorapp.utils.Const.CHANGED_STUDENT
-import com.summer.itis.curatorapp.utils.Const.CURATOR_TYPE
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_CURATOR
 import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_STUDENT
@@ -39,8 +28,10 @@ import com.summer.itis.curatorapp.utils.Const.THEME_KEY
 import com.summer.itis.curatorapp.utils.Const.WAITING_CURATOR
 import com.summer.itis.curatorapp.utils.Const.WAITING_STUDENT
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_theme_list.*
-import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.layout_recycler_list.*
+import java.util.regex.Pattern
 
 
 class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), SuggestionListView, View.OnClickListener {
@@ -49,7 +40,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
     lateinit var fragmentParent: ThemeListView
     private lateinit var adapter: SuggestionAdapter
 
-    lateinit var suggestions: MutableList<SuggestionTheme>
+    lateinit var suggestions: MutableList<Suggestion>
     lateinit var userId: String
 
     @InjectPresenter
@@ -91,7 +82,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
         }
     }
 
-    override fun showSuggestions(suggestions: List<SuggestionTheme>) {
+    override fun showSuggestions(suggestions: List<Suggestion>) {
         this.suggestions = suggestions.toMutableList()
         changeDataSet(this.suggestions)
     }
@@ -122,7 +113,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
     }
 
 
-    override fun changeDataSet(tests: List<SuggestionTheme>) {
+    override fun changeDataSet(tests: List<Suggestion>) {
         adapter.changeDataSet(tests)
         hideLoading()
     }
@@ -155,11 +146,11 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
         })
     }
 
-    override fun onItemClick(item: SuggestionTheme) {
+    override fun onItemClick(item: Suggestion) {
         val args = Bundle()
         args.putString(THEME_KEY, gsonConverter.toJson(item))
         val fragment = SuggestionFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(TAB_THEMES, fragment, true)
+        mainListener.pushFragments(fragment, true)
     }
 
     override fun chooseUserFakeAction(pos: Int) {
@@ -208,7 +199,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
 
     }
 
-    private fun openFakeDialog(suggestionTheme: SuggestionTheme, listAction: MutableList<String>) {
+    private fun openFakeDialog(suggestion: Suggestion, listAction: MutableList<String>) {
         actionNumber = 0
         this.activity?.let {
             MaterialDialog.Builder(it)
@@ -227,7 +218,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
                     }
                     .onPositive { dialog, which ->
                         this.context?.let { it1 ->
-                            presenter.setFakeResponse(suggestionTheme, listAction[actionNumber], it1)
+                            presenter.setFakeResponse(suggestion, listAction[actionNumber], it1)
                         }
                     }
                     .show()
@@ -237,7 +228,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
 
     override fun findByQuery(query: String) {
         val pattern: Pattern = Pattern.compile("${query.toLowerCase()}.*")
-        val list: MutableList<SuggestionTheme> = java.util.ArrayList()
+        val list: MutableList<Suggestion> = java.util.ArrayList()
         for(skill in suggestions) {
             if(pattern.matcher(skill.theme?.title?.toLowerCase()).matches()) {
                 list.add(skill)
@@ -253,7 +244,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
                 val args = Bundle()
                 args.putString(ID_KEY, userId)
                 val fragment = AddThemeFragment.newInstance(args, mainListener)
-                mainListener.pushFragments(TAB_THEMES, fragment, true)
+                mainListener.pushFragments(fragment, true)
             }
         }
     }

@@ -3,9 +3,9 @@ package com.summer.itis.curatorapp.ui.theme.theme_list.tab_fragment.my_theme_lis
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.summer.itis.curatorapp.model.theme.Status
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
+import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.model.theme.Theme
-import com.summer.itis.curatorapp.model.theme.ThemeProgress
+import com.summer.itis.curatorapp.model.theme.Progress
 import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
@@ -25,14 +25,14 @@ class MyThemeListPresenter(): BaseFragPresenter<MyThemeListView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun addFakeSuggestion(theme: Theme, fakeStudent: Student) {
-        val suggestionTheme = SuggestionTheme()
+        val suggestionTheme = Suggestion()
         suggestionTheme.id = "${ Random().nextInt(24000)}"
         suggestionTheme.theme = theme
         suggestionTheme.curator = theme.curator
         suggestionTheme.student = fakeStudent
         suggestionTheme.type = CURATOR_TYPE
 
-        val themeProgress = ThemeProgress()
+        val themeProgress = Progress()
         themeProgress.title = theme.title
         themeProgress.description = theme.description
         suggestionTheme.progress = themeProgress
@@ -43,14 +43,14 @@ class MyThemeListPresenter(): BaseFragPresenter<MyThemeListView>() {
     }
 
     fun addFakeStudentSuggestion(theme: Theme, fakeStudent: Student) {
-        val suggestionTheme = SuggestionTheme()
+        val suggestionTheme = Suggestion()
         suggestionTheme.id = "${ Random().nextInt(24000)}"
         suggestionTheme.theme = theme
         suggestionTheme.curator = theme.curator
         suggestionTheme.student = fakeStudent
         suggestionTheme.type = STUDENT_TYPE
 
-        val themeProgress = ThemeProgress()
+        val themeProgress = Progress()
         themeProgress.title = theme.title
         themeProgress.description = theme.description
         suggestionTheme.progress = themeProgress
@@ -60,8 +60,8 @@ class MyThemeListPresenter(): BaseFragPresenter<MyThemeListView>() {
         theme.curator?.id?.let { postSuggestion(it, suggestionTheme) }
     }
 
-    fun postSuggestion(curatorId: String, suggestionTheme: SuggestionTheme) {
-        val disposable = RepositoryProvider.suggestionRepository.postCuratorSuggestion(curatorId, suggestionTheme).subscribe { res ->
+    fun postSuggestion(curatorId: String, suggestion: Suggestion) {
+        val disposable = RepositoryProvider.suggestionRepository.postCuratorSuggestion(curatorId, suggestion).subscribe { res ->
             Log.d(Const.TAG_LOG, "post suggestion response")
             if(res == null) {
                 Log.d(Const.TAG_LOG, "res == null")
@@ -76,7 +76,7 @@ class MyThemeListPresenter(): BaseFragPresenter<MyThemeListView>() {
                 if (it.isSuccessful) {
                     Log.d(Const.TAG_LOG, "successful post suggestion")
                     it.body()?.let { skills ->
-                        AppHelper.currentCurator.suggestions.add(0, suggestionTheme)
+                        AppHelper.currentCurator.suggestions.add(0, suggestion)
                     }
                 } else {
                     Log.d(Const.TAG_LOG, "failed post suggestion = ${it.code()} and ${it.errorBody()?.string()} and ${it.message()}")

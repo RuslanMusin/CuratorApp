@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
+import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.utils.Const.ALL_CHOOSED
@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.toolbar_back_done.*
 
 class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSuggestionView, View.OnClickListener {
 
-    private lateinit var suggestion: SuggestionTheme
+    private lateinit var suggestion: Suggestion
 
     override lateinit var mainListener: NavigationView
 
@@ -50,7 +50,7 @@ class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSugg
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            suggestion = gsonConverter.fromJson(it.getString(THEME_KEY), SuggestionTheme::class.java)
+            suggestion = gsonConverter.fromJson(it.getString(THEME_KEY), Suggestion::class.java)
         }
     }
 

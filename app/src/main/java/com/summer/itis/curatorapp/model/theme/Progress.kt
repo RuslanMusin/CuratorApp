@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.summer.itis.curatorapp.model.common.Identified
 import java.util.*
 
-class ThemeProgress: Identified {
+class Progress: Identified {
 
     lateinit override var id: String
     @SerializedName("date_update")

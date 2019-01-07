@@ -4,6 +4,7 @@ import com.google.gson.GsonBuilder
 import com.summer.itis.curatorapp.BuildConfig
 import com.summer.itis.curatorapp.api.services.*
 import com.summer.itis.curatorapp.model.common.APIError
+import com.summer.itis.curatorapp.utils.Const.TIME_FORMAT
 import okhttp3.ResponseBody
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -16,7 +17,7 @@ class ApiFactory {
     companion object {
 
         private fun buildRetrofit(): Retrofit {
-            val gson = GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create()
+            val gson = GsonBuilder().setDateFormat(TIME_FORMAT).create()
 
             return Retrofit.Builder()
                     .baseUrl(BuildConfig.API_ENDPOINT)

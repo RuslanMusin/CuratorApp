@@ -400,6 +400,8 @@
     <string name="connection_reset">Ошибка подключения к серверу. Попробуйте переподключиться</string>
     <string name="server_reset">Ошибка подключения</string>
 
+    <string name="group_course">%1$s , %2$d курс</string>
+
 
     <string-array name="courses">
         <item>1 курс</item>

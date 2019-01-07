@@ -19,10 +19,8 @@ import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
 import com.summer.itis.curatorapp.utils.Const.TAB_NAME
 import com.summer.itis.curatorapp.utils.Const.TYPE
 import com.summer.itis.curatorapp.utils.Const.USER_ID
-import com.summer.itis.curatorapp.utils.Const.USER_KEY
 import com.summer.itis.curatorapp.utils.Const.WATCHER_TYPE
 import com.summer.itis.curatorapp.utils.Const.WORK_KEY
-import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import kotlinx.android.synthetic.main.fragment_work.*
 import kotlinx.android.synthetic.main.layout_expandable_text_view.*
 import kotlinx.android.synthetic.main.toolbar_back.*
@@ -119,19 +117,18 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
         args.putString(USER_ID, work.theme.student?.id)
         args.putString(TAB_NAME, TAB_WORKS)
         val fragment = StudentFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(TAB_WORKS, fragment, true)
+        mainListener.pushFragments(fragment, true)
     }
 
     private fun showSteps() {
         val args = Bundle()
         args.putString(WORK_KEY, work.id)
-        args.putString(TAB_NAME, TAB_WORKS)
         if(AppHelper.currentCurator.id.equals(work.theme.curator?.id)) {
             args.putString(TYPE, OWNER_TYPE)
         } else {
             args.putString(TYPE, WATCHER_TYPE)
         }
         val fragment = StepListFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(TAB_WORKS, fragment, true)
+        mainListener.pushFragments(fragment, true)
     }
 }

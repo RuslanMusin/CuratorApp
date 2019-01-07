@@ -1,10 +1,12 @@
 package com.summer.itis.curatorapp.api.services
 
 import com.summer.itis.curatorapp.model.comment.Comment
-import com.summer.itis.curatorapp.model.material.Material
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface CommentService {
 

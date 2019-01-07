@@ -3,11 +3,8 @@ package com.summer.itis.curatorapp.ui.work.work_step.material.add_material
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
 import com.summer.itis.curatorapp.model.material.Material
-import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
-import com.summer.itis.curatorapp.ui.curator.curator_item.description.edit.ChangeDescView
-import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const
 import io.reactivex.disposables.CompositeDisposable
 

@@ -14,16 +14,12 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.skill.Skill
 import com.summer.itis.curatorapp.model.skill.Subject
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
+import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.model.theme.Theme
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_THEMES
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.student.search.choose_skill.ChooseAddSkillFragment
-import com.summer.itis.curatorapp.ui.student.search.choose_skill_main.ChooseSkillFragment
 import com.summer.itis.curatorapp.utils.Const
-import com.summer.itis.curatorapp.utils.Const.ADD_SKILL
 import com.summer.itis.curatorapp.utils.Const.ADD_THEME_TYPE
 import com.summer.itis.curatorapp.utils.Const.ALL_CHOOSED
 import com.summer.itis.curatorapp.utils.Const.CHOOSE_SKILL
@@ -38,7 +34,7 @@ import java.util.*
 class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, View.OnClickListener {
 
     private lateinit var theme: Theme
-    private var suggestionTheme: SuggestionTheme? = null
+    private var suggestion: Suggestion? = null
 
     private var type = ADD_THEME_TYPE
 
@@ -187,7 +183,7 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
         mainListener.showFragment(SHOW_THEMES, this, fragment)*/
         val fragment = ChooseAddSkillFragment.newInstance(mainListener)
         fragment.setTargetFragment(this, Const.CHOOSE_SKILL)
-        mainListener.showFragment(NavigationBaseActivity.SHOW_PROFILE, this, fragment)
+        mainListener.showFragment(this, fragment)
     }
 
     override fun returnEditResult(intent: Intent?) {

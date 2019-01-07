@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/li_added_skill"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_marginTop="8dp"
-    >
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/li_added_skill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginBottom="8dp">
+        android:paddingTop="@dimen/margin.normal"
+        android:paddingBottom="@dimen/margin.normal"
+    >
 
         <LinearLayout
             android:layout_width="0dp"
@@ -38,5 +39,4 @@
 
     </LinearLayout>
 
-    <include layout="@layout/layout_divider_2"/>
 </LinearLayout>

@@ -1,8 +1,5 @@
 package com.summer.itis.curatorapp.api.services
 
-import com.summer.itis.curatorapp.model.comment.Comment
-import com.summer.itis.curatorapp.model.step.Step
-import com.summer.itis.curatorapp.model.theme.Theme
 import com.summer.itis.curatorapp.model.work.Work
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result

@@ -13,7 +13,6 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.skill.Skill
 import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_THEMES
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.student.search.choose_skill.ChooseAddSkillFragment
 import com.summer.itis.curatorapp.ui.student.student_list.StudentAdapter
@@ -94,7 +93,7 @@ class ChooseSkillFragment : BaseFragment<ChooseSkillMainPresenter>(), ChooseSkil
         li_choose_skill.setOnClickListener{
             val fragment = ChooseAddSkillFragment.newInstance(mainListener)
             fragment.setTargetFragment(this, CHOOSE_SKILL)
-            mainListener.showFragment(SHOW_THEMES, this, fragment)
+            mainListener.showFragment(this, fragment)
         }
         spinner_level.setItems(resources.getStringArray(R.array.skill_levels).toList())
         level = getString(R.string.low_level)

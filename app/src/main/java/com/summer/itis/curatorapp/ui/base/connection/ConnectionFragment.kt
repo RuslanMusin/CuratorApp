@@ -7,19 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
-import com.summer.itis.curatorapp.model.work.Work
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.student.student_item.StudentFragment
-import com.summer.itis.curatorapp.ui.work.progress_card.StepListFragment
-import com.summer.itis.curatorapp.ui.work.work_item.WorkPresenter
-import com.summer.itis.curatorapp.ui.work.work_item.WorkView
-import com.summer.itis.curatorapp.utils.AppHelper
-import com.summer.itis.curatorapp.utils.Const
 import kotlinx.android.synthetic.main.fragment_connectivity.*
-import kotlinx.android.synthetic.main.fragment_work.*
-import kotlinx.android.synthetic.main.layout_expandable_text_view.*
 import kotlinx.android.synthetic.main.toolbar_back.*
 
 class ConnectionFragment: BaseFragment<ConnectionPresenter>(), ConnectionView, View.OnClickListener {
