@@ -40,7 +40,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
     lateinit var fragmentParent: ThemeListView
     private lateinit var adapter: SuggestionAdapter
 
-    lateinit var suggestions: MutableList<Suggestion>
+    var suggestions: MutableList<Suggestion> = ArrayList()
     lateinit var userId: String
 
     @InjectPresenter
@@ -78,7 +78,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
         arguments?.let {
             userId = it.getString(ID_KEY)
             initViews()
-            presenter.loadSkills(userId)
+            presenter.loadSuggestions(userId)
         }
     }
 
@@ -87,14 +87,20 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
         changeDataSet(this.suggestions)
     }
 
+    override fun reloadList() {
+        if(suggestions.size > 0) {
+            presenter.loadSuggestions(userId)
+        }
+    }
+
+
     private fun initViews() {
         initRecycler()
         setListeners()
     }
 
     private fun setListeners() {
-        btn_add_theme.setOnClickListener(this)
-
+        btn_add_theme.visibility = View.GONE
     }
 
     override fun setNotLoading() {
@@ -129,21 +135,6 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
         rv_list.setEmptyView(tv_empty)
         adapter.attachToRecyclerView(rv_list)
         adapter.setOnItemClickListener(this)
-
-        rv_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0 || dy < 0 && btn_add_theme.isShown())
-                    btn_add_theme.hide()
-            }
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    btn_add_theme.show()
-                }
-                super.onScrollStateChanged(recyclerView, newState)
-            }
-        })
     }
 
     override fun onItemClick(item: Suggestion) {

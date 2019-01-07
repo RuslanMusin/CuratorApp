@@ -3,12 +3,12 @@ package com.summer.itis.curatorapp.api.services
 import com.summer.itis.curatorapp.model.user.Curator
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.PUT
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface CuratorService {
+
+    @POST("logout")
+    fun logout(): Single<Result<Void>>
 
     @GET("curators/{curator_id}")
     fun findById(

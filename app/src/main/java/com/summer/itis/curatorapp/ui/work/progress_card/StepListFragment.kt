@@ -76,7 +76,6 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
         super.onViewCreated(view, savedInstanceState)
         initViews()
         presenter.loadSteps(workId)
-//        loadSkills()
     }
 
     override fun showSteps(steps: List<Step>) {
@@ -140,11 +139,13 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
     }
 
     override fun onItemClick(item: Step) {
-        val args = Bundle()
-        args.putString(WORK_KEY, workId)
-        args.putString(STEP_KEY, item.id)
-        val fragment = StepFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(fragment, true)
+        if(type.equals(OWNER_TYPE)) {
+            val args = Bundle()
+            args.putString(WORK_KEY, workId)
+            args.putString(STEP_KEY, item.id)
+            val fragment = StepFragment.newInstance(args, mainListener)
+            mainListener.pushFragments(fragment, true)
+        }
     }
 
     override fun onClick(v: View) {

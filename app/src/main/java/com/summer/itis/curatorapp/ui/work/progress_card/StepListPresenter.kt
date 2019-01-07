@@ -14,30 +14,13 @@ class StepListPresenter(): BaseFragPresenter<StepListView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun loadSteps(workId: String) {
-        val disposable = RepositoryProvider.workStepRepository.findAll(workId).subscribe { res ->
-            Log.d(Const.TAG_LOG, "receive work response")
-            if(res == null) {
-                Log.d(Const.TAG_LOG, "work res == null")
-            } else {
-                if(res.response() == null) {
-                    Log.d(Const.TAG_LOG, "work response == null and isError = ${res.isError}")
-                    Log.d(Const.TAG_LOG, "work error = ${res.error()?.message}")
-                    res.error()?.printStackTrace()
+        val disposable = RepositoryProvider.workStepRepository
+            .findAll(workId)
+            .subscribe { res ->
+                interceptResponse(res) {
+                    viewState.showSteps(it.sortedWith(compareBy (Step::dateFinish)))
                 }
-            }
-            res?.response()?.let {
-                if (it.isSuccessful) {
-                    Log.d(Const.TAG_LOG, "successful work")
-                    it.body()?.let { steps ->
-                        viewState.showSteps(steps.sortedWith(compareBy (Step::dateFinish)))
-                    }
-                } else {
-                    Log.d(Const.TAG_LOG, "failed get steps = ${it.code()} and ${it.errorBody()?.string()} and ${it.message()}")
-                    Log.d(Const.TAG_LOG, "failed raw = ${it.raw()}")
-                }
-            }
         }
         compositeDisposable.add(disposable)
     }
-
 }

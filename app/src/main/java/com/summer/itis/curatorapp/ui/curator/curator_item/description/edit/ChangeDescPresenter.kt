@@ -21,28 +21,6 @@ class ChangeDescPresenter(): BaseFragPresenter<ChangeDescView>() {
     fun saveCuratorDesc(curator: Curator) {
         val disposable = RepositoryProvider.curatorRepository.update(curator.id, curator).subscribe { res ->
             interceptResponse(res, saveChanges())
-           /* Log.d(Const.TAG_LOG, "receive subjects response")
-            if(res == null) {
-                Log.d(Const.TAG_LOG, "res == null")
-            } else {
-                if(res.response() == null) {
-                    Log.d(Const.TAG_LOG, "response == null and isError = ${res.isError}")
-                    Log.d(Const.TAG_LOG, "error = ${res.error()?.message}")
-                    res.error()?.printStackTrace()
-                }
-            }
-            res?.response()?.let {
-                if (it.isSuccessful) {
-                    Log.d(Const.TAG_LOG, "successful subjects")
-                    it.body()?.let { students ->
-
-                    }
-                } else {
-                    Log.d(Const.TAG_LOG, "failed desc changes")
-                    Log.d(TAG_LOG, "mes = ${it.message()}")
-
-                }
-            }*/
         }
         compositeDisposable.add(disposable)
     }

@@ -38,33 +38,12 @@ class  ThemePresenter(): BaseFragPresenter<ThemeView>() {
         suggestionTheme.progress = themeProgress
 
         val disposable =
-                RepositoryProvider.suggestionRepository.postCuratorSuggestion(AppHelper.currentCurator.id, suggestionTheme).subscribe { res ->
-                    Log.d(Const.TAG_LOG, "post suggestion response")
-                    if (res == null) {
-                        Log.d(Const.TAG_LOG, "res == null")
-                    } else {
-                        if (res.response() == null) {
-                            Log.d(Const.TAG_LOG, "response == null and isError = ${res.isError}")
-                            Log.d(Const.TAG_LOG, "error = ${res.error()?.message}")
-                            res.error()?.printStackTrace()
+                RepositoryProvider.suggestionRepository
+                    .postCuratorSuggestion(AppHelper.currentCurator.id, suggestionTheme)
+                    .subscribe { res ->
+                        interceptResponse(res) {
+                            AppHelper.currentCurator.suggestions.add(0, suggestionTheme)
                         }
-                    }
-                    res?.response()?.let {
-                        if (it.isSuccessful) {
-                            Log.d(Const.TAG_LOG, "successful post suggestion")
-                            it.body()?.let { skills ->
-                                AppHelper.currentCurator.suggestions.add(0, suggestionTheme)
-
-                            }
-                        } else {
-                            Log.d(
-                                Const.TAG_LOG,
-                                "failed post suggestion = ${it.code()} and ${it.errorBody()?.string()} and ${it.message()}"
-                            )
-                            Log.d(Const.TAG_LOG, "failed raw = ${it.raw()}")
-
-                        }
-                    }
                 }
         compositeDisposable.add(disposable)
     }

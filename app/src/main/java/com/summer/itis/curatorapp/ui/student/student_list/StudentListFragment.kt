@@ -32,6 +32,7 @@ import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.layout_recycler_list.*
 import kotlinx.android.synthetic.main.toolbar_add.*
+import java.util.*
 import java.util.regex.Pattern
 
 class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListView, View.OnClickListener {
@@ -53,10 +54,6 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
 
 
     companion object {
-
-        const val TAG_SKILLS = "TAG_SKILLS"
-
-        const val EDIT_SKILLS = 1
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
             val fragment = StudentListFragment()
@@ -258,23 +255,25 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
     }
 
     private fun filter(student: Student): Boolean {
+        Log.d(TAG_LOG, "courses size = ${courses.size}")
+        Log.d(TAG_LOG, "skills size = ${skills.size}")
         if(courses.size != 0) {
             var yearFlag = false
             for (year in courses) {
                 if (student.course == year) {
                     yearFlag = true
+                    Log.d(TAG_LOG, "year true")
+                    break
                 }
             }
             if (yearFlag) {
                 var skillFlag = true
                 for (skillFilter in skills) {
-                    var skillItemFlag = false
-                    for (skill in student.skills) {
-                        if (skill.equals(skillFilter)) {
-                            skillItemFlag = true
-                        }
+                    Log.d(TAG_LOG, "skillFilter = ${skillFilter.name} and hash = ${skillFilter.hashCode()}")
+                    for(skill in student.skills) {
+                        Log.d(TAG_LOG, "skill = ${skill.name}  and hash = ${skill.hashCode()}")
                     }
-                    if (skillItemFlag == false) {
+                    if(!student.skills.contains(skillFilter)) {
                         skillFlag = false
                         break
                     }

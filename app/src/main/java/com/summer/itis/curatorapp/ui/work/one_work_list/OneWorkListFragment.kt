@@ -79,6 +79,7 @@ class OneWorkListFragment : BaseFragment<OneWorkListPresenter>(), OneWorkListVie
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        presenter.loadWorks(user.id)
     }
 
     private fun initViews() {
@@ -118,6 +119,12 @@ class OneWorkListFragment : BaseFragment<OneWorkListPresenter>(), OneWorkListVie
         hideLoading()
     }
 
+    override fun showWorks(works: List<Work>) {
+        this.works = works.toMutableList()
+        changeDataSet(this.works)
+    }
+
+
     override fun handleError(throwable: Throwable) {
 
     }
@@ -133,9 +140,9 @@ class OneWorkListFragment : BaseFragment<OneWorkListPresenter>(), OneWorkListVie
 
     override fun onItemClick(item: Work) {
         val args = Bundle()
-        args.putString(Const.WORK_KEY, Const.gsonConverter.toJson(item))
+        args.putString(Const.ID_KEY, item.id)
         val fragment = WorkFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(fragment, true)
+        mainListener.showFragment(this, fragment)
     }
 
     override fun onClick(v: View) {

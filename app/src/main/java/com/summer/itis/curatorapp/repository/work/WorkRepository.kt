@@ -14,5 +14,7 @@ interface WorkRepository {
     fun updateCuratorWork(curatorId: String, work: Work): Single<Result<Work>>
     fun deleteCuratorWork(curatorId: String, workId: String): Single<Result<Work>>
 
+    fun findStudentWorks(studentId: String): Single<Result<List<Work>>>
+    fun findStudentWork(studentId: String, workId: String): Single<Result<Work>>
 
 }

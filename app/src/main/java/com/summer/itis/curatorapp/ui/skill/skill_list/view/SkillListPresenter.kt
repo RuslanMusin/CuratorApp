@@ -14,26 +14,8 @@ class SkillListPresenter(): BaseFragPresenter<SkillListView>() {
 
     fun loadCuratorSkills(userId: String) {
         val disposable = RepositoryProvider.skillRepository.findCuratorSkills(userId).subscribe { res ->
-            Log.d(Const.TAG_LOG, "receive subjects response")
-            if(res == null) {
-                Log.d(Const.TAG_LOG, "res == null")
-            } else {
-                if(res.response() == null) {
-                    Log.d(Const.TAG_LOG, "response == null and isError = ${res.isError}")
-                    Log.d(Const.TAG_LOG, "error = ${res.error()?.message}")
-                    res.error()?.printStackTrace()
-                }
-            }
-            res?.response()?.let {
-                if (it.isSuccessful) {
-                    Log.d(Const.TAG_LOG, "successful subjects")
-                    it.body()?.let { skills ->
-                        viewState.showSkills(skills)
-                    }
-                } else {
-                    Log.d(Const.TAG_LOG, "failed subjects")
-
-                }
+            interceptResponse(res) {
+                viewState.showSkills(it)
             }
         }
         compositeDisposable.add(disposable)
@@ -41,26 +23,8 @@ class SkillListPresenter(): BaseFragPresenter<SkillListView>() {
 
     fun loadStudentSkills(userId: String) {
         val disposable = RepositoryProvider.skillRepository.findStudentSkills(userId).subscribe { res ->
-            Log.d(Const.TAG_LOG, "receive subjects response")
-            if(res == null) {
-                Log.d(Const.TAG_LOG, "res == null")
-            } else {
-                if(res.response() == null) {
-                    Log.d(Const.TAG_LOG, "response == null and isError = ${res.isError}")
-                    Log.d(Const.TAG_LOG, "error = ${res.error()?.message}")
-                    res.error()?.printStackTrace()
-                }
-            }
-            res?.response()?.let {
-                if (it.isSuccessful) {
-                    Log.d(Const.TAG_LOG, "successful subjects")
-                    it.body()?.let { skills ->
-                        viewState.showSkills(skills)
-                    }
-                } else {
-                    Log.d(Const.TAG_LOG, "failed subjects")
-
-                }
+            interceptResponse(res) {
+                viewState.showSkills(it)
             }
         }
         compositeDisposable.add(disposable)

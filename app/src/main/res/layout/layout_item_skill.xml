@@ -12,8 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingTop="@dimen/margin.normal"
-        android:paddingBottom="@dimen/margin.normal"
     >
 
         <LinearLayout
@@ -21,22 +19,23 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_weight="1"
-            android:paddingStart="@dimen/margin.normal"
-            android:paddingEnd="@dimen/margin.normal"
+            android:padding="@dimen/padding_medium"
 
             >
 
             <TextView
                 android:id="@+id/tv_added_skill_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/secondary_text"
-                android:textSize="@dimen/text.16"
+                android:textSize="@dimen/text.18"
                 android:text="@string/all_students_choosed"
                 />
 
         </LinearLayout>
 
     </LinearLayout>
+
+    <include layout="@layout/layout_divider"/>
 
 </LinearLayout>

@@ -45,8 +45,6 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
 
     companion object {
 
-        const val TAG_SKILLS = "TAG_SKILLS"
-
         const val EDIT_SKILLS = 1
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
@@ -91,44 +89,12 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
         } else {
             presenter.loadCuratorSkills(userId)
         }
-//        loadSkills()
     }
 
     override fun showSkills(skills: List<Skill>) {
         this.skills = skills.toMutableList()
         changeDataSet(this.skills)
     }
-
-    /*private fun loadSkills() {
-//        presenter.loadWorks(AppHelper.currentCurator.id)
-        if(curator.skills.size == 0) {
-            this.activity?.let { skills = AppHelper.getMySkillList(it).toMutableList()}
-          *//*  var skill: Skill = Skill()
-
-            skill.name = "Java"
-            skill.id = "101"
-            skill.level = getString(R.string.high_level)
-            skills.add(skill)
-            var level: Int
-            var levelStr: String = getString(R.string.low_level)
-            for (i in 1..10) {
-                skill = Skill()
-                skill.id = "$i"
-                skill.name = "Machine learning $i"
-                level = Random().nextInt(3)
-                this.activity?.let { levelStr = AppHelper.getLevelStr(level, it) }
-                skill.level = levelStr
-                skills.add(skill)
-            }*//*
-            AppHelper.currentCurator.skills = skills
-            saveCuratorState()
-
-        } else {
-            skills = curator.skills
-        }
-        changeDataSet(skills)
-
-    }*/
 
     private fun initViews() {
         setToolbarData()
@@ -187,7 +153,6 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
     }
 
     override fun onItemClick(item: Skill) {
-//        TestActivity.start(this, item)
     }
 
     override fun onClick(v: View) {
@@ -203,8 +168,6 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
     private fun editSkills() {
         val fragment = EditSkillsFragment.newInstance(mainListener)
         fragment.setTargetFragment(this, EDIT_SKILLS)
-//        mainListener.loadFragment(fragment)
-//        mainListener.pushFragments(TAB_PROFILE, fragment, true)
         mainListener.showFragment(this, fragment)
 
     }
@@ -215,16 +178,13 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
             when(requestCode) {
 
                 EDIT_SKILLS -> {
-//                    step = AppHelper.currentCurator as User
                     data?.getStringExtra(SKILL_KEY)?.let {
                         val founderListType = object : TypeToken<ArrayList<Skill>>(){}.type
                         val skills: List<Skill> = gsonConverter.fromJson(it, founderListType)
-                       /* steps.add(0, skill)*/
                         AppHelper.currentCurator.skills = skills.toMutableList()
                         this.skills = skills.toMutableList()
                         changeDataSet(skills)
                     }
-//                    changeDataSet(step.subjects)
                 }
             }
         }
@@ -256,19 +216,6 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
                 return false
             }
         })
-
-      /*  val editItem = menu.findItem(R.id.action_edit)
-        editItem.setVisible(true)
-        editItem.setOnMenuItemClickListener { menuItem ->
-            when(menuItem.itemId) {
-                R.id.action_edit -> {
-                    editSkills()
-
-                }
-            }
-            true
-        }*/
-
 
     }
 

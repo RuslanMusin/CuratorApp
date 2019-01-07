@@ -6,5 +6,5 @@ import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragView
 
 interface MaterialListView: BaseFragView, BaseRecyclerView<Material> {
 
-    fun showSkills(skills: List<Material>)
+    fun showMaterials(skills: List<Material>)
 }

@@ -36,27 +36,9 @@ open class CommentPresenter<View: CommentView>: BaseFragPresenter<View>() {
             it.doOnSubscribe({ viewState.showLoading(it) })
                 .doAfterTerminate({ viewState.hideLoading() })
                 .subscribe { res ->
-                    Log.d(Const.TAG_LOG, "receive subjects response")
-                    if (res == null) {
-                        Log.d(Const.TAG_LOG, "res == null")
-                    } else {
-                        if (res.response() == null) {
-                            Log.d(Const.TAG_LOG, "response == null and isError = ${res.isError}")
-                            Log.d(Const.TAG_LOG, "error = ${res.error()?.message}")
-                            res.error()?.printStackTrace()
-                        }
-                    }
-                    res?.response()?.let {
-                        if (it.isSuccessful) {
-                            Log.d(Const.TAG_LOG, "successful subjects")
-                            it.body()?.let { skills ->
-                                viewState.showComments(skills)
-                            }
-                        } else {
-                            Log.d(Const.TAG_LOG, "failed subjects")
-
-                        }
-                    }
+                   interceptResponse(res) {
+                       viewState.showComments(it)
+                   }
                 }
         }
         disposable?.let { compositeDisposable.add(it) }
@@ -77,57 +59,13 @@ open class CommentPresenter<View: CommentView>: BaseFragPresenter<View>() {
         }
         val disposable = single
             ?.subscribe { res ->
-            Log.d(Const.TAG_LOG, "receive subjects response")
-            if(res == null) {
-                Log.d(Const.TAG_LOG, "res == null")
-            } else {
-                if(res.response() == null) {
-                    Log.d(Const.TAG_LOG, "response == null and isError = ${res.isError}")
-                    Log.d(Const.TAG_LOG, "error = ${res.error()?.message}")
-                    res.error()?.printStackTrace()
-                }
-            }
-            res?.response()?.let {
-                if (it.isSuccessful) {
-                    Log.d(Const.TAG_LOG, "successful subjects")
-                    it.body()?.let { skills ->
-//                        viewState.showComments(skills)
-                    }
-                } else {
-                    Log.d(Const.TAG_LOG, "failed subjects")
-
-                }
-            }
+                interceptResponse(res) {}
         }
         disposable?.let { compositeDisposable.add(it) }
     }
 
     fun openCommentAuthor(userId: String) {
-       /* userRepository.findById(userId).subscribe{ step ->
-            viewState.goToCommentAuthor(step)
-        }*/
-    }
 
-    /* fun loadComments(map: String) {
-        val list: MutableList<Comment> = ArrayList()
-        for(i in 1..10) {
-            val comment = Comment()
-            comment.authorId = "$i"
-            comment.id = "$i"
-            comment.authorName = AppHelper.currentCurator.name
-            comment.authorPhotoUrl = STUB_PATH
-            comment.createdDate = Date()
-            comment.content = "Simple comment $i"
-            list.add(comment)
-        }
-        viewState.hideLoading()
-        viewState.showComments(list)
-       *//* repository.getComments(map)
-                .doOnSubscribe({ viewState.showLoading(it) })
-                .doAfterTerminate({ viewState.hideLoading() })
-                .subscribe{ comments ->
-                    viewState?.showComments(comments)
-                }*//*
-    }*/
+    }
 
 }

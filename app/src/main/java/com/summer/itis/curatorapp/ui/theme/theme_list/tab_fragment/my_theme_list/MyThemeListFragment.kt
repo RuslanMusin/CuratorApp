@@ -33,7 +33,7 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
     lateinit override var mainListener: NavigationView
     private lateinit var adapter: ThemeAdapter
 
-    lateinit var themes: MutableList<Theme>
+    var themes: MutableList<Theme> = ArrayList()
     lateinit var userId: String
 
     lateinit var fakeStudents: List<Student>
@@ -96,6 +96,12 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
         Log.d(TAG_LOG, "date = ${themes[0].dateCreation}")
         Log.d(TAG_LOG, "dateStr = ${FormatterUtil.getStringFromDate(themes[0].dateCreation)}")
         changeDataSet(this.themes)
+    }
+
+    override fun reloadList() {
+        if(themes.size > 0) {
+            presenter.loadSkills(userId)
+        }
     }
 
     private fun initViews() {

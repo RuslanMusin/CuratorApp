@@ -10,28 +10,9 @@ import com.summer.itis.curatorapp.utils.Const
 class  StepPresenter(): CommentPresenter<StepView>() {
 
     fun loadStep(workId: String, stepId: String) {
-        val disposable = RepositoryProvider.workStepRepository.findById(workId, stepId).subscribe { res ->
-            Log.d(Const.TAG_LOG, "receive work response")
-            if(res == null) {
-                Log.d(Const.TAG_LOG, "work res == null")
-            } else {
-                if(res.response() == null) {
-                    Log.d(Const.TAG_LOG, "work response == null and isError = ${res.isError}")
-                    Log.d(Const.TAG_LOG, "work error = ${res.error()?.message}")
-                    res.error()?.printStackTrace()
-                }
-            }
-            res?.response()?.let {
-                if (it.isSuccessful) {
-                    Log.d(Const.TAG_LOG, "successful work")
-                    it.body()?.let { step ->
-                        viewState.showStep(step)
-                    }
-                } else {
-                    Log.d(Const.TAG_LOG, "failed get step = ${it.code()} and ${it.errorBody()?.string()} and ${it.message()}")
-                    Log.d(Const.TAG_LOG, "failed raw = ${it.raw()}")
-                }
-            }
+        val disposable = RepositoryProvider.workStepRepository.findById(workId, stepId)
+            .subscribe { res ->
+                interceptResponse(res) { viewState.showStep(it) }
         }
         compositeDisposable.add(disposable)
     }

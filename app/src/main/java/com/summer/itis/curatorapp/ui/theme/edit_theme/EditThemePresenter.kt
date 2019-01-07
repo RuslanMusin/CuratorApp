@@ -17,61 +17,23 @@ class EditThemePresenter(): BaseFragPresenter<EditThemeView>() {
 
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-   /* fun saveThemeEdit(themeNew: Theme) {
-        val iterator = AppHelper.currentCurator.themes.iterator()
-        for((i, theme) in iterator.withIndex()) {
-            if(theme.id.equals(themeNew.id)) {
-                AppHelper.currentCurator.themes[i] = themeNew
-
-                val suggestionIterator = AppHelper.currentCurator.suggestions.iterator()
-                for(suggestion  in suggestionIterator) {
-                    if(suggestion.theme?.id.equals(themeNew.id)) {
-                        suggestion.theme = themeNew
-                        suggestion.progress?.title = themeNew.title
-                        suggestion.progress?.description = themeNew.description
-                        suggestion.progress?.skills = themeNew.skills
-                    }
-                }
-                viewState.saveCuratorState()
-
-                val intent = Intent()
-                intent.putExtra(THEME_KEY , gsonConverter.toJson(themeNew))
-                viewState.returnEditResult(intent)
-
-                break
-            }
-        }
-
-    }
-*/
     fun updateTheme(theme: Theme) {
        theme.setApiFields()
-//        val themeApi: ThemeApi = ThemeApi(theme)
-        val disposable = RepositoryProvider.themeRepository.updateCuratorTheme(AppHelper.currentCurator.id, theme).subscribe { res ->
-            Log.d(Const.TAG_LOG, "post theme response")
-            if(res == null) {
-                Log.d(Const.TAG_LOG, "res == null")
-            } else {
-                if(res.response() == null) {
-                    Log.d(Const.TAG_LOG, "response == null and isError = ${res.isError}")
-                    Log.d(Const.TAG_LOG, "error = ${res.error()?.message}")
-                    res.error()?.printStackTrace()
-                }
-            }
-            res?.response()?.let {
-                if (it.isSuccessful) {
-                    Log.d(Const.TAG_LOG, "successful put theme")
-                    AppHelper.currentCurator.themes.add(0, theme)
-                    val intent = Intent()
-                    intent.putExtra(THEME_KEY , gsonConverter.toJson(theme))
-                    viewState.returnEditResult(intent)
-                } else {
-                    Log.d(Const.TAG_LOG, "failed put theme = ${it.code()} and ${it.errorBody()?.string()} and ${it.message()}")
-                    Log.d(Const.TAG_LOG, "failed raw = ${it.raw()}")
-                }
-            }
+        val disposable = RepositoryProvider.themeRepository
+            .updateCuratorTheme(AppHelper.currentCurator.id, theme)
+            .subscribe { res ->
+                interceptResponse(res, handleUpdateTheme())
         }
         compositeDisposable.add(disposable)
+    }
+
+    private fun handleUpdateTheme(): (theme: Theme) -> Unit {
+        return {
+            AppHelper.currentCurator.themes.add(0, it)
+            val intent = Intent()
+            intent.putExtra(THEME_KEY , gsonConverter.toJson(it))
+            viewState.returnEditResult(intent)
+        }
     }
 
 }

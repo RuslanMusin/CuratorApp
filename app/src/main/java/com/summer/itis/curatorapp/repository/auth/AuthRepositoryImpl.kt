@@ -1,6 +1,7 @@
 package com.summer.itis.curatorapp.repository.auth
 
 import com.summer.itis.curatorapp.api.ApiFactory.Companion.authService
+import com.summer.itis.curatorapp.api.ApiFactory.Companion.curatorService
 import com.summer.itis.curatorapp.model.api_result.LoginBody
 import com.summer.itis.curatorapp.model.api_result.LoginResult
 import com.summer.itis.curatorapp.model.user.User
@@ -20,8 +21,8 @@ class AuthRepositoryImpl : AuthRepository {
             .compose(RxUtils.asyncSingle())
     }
 
-    override fun logout(): Single<Result<Unit>> {
-        return authService
+    override fun logout(): Single<Result<Void>> {
+        return curatorService
             .logout()
             .compose(RxUtils.asyncSingle())
     }

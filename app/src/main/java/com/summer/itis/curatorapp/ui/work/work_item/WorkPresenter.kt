@@ -14,27 +14,7 @@ class  WorkPresenter(): BaseFragPresenter<WorkView>() {
 
     fun loadWork(workId: String) {
         val disposable = RepositoryProvider.worksRepository.findById(workId).subscribe { res ->
-            Log.d(Const.TAG_LOG, "receive work response")
-            if(res == null) {
-                Log.d(Const.TAG_LOG, "work res == null")
-            } else {
-                if(res.response() == null) {
-                    Log.d(Const.TAG_LOG, "work response == null and isError = ${res.isError}")
-                    Log.d(Const.TAG_LOG, "work error = ${res.error()?.message}")
-                    res.error()?.printStackTrace()
-                }
-            }
-            res?.response()?.let {
-                if (it.isSuccessful) {
-                    Log.d(Const.TAG_LOG, "successful work")
-                    it.body()?.let { work ->
-                        viewState.showWork(work)
-                    }
-                } else {
-                    Log.d(Const.TAG_LOG, "failed work")
-
-                }
-            }
+            interceptResponse(res) { viewState.showWork(it) }
         }
         compositeDisposable.add(disposable)
     }

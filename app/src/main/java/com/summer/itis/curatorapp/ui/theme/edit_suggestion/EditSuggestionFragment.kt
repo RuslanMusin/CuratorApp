@@ -71,8 +71,8 @@ class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSugg
     }
 
     private fun setThemeData() {
-        et_theme_name.setText(suggestion.progress?.title)
-        et_theme_desc.setText(suggestion.progress?.description)
+        et_theme_name.setText(suggestion.getCorrectTitle())
+        et_theme_desc.setText(suggestion.getCorrectDesc())
     }
 
     private fun setToolbarData() {
@@ -96,7 +96,7 @@ class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSugg
                     suggestion.progress?.title = title
                     suggestion.progress?.description = desc
 
-                    presenter.updateTheme(suggestion)
+                    presenter.updateSuggestion(suggestion)
                 }
             }
 

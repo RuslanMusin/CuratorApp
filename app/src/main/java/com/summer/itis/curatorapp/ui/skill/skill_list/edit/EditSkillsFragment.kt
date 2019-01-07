@@ -74,10 +74,10 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
         super.onViewCreated(view, savedInstanceState)
         initViews()
         presenter.loadCuratorSkills(AppHelper.currentCurator.id)
-//        loadSkills()
+//        loadSuggestions()
     }
 
-   /* private fun loadSkills() {
+   /* private fun loadSuggestions() {
 //        presenter.loadWorks(AppHelper.currentCurator.id)
         if(curator.skills.size == 0) {
             skills = ArrayList()

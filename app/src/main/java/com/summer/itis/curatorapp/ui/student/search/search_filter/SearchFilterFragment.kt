@@ -106,9 +106,17 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
     private fun initViews() {
         setToolbarData()
         setListeners()
+        setData()
+    }
 
-        if(skills.size != 0) {
-            tv_added_skills.text = getSkillsText()
+    private fun setData() {
+        if(skills.size == 0) {
+            tv_added_skills.text = getString(R.string.doesnt_matter_for_all)
+        } else {
+            tv_added_skills.visibility = View.GONE
+            for (skill in skills) {
+                addSkillView(skill)
+            }
         }
         if(courses.size != 0) {
             if(courses.size != 4) {

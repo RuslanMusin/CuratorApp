@@ -85,7 +85,7 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
 
     private fun setListeners() {
         li_skills.setOnClickListener(this)
-        li_works.setOnClickListener(this)
+//        li_works.setOnClickListener(this)
         li_desc.setOnClickListener(this)
         btn_add.setOnClickListener(this)
         btn_back.setOnClickListener(this)
@@ -107,7 +107,7 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
 
             R.id.li_skills -> showSkills()
 
-            R.id.li_works -> showWorks()
+//            R.id.li_works -> showWorks()
 
             R.id.li_desc -> showDesc()
         }
@@ -145,7 +145,6 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
         args.putString(ID_KEY, student.id)
         val fragment = SkillListFragment.newInstance(args, mainListener)
         mainListener.showFragment(this, fragment)
-//        mainListener.pushFragments(TAB_STUDENTS, fragment, true)
     }
 
     private fun showWorks() {

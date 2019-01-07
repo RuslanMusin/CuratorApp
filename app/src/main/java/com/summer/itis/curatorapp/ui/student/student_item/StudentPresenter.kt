@@ -14,26 +14,8 @@ class StudentPresenter(): BaseFragPresenter<StudentView>() {
 
     fun loadStudent(studentId: String) {
         val disposable = RepositoryProvider.studentRepository.findById(studentId).subscribe { res ->
-            Log.d(Const.TAG_LOG, "receive subjects response")
-            if(res == null) {
-                Log.d(Const.TAG_LOG, "res == null")
-            } else {
-                if(res.response() == null) {
-                    Log.d(Const.TAG_LOG, "response == null and isError = ${res.isError}")
-                    Log.d(Const.TAG_LOG, "error = ${res.error()?.message}")
-                    res.error()?.printStackTrace()
-                }
-            }
-            res?.response()?.let {
-                if (it.isSuccessful) {
-                    Log.d(Const.TAG_LOG, "successful subjects")
-                    it.body()?.let { students ->
-                        viewState.showStudent(students)
-                    }
-                } else {
-                    Log.d(Const.TAG_LOG, "failed subjects")
-
-                }
+            interceptResponse(res) {
+                viewState.showStudent(it)
             }
         }
         compositeDisposable.add(disposable)

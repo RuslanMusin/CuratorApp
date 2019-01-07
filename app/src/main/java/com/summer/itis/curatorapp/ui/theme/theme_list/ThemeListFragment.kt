@@ -12,6 +12,7 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.ui.base.base_custom.SearchListener
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
+import com.summer.itis.curatorapp.ui.theme.theme_list.tab_fragment.ReloadableListView
 import com.summer.itis.curatorapp.ui.theme.theme_list.tab_fragment.my_theme_list.MyThemeListFragment
 import com.summer.itis.curatorapp.ui.theme.theme_list.tab_fragment.suggestion_list.SuggestionListFragment
 import com.summer.itis.curatorapp.utils.AppHelper
@@ -82,7 +83,7 @@ class ThemeListFragment : BaseFragment<ThemeListPresenter>(), ThemeListView {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 Log.d(TAG_LOG, "on tab selected")
                 viewpager.currentItem = tab.position
-//                this@TestListActivity.changeAdapter(tab.position)
+                (fragments[tab.position] as ReloadableListView).reloadList()
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -95,11 +96,6 @@ class ThemeListFragment : BaseFragment<ThemeListPresenter>(), ThemeListView {
         })
     }
 
-   /* override fun changeAdapter(position: Int) {
-        val fragment = (viewpager.adapter as FragViewPagerAdapter<*>).getFragmentForChange(position)
-        (fragment as TestListFragment).changeDataInAdapter()
-    }
-*/
 
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = FragViewPagerAdapter(childFragmentManager)

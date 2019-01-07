@@ -25,13 +25,6 @@ class  SuggestionPresenter(): CommentPresenter<SuggestionView>() {
     }
 
     fun rejectCurator(sug: Suggestion) {
-       /* for (sug in AppHelper.currentCurator.suggestions) {
-            if (sug.id.equals(sug.id)) {
-                sug.status = Status(Integer.toString(Random().nextInt(100) + 1), REJECTED_CURATOR)
-                viewState.setStatus(sug.status.name)
-
-            }
-        }*/
         val curatorId = AppHelper.currentCurator.id
         sug.status = AppHelper.getStatus(REJECTED_CURATOR)
         changeSuggestionStatus(curatorId, sug)
@@ -54,42 +47,14 @@ class  SuggestionPresenter(): CommentPresenter<SuggestionView>() {
     }
 
     fun changeSuggestionStatus(curatorId: String, sug: Suggestion) {
-        /*for (sug in AppHelper.currentCurator.suggestions) {
-            if (sug.id.equals(id)) {
-                sug.status = Status(Integer.toString(Random().nextInt(100) + 1), status)
-                viewState.setStatus(status)
-            }
-        }*/
         viewState.setStatus(sug.status.name)
         sug.setApiFileds()
-        RepositoryProvider.suggestionRepository.updateCuratorSuggestion(curatorId, sug).subscribe { e ->
-            Log.d(Const.TAG_LOG, "changed status to rejected")
-            checkResponse(e)
+        val disposable = RepositoryProvider.suggestionRepository
+            .updateCuratorSuggestion(curatorId, sug)
+            .subscribe { res ->
+                interceptResponse(res) {}
         }
-    }
-
-    fun checkResponse(res: Result<Suggestion>) {
-        if(res == null) {
-            Log.d(Const.TAG_LOG, "res == null")
-        } else {
-            if(res.response() == null) {
-                Log.d(Const.TAG_LOG, "response == null and isError = ${res.isError}")
-                Log.d(Const.TAG_LOG, "error = ${res.error()?.message}")
-                res.error()?.printStackTrace()
-            }
-        }
-        res?.response()?.let {
-            if (it.isSuccessful) {
-                Log.d(Const.TAG_LOG, "successful changed suggestion")
-                it.body()?.let { skills ->
-                    Log.d(Const.TAG_LOG, "body not null")
-                }
-            } else {
-                Log.d(Const.TAG_LOG, "failed changed suggestion = ${it.code()} and ${it.errorBody()?.string()} and ${it.message()}")
-                Log.d(Const.TAG_LOG, "failed raw = ${it.raw()}")
-
-            }
-        }
+        compositeDisposable.add(disposable)
     }
 
 }

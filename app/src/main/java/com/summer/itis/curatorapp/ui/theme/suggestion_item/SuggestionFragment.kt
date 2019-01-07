@@ -122,7 +122,6 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_edit)
         toolbar_title.text = getString(R.string.suggestion)
-//        suggestion.progress?.title?.let { mainListener.setToolbarTitle(it) }
         btn_back.visibility = View.VISIBLE
 
     }

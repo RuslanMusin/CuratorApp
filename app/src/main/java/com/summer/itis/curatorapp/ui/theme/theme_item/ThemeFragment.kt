@@ -92,7 +92,6 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_back_add_edit)
         toolbar_title.text = getString(R.string.theme)
-//        mainListener.setToolbarTitle(theme.title)
     }
 
     private fun setListeners() {
@@ -155,7 +154,7 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
     }
 
     private fun addSkillView(skill: Skill) {
-        val view: View = layoutInflater.inflate(R.layout.layout_item_skill, li_added_skills,false)
+        val view: View = layoutInflater.inflate(R.layout.item_skill_small, li_added_skills,false)
         val tvAddedSkill: TextView = view.findViewById(R.id.tv_added_skill_name)
 
         tvAddedSkill.text = skill.name

@@ -58,8 +58,6 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
 
     companion object {
 
-        const val ADD_SUBJECT: Int = 1
-
         fun newInstance(args: Bundle, mainListener: NavigationView): Fragment {
             val fragment = EditThemeFragment()
             fragment.arguments = args
@@ -112,8 +110,6 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
                 addSkillView(skill)
             }
         }
-
-//        tv_added_skills.content = getSkillsText()
     }
 
     private fun setToolbarData() {
@@ -144,7 +140,7 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
     }
 
     private fun addSkillView(skill: Skill) {
-        val view: View = layoutInflater.inflate(R.layout.item_skill_clear, li_added_skills,false)
+        val view: View = layoutInflater.inflate(R.layout.item_skill_clear_margin_off, li_added_skills,false)
         val ivRemoveSkill: ImageView = view.findViewById(R.id.iv_remove_skill)
         val tvAddedSkill: TextView = view.findViewById(R.id.tv_added_skill_name)
 

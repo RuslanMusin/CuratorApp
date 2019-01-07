@@ -28,30 +28,14 @@ class SuggestionListPresenter(): BaseFragPresenter<SuggestionListView>() {
 
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
-    fun loadSkills(userId: String) {
+    fun loadSuggestions(userId: String) {
         Log.d(TAG_LOG, "id = $userId")
-        val disposable = RepositoryProvider.suggestionRepository.findCuratorSuggestions(userId).subscribe { res ->
-            Log.d(TAG_LOG, "receive sug response")
-            if(res == null) {
-                Log.d(Const.TAG_LOG, "res == null")
-            } else {
-                if(res.response() == null) {
-                    Log.d(Const.TAG_LOG, "response == null and isError = ${res.isError}")
-                    Log.d(TAG_LOG, "error = ${res.error()?.message}")
-                    res.error()?.printStackTrace()
+        val disposable = RepositoryProvider.suggestionRepository
+            .findCuratorSuggestions(userId)
+            .subscribe { res ->
+                interceptResponse(res) {
+                    viewState.showSuggestions(it.reversed())
                 }
-            }
-            res?.response()?.let {
-                if (it.isSuccessful) {
-                    Log.d(Const.TAG_LOG, "successful suggestions")
-                    it.body()?.let { suggestions ->
-                        viewState.showSuggestions(suggestions.reversed())
-                    }
-                } else {
-                    Log.d(Const.TAG_LOG, "failed suggestions")
-
-                }
-            }
         }
         compositeDisposable.add(disposable)
     }
@@ -82,7 +66,7 @@ class SuggestionListPresenter(): BaseFragPresenter<SuggestionListView>() {
                 suggestionRepository.updateCuratorSuggestion(curatorId, sug).subscribe { e ->
                     Log.d(TAG_LOG, "changed status to accepted")
                     checkResponse(e)
-                    loadSkills(curatorId)
+                    loadSuggestions(curatorId)
                 }
 
             }
@@ -98,7 +82,7 @@ class SuggestionListPresenter(): BaseFragPresenter<SuggestionListView>() {
                 suggestionRepository.updateCuratorSuggestion(curatorId, sug).subscribe { e ->
                     Log.d(TAG_LOG, "changed status to rejected")
                     checkResponse(e)
-                    loadSkills(curatorId)
+                    loadSuggestions(curatorId)
                 }
             }
 
@@ -113,7 +97,7 @@ class SuggestionListPresenter(): BaseFragPresenter<SuggestionListView>() {
                 suggestionRepository.updateCuratorSuggestion(curatorId, sug).subscribe { e ->
                     Log.d(TAG_LOG, "changed status to in progress")
                     checkResponse(e)
-                    loadSkills(curatorId)
+                    loadSuggestions(curatorId)
                 }
             }
 
@@ -124,7 +108,7 @@ class SuggestionListPresenter(): BaseFragPresenter<SuggestionListView>() {
                 suggestionRepository.updateCuratorSuggestion(curatorId, sug).subscribe { e ->
                     Log.d(TAG_LOG, "changed status to save changes")
                     checkResponse(e)
-                    loadSkills(curatorId)
+                    loadSuggestions(curatorId)
                 }
             }
 
@@ -137,15 +121,6 @@ class SuggestionListPresenter(): BaseFragPresenter<SuggestionListView>() {
                 sug.status = Status(CHANGED_STUDENT_NUM, status)
             }
         }
-    }
-
-    fun findSkillsByType(userId: String, type: String) {
-        /* if(type.equals(CURATOR_TYPE)) {
-             skillRepository
-                     .findMySkills(userId)
-         } else {
-
-         }*/
     }
 
     fun checkResponse(res: Result<Suggestion>) {
@@ -171,17 +146,5 @@ class SuggestionListPresenter(): BaseFragPresenter<SuggestionListView>() {
             }
         }
     }
-
-   /* fun createWork(sug: Suggestion) {
-          val work = Work()
-               work.id = sug.id
-               work.dateStart = Date()
-               sug.theme?.let {
-                   it.student = sug.student
-                   it.curator = sug.curator
-                   work.theme = it
-               }
-               AppHelper.currentCurator.works.add(0, work)
-    }*/
 
 }

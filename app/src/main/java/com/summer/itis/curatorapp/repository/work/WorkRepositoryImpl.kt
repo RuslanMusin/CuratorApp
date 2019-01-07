@@ -32,4 +32,13 @@ class WorkRepositoryImpl(val apiService: WorkService): WorkRepository {
         return apiService.deleteCuratorWork(curatorId, workId).compose(RxUtils.asyncSingle())
     }
 
+    override fun findStudentWorks(studentId: String): Single<Result<List<Work>>> {
+        return apiService.findStudentWorks(studentId).compose(RxUtils.asyncSingle())
+    }
+
+    override fun findStudentWork(studentId: String, workId: String): Single<Result<Work>> {
+        return apiService.findStudentWork(studentId, workId).compose(RxUtils.asyncSingle())
+    }
+
+
 }

@@ -61,74 +61,36 @@ class MyThemeListPresenter(): BaseFragPresenter<MyThemeListView>() {
     }
 
     fun postSuggestion(curatorId: String, suggestion: Suggestion) {
-        val disposable = RepositoryProvider.suggestionRepository.postCuratorSuggestion(curatorId, suggestion).subscribe { res ->
-            Log.d(Const.TAG_LOG, "post suggestion response")
-            if(res == null) {
-                Log.d(Const.TAG_LOG, "res == null")
-            } else {
-                if(res.response() == null) {
-                    Log.d(Const.TAG_LOG, "response == null and isError = ${res.isError}")
-                    Log.d(Const.TAG_LOG, "error = ${res.error()?.message}")
-                    res.error()?.printStackTrace()
+        val disposable = RepositoryProvider.suggestionRepository
+            .postCuratorSuggestion(curatorId, suggestion)
+            .subscribe { res ->
+                interceptResponse(res) {
+                    AppHelper.currentCurator.suggestions.add(0, suggestion)
                 }
-            }
-            res?.response()?.let {
-                if (it.isSuccessful) {
-                    Log.d(Const.TAG_LOG, "successful post suggestion")
-                    it.body()?.let { skills ->
-                        AppHelper.currentCurator.suggestions.add(0, suggestion)
-                    }
-                } else {
-                    Log.d(Const.TAG_LOG, "failed post suggestion = ${it.code()} and ${it.errorBody()?.string()} and ${it.message()}")
-                    Log.d(TAG_LOG, "failed raw = ${it.raw()}")
-
-                }
-            }
         }
         compositeDisposable.add(disposable)
     }
 
-
     fun loadSkills(userId: String) {
-        val disposable = RepositoryProvider.themeRepository.findCuratorThemes(userId).subscribe { res ->
-            res?.response()?.let {
-                if (it.isSuccessful) {
-                    Log.d(TAG_LOG, "successful themes")
-                    it.body()?.let { themes ->
-                        viewState.showThemes(themes)
-                    }
-                } else {
-
+        val disposable = RepositoryProvider.themeRepository
+            .findCuratorThemes(userId)
+            .subscribe { res ->
+                interceptResponse(res) {
+                    viewState.showThemes(it)
                 }
-            }
         }
         compositeDisposable.add(disposable)
     }
 
     fun loadFakeStudents() {
-        val disposable = RepositoryProvider.studentRepository.findAll().subscribe { res ->
-            res?.response()?.let {
-                if (it.isSuccessful) {
-                    Log.d(TAG_LOG, "successful themes")
-                    it.body()?.let { themes ->
-                        viewState.updateFakeStudents(themes.subList(0, 3))
-                    }
-                } else {
-
+        val disposable = RepositoryProvider.studentRepository
+            .findAll()
+            .subscribe { res ->
+                interceptResponse(res) {
+                    viewState.updateFakeStudents(it.subList(0, 3))
                 }
-            }
         }
         compositeDisposable.add(disposable)
-    }
-
-
-    fun findSkillsByType(userId: String, type: String) {
-        /* if(type.equals(CURATOR_TYPE)) {
-             skillRepository
-                     .findMySkills(userId)
-         } else {
-
-         }*/
     }
 
 }

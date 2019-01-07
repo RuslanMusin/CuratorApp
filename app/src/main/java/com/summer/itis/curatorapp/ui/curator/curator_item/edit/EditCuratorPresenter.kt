@@ -15,28 +15,9 @@ class EditCuratorPresenter(): BaseFragPresenter<EditCuratorView>() {
 
     fun updateCurator(curator: Curator) {
         val disposable = RepositoryProvider.curatorRepository.update(curator.id, curator).subscribe { res ->
-            Log.d(Const.TAG_LOG, "receive subjects response")
-            if(res == null) {
-                Log.d(Const.TAG_LOG, "res == null")
-            } else {
-                if(res.response() == null) {
-                    Log.d(Const.TAG_LOG, "response == null and isError = ${res.isError}")
-                    Log.d(Const.TAG_LOG, "error = ${res.error()?.message}")
-                    res.error()?.printStackTrace()
-                }
-            }
-            res?.response()?.let {
-                if (it.isSuccessful) {
-                    Log.d(Const.TAG_LOG, "successful subjects")
-                    it.body()?.let { skills ->
-                        viewState.returnAfterEdit()
-                    }
-                } else {
-                    Log.d(Const.TAG_LOG, "failed profile changes")
-                    Log.d(Const.TAG_LOG, "mes = ${it.message()}")
-
-                }
-            }
+           interceptResponse(res) {
+               viewState.returnAfterEdit()
+           }
         }
         compositeDisposable.add(disposable)
     }

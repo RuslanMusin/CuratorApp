@@ -71,7 +71,7 @@ class MaterialListFragment : BaseFragment<MaterialListPresenter>(), MaterialList
         presenter.loadMaterials(workId, stepId)
     }
 
-    override fun showSkills(skills: List<Material>) {
+    override fun showMaterials(skills: List<Material>) {
         this.skills = skills.toMutableList()
         changeDataSet(this.skills)
     }

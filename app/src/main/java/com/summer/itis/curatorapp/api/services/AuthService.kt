@@ -12,7 +12,4 @@ interface AuthService {
 
     @POST("login")
     fun login(@Body user: User): Single<Result<LoginResult>>
-
-    @POST("logout")
-    fun logout(): Single<Result<Unit>>
 }
