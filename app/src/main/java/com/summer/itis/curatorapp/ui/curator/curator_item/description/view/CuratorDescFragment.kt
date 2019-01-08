@@ -10,24 +10,20 @@ import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.TAB_PROFILE
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.TAB_STUDENTS
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.TAB_THEMES
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.curator.curator_item.description.edit.ChangeDescFragment
 import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const
-import com.summer.itis.curatorapp.utils.Const.CURATOR_TYPE
 import com.summer.itis.curatorapp.utils.Const.DESC_KEY
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
-import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
 import com.summer.itis.curatorapp.utils.Const.SUGGESTION_TYPE
 import com.summer.itis.curatorapp.utils.Const.THEME_TYPE
 import com.summer.itis.curatorapp.utils.Const.TYPE
 import kotlinx.android.synthetic.main.fragment_description.*
-import kotlinx.android.synthetic.main.toolbar_edit.*
+import kotlinx.android.synthetic.main.toolbar_edit_back.*
+import kotlinx.android.synthetic.main.toolbar_edit_back.view.*
 
-class DescriptionFragment : BaseFragment<DescriptionPresenter>(), DescriptionView, View.OnClickListener {
+class CuratorDescFragment : BaseFragment<CuratorDescPresenter>(), CuratorDescView, View.OnClickListener {
 
     lateinit var type: String
     var isOwner: Boolean = false
@@ -36,7 +32,7 @@ class DescriptionFragment : BaseFragment<DescriptionPresenter>(), DescriptionVie
     lateinit override var mainListener: NavigationView
 
     @InjectPresenter
-    lateinit var presenter: DescriptionPresenter
+    lateinit var presenter: CuratorDescPresenter
 
     companion object {
 
@@ -45,14 +41,14 @@ class DescriptionFragment : BaseFragment<DescriptionPresenter>(), DescriptionVie
         const val EDIT_DESC = 1
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
-            val fragment = DescriptionFragment()
+            val fragment = CuratorDescFragment()
             fragment.arguments = args
             fragment.mainListener = navigationView
             return fragment
         }
 
         fun newInstance(navigationView: NavigationView): Fragment {
-            val fragment = DescriptionFragment()
+            val fragment = CuratorDescFragment()
             fragment.mainListener = navigationView
             return fragment
         }
@@ -83,17 +79,17 @@ class DescriptionFragment : BaseFragment<DescriptionPresenter>(), DescriptionVie
     }
 
     fun initViews() {
-        findViews()
+        setData()
         setToolbarData()
         setListeners()
     }
 
     private fun setToolbarData() {
-        mainListener.setToolbar(toolbar_edit)
+        mainListener.setToolbar(toolbar_edit_back)
         if(!isOwner || type.equals(THEME_TYPE) || type.equals(SUGGESTION_TYPE)) {
             btn_edit.visibility = View.GONE
         }
-        toolbar_edit.title = getString(R.string.desc)
+        toolbar_edit_back.toolbar_title.text = getString(R.string.desc)
         btn_back.visibility = View.VISIBLE
 
     }
@@ -103,7 +99,7 @@ class DescriptionFragment : BaseFragment<DescriptionPresenter>(), DescriptionVie
         btn_back.setOnClickListener(this)
     }
 
-    private fun findViews() {
+    private fun setData() {
         tv_desc_name.text = description
     }
 

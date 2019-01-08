@@ -12,7 +12,7 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.DescriptionFragment
+import com.summer.itis.curatorapp.ui.description.DescriptionFragment
 import com.summer.itis.curatorapp.ui.skill.skill_list.view.SkillListFragment
 import com.summer.itis.curatorapp.ui.work.one_work_list.OneWorkListFragment
 import com.summer.itis.curatorapp.utils.AppHelper
@@ -25,7 +25,6 @@ import com.summer.itis.curatorapp.utils.Const.REQUEST_CODE
 import com.summer.itis.curatorapp.utils.Const.SEND_THEME
 import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
 import com.summer.itis.curatorapp.utils.Const.TAB_NAME
-import com.summer.itis.curatorapp.utils.Const.TYPE
 import com.summer.itis.curatorapp.utils.Const.USER_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import kotlinx.android.synthetic.main.layout_student.*
@@ -81,6 +80,7 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_add)
+        toolbar_title.text = getString(R.string.student)
     }
 
     private fun setListeners() {
@@ -116,10 +116,8 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
     private fun showDesc() {
         val args = Bundle()
         args.putString(DESC_KEY, student.description)
-        args.putString(TYPE, STUDENT_TYPE)
         val fragment = DescriptionFragment.newInstance(args, mainListener)
         mainListener.showFragment(this, fragment)
-//        mainListener.pushFragments(TAB_STUDENTS, fragment, true)
     }
 
     private fun giveTheme() {

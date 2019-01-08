@@ -1,15 +1,17 @@
-package com.summer.itis.curatorapp.ui.work.progress_card
+package com.summer.itis.curatorapp.ui.work.progress_card.show
 
 import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.step.Step
+import com.summer.itis.curatorapp.model.theme.Status
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.work.work_step.add_step.AddStepFragment
@@ -17,7 +19,7 @@ import com.summer.itis.curatorapp.ui.work.work_step.step.StepFragment
 import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
 import com.summer.itis.curatorapp.utils.Const.STEP_KEY
-import com.summer.itis.curatorapp.utils.Const.TAB_NAME
+import com.summer.itis.curatorapp.utils.Const.TAG_LOG
 import com.summer.itis.curatorapp.utils.Const.TYPE
 import com.summer.itis.curatorapp.utils.Const.WATCHER_TYPE
 import com.summer.itis.curatorapp.utils.Const.WORK_KEY
@@ -26,7 +28,8 @@ import kotlinx.android.synthetic.main.layout_recycler_list.*
 import kotlinx.android.synthetic.main.toolbar_add.*
 import java.util.*
 
-class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.OnClickListener {
+class StepListFragment : BaseFragment<StepListPresenter>(),
+    StepListView, View.OnClickListener {
 
     lateinit var workId: String
     var type: String = OWNER_TYPE
@@ -39,10 +42,6 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
     lateinit var presenter: StepListPresenter
 
     companion object {
-
-        const val TAG_SKILLS = "TAG_SKILLS"
-
-        const val EDIT_SKILLS = 1
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
             val fragment = StepListFragment()
@@ -130,7 +129,7 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
     }
 
     private fun initRecycler() {
-        adapter = StepAdapter(ArrayList())
+        adapter = StepAdapter(ArrayList(), this)
         val manager = LinearLayoutManager(activity as Activity)
         rv_list.layoutManager = manager
         rv_list.setEmptyView(tv_empty)
@@ -163,6 +162,12 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
         args.putString(Const.ID_KEY, workId)
         val fragment = AddStepFragment.newInstance(args, mainListener)
         mainListener.pushFragments(fragment, true)
+    }
+
+    override fun changeStatus(pos: Int, status: Status) {
+        val step = steps[pos]
+        Log.d(TAG_LOG, "step status = ${step.status.id} and status = ${status.id}")
+        presenter.changeStatus(workId, step)
     }
 
 }

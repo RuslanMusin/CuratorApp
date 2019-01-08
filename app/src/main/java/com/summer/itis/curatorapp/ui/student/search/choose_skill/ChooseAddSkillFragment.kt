@@ -21,7 +21,7 @@ import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.layout_recycler_list.*
-import kotlinx.android.synthetic.main.toolbar_edit.*
+import kotlinx.android.synthetic.main.toolbar_back.*
 import java.util.*
 import java.util.regex.Pattern
 
@@ -62,7 +62,7 @@ class ChooseAddSkillFragment : BaseFragment<ChooseSkilllPresenter>(), ChooseSkil
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_skills, container, false)
+        val view = inflater.inflate(R.layout.fragment_student_list, container, false)
         return view
     }
 
@@ -84,10 +84,8 @@ class ChooseAddSkillFragment : BaseFragment<ChooseSkilllPresenter>(), ChooseSkil
     }
 
     private fun setToolbarData() {
-        mainListener.setToolbar(toolbar_edit)
-        btn_back.visibility = View.VISIBLE
-        btn_ok.visibility = View.GONE
-        btn_edit.visibility = View.GONE
+        mainListener.setToolbar(toolbar_back)
+        toolbar_title.text = getString(R.string.skills)
     }
 
     private fun setListeners() {

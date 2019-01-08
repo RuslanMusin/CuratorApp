@@ -105,6 +105,7 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_back_done)
+        toolbar_title.text = getString(R.string.add_theme)
     }
 
     private fun setListeners() {

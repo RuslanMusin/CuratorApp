@@ -19,7 +19,8 @@ import com.summer.itis.curatorapp.model.theme.Progress
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.TAB_THEMES
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.comment.CommentFragment
-import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.DescriptionFragment
+import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.CuratorDescFragment
+import com.summer.itis.curatorapp.ui.description.DescriptionFragment
 import com.summer.itis.curatorapp.ui.student.student_item.StudentFragment
 import com.summer.itis.curatorapp.ui.theme.edit_suggestion.EditSuggestionFragment
 import com.summer.itis.curatorapp.utils.AppHelper
@@ -34,6 +35,7 @@ import com.summer.itis.curatorapp.utils.Const.EDIT_SUGGESTION
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_CURATOR
 import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_STUDENT
+import com.summer.itis.curatorapp.utils.Const.MAX_LENGTH
 import com.summer.itis.curatorapp.utils.Const.REJECTED_CURATOR
 import com.summer.itis.curatorapp.utils.Const.REJECTED_CURATOR_NUM
 import com.summer.itis.curatorapp.utils.Const.REJECTED_STUDENT
@@ -68,10 +70,6 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
     override lateinit var presenter: SuggestionPresenter
 
     companion object {
-
-        const val TAG_CURATOR = "TAG_CURATOR"
-
-        const val EDIT_CURATOR = 1
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
             val fragment = SuggestionFragment()
@@ -192,17 +190,12 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
     }
 
     private fun setData() {
-        if(suggestion.theme?.skills?.size == 0) {
-            li_skills.visibility = View.GONE
-        } else {
-            tv_skills.text = this.activity?.let { suggestion.theme?.skills?.let { it1 -> SkillViewHelper.getSkillsText(it1, it) } }
-        }
         tv_title.text = suggestion.getCorrectTitle()
         tv_curator.text = suggestion.curator?.name
         tv_student.text = suggestion.student?.name
         tv_subject.text = suggestion.theme?.subject?.name
         setStatus(suggestion.status.name)
-        expand_text_view.text = suggestion.getCorrectDesc()
+        tv_desc.text = suggestion.getCorrectDesc()?.let { AppHelper.cutLongDescription(it, MAX_LENGTH) }
     }
 
     override fun onClick(v: View) {
@@ -223,6 +216,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
             R.id.btn_revision -> {
                 presenter.revisionTheme(suggestion)
             }
+
         }
     }
 
@@ -260,10 +254,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
 
     private fun showDesc() {
         val args = Bundle()
-        args.putString(DESC_KEY, suggestion.progress?.description)
-        args.putString(TYPE, SUGGESTION_TYPE)
-        args.putString(USER_ID, AppHelper.currentCurator.id)
-        args.putString(ID_KEY, suggestion.id)
+        args.putString(DESC_KEY, suggestion.getCorrectDesc())
         val fragment = DescriptionFragment.newInstance(args, mainListener)
         mainListener.pushFragments(fragment, true)
     }

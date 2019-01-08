@@ -31,7 +31,7 @@ import com.summer.itis.curatorapp.utils.Const.TAG_LOG
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.layout_recycler_list.*
-import kotlinx.android.synthetic.main.toolbar_add.*
+import kotlinx.android.synthetic.main.toolbar_back.*
 import java.util.*
 import java.util.regex.Pattern
 
@@ -100,8 +100,8 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
     }
 
     private fun setToolbarData() {
-        mainListener.setToolbar(toolbar_add)
-        btn_add.visibility = View.GONE
+        mainListener.setToolbar(toolbar_back)
+        toolbar_title.text = getString(R.string.menu_students)
     }
 
     private fun setListeners() {
@@ -269,11 +269,11 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
             if (yearFlag) {
                 var skillFlag = true
                 for (skillFilter in skills) {
-                    Log.d(TAG_LOG, "skillFilter = ${skillFilter.name} and hash = ${skillFilter.hashCode()}")
-                    for(skill in student.skills) {
-                        Log.d(TAG_LOG, "skill = ${skill.name}  and hash = ${skill.hashCode()}")
+                    Log.d(TAG_LOG, "skillFilter = ${skillFilter.id} and hash = ${skillFilter.hashCode()}")
+                    for(skill in student.skillsIds) {
+                        Log.d(TAG_LOG, "skillId = ${skill}")
                     }
-                    if(!student.skills.contains(skillFilter)) {
+                    if(!student.skillsIds.contains(skillFilter.id)) {
                         skillFlag = false
                         break
                     }

@@ -332,7 +332,7 @@
     <string name="accept_theme">Принять тему</string>
     <string name="theme_status">Статус</string>
     <string name="subject">Область</string>
-    <string name="student_name">Студент</string>
+    <string name="student">Студент</string>
     <string name="curator">Куратор</string>
     <string name="suggestions">Предложения</string>
     <string name="my_themes">Мои темы</string>
@@ -361,8 +361,8 @@
     <string name="status_new">Новая</string>
     <string name="change_suggestion">Изменение предложения</string>
     <string name="should_send_theme">Хотите предложить тему?</string>
-    <string name="send_theme_content">При нажатии на OK вам нужно будет выбрать студента, которому вы хотите предложить этут тему</string>
-    <string name="theme_suggestions_will_be_changed">После редактирования темы все прошлые предложеия по ней будут изменены</string>
+    <string name="send_theme_content">При нажатии на OK вам нужно будет выбрать студента, которому вы хотите предложить эту тему</string>
+    <string name="theme_suggestions_will_be_changed">После редактирования темы все прошлые предложения по ней будут изменены</string>
     <string name="should_edit_theme">Хотите внести изменения ?</string>
     <string name="changes_updated">Изменения успешно сохранены</string>
     <string name="suggestion_was_sended">Предложение было отправлено</string>
@@ -401,6 +401,13 @@
     <string name="server_reset">Ошибка подключения</string>
 
     <string name="group_course">%1$s , %2$d курс</string>
+    <string name="add_step">Добавление шага</string>
+    <string name="filter">Фильтр</string>
+    <string name="add_theme">Добавление темы</string>
+    <string name="subjects">Предметы</string>
+    <string name="edit_theme">Редактирование темы</string>
+    <string name="edit_profile">Изменение профиля</string>
+    <string name="edit_desc">Изменение описания</string>
 
 
     <string-array name="courses">

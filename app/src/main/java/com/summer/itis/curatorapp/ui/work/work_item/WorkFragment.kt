@@ -9,16 +9,15 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.work.Work
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.TAB_WORKS
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.student.student_item.StudentFragment
-import com.summer.itis.curatorapp.ui.work.progress_card.StepListFragment
+import com.summer.itis.curatorapp.ui.description.DescriptionFragment
+import com.summer.itis.curatorapp.ui.work.progress_card.show.StepListFragment
 import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
+import com.summer.itis.curatorapp.utils.Const.MAX_LENGTH
 import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
-import com.summer.itis.curatorapp.utils.Const.TAB_NAME
 import com.summer.itis.curatorapp.utils.Const.TYPE
-import com.summer.itis.curatorapp.utils.Const.USER_ID
 import com.summer.itis.curatorapp.utils.Const.WATCHER_TYPE
 import com.summer.itis.curatorapp.utils.Const.WORK_KEY
 import kotlinx.android.synthetic.main.fragment_work.*
@@ -79,6 +78,7 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
     private fun setListeners() {
         btn_back.setOnClickListener(this)
         li_skills.setOnClickListener(this)
+        li_desc.setOnClickListener(this)
     }
 
     override fun showWork(work: Work) {
@@ -92,7 +92,7 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
             tv_student.text = name
         }
         tv_subject.text = work.theme.subject.name
-        expand_text_view.text = work.theme.description
+        tv_desc.text = AppHelper.cutLongDescription(work.theme.description, MAX_LENGTH)
     }
 
     override fun onClick(v: View) {
@@ -101,7 +101,16 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
             R.id.btn_back -> backFragment()
 
             R.id.li_skills -> showSteps()
+
+            R.id.li_desc -> showDesc()
         }
+    }
+
+    private fun showDesc() {
+        val args = Bundle()
+        args.putString(Const.DESC_KEY, work.theme.description)
+        val fragment = DescriptionFragment.newInstance(args, mainListener)
+        mainListener.pushFragments(fragment, true)
     }
 
     private fun showSteps() {

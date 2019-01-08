@@ -114,6 +114,7 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_back_done)
+        toolbar_title.text = getString(R.string.edit_theme)
     }
 
     private fun setListeners() {

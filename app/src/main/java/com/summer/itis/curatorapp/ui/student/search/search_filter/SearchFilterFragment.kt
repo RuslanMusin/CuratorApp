@@ -31,7 +31,7 @@ import com.summer.itis.curatorapp.utils.Const.FILTERS
 import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import kotlinx.android.synthetic.main.fragment_search_filter.*
-import kotlinx.android.synthetic.main.toolbar_add_done.*
+import kotlinx.android.synthetic.main.toolbar_back_done.*
 import java.util.*
 
 
@@ -118,18 +118,20 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
                 addSkillView(skill)
             }
         }
-        if(courses.size != 0) {
-            if(courses.size != 4) {
-                tv_added_courses.text = getCoursesText()
-            } else {
-                tv_added_courses.text = getString(R.string.doesnt_matter)
-            }
+        if(courses.size == 0) {
+            loadCourses()
         }
+        if(courses.size != 4) {
+            tv_added_courses.text = getCoursesText()
+        } else {
+            tv_added_courses.text = getString(R.string.doesnt_matter)
+        }
+
     }
 
     private fun setToolbarData() {
-        mainListener.setToolbar(toolbar_add_done)
-        btn_add.visibility = View.GONE
+        mainListener.setToolbar(toolbar_back_done)
+        toolbar_title.text = getString(R.string.filter)
     }
 
     private fun setListeners() {
@@ -207,8 +209,10 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
                     for(i in which.indices) {
                         courses.add((which[i] + 1).toLong())
                     }
-
-                    if(courses.size == 4 || courses.size == 0) {
+                    if(courses.size == 0) {
+                        loadCourses()
+                    }
+                    if(courses.size == 4) {
                         tv_added_courses.text = getString(R.string.doesnt_matter)
                     }
                     true

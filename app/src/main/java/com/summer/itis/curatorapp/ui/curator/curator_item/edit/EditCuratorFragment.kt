@@ -17,7 +17,7 @@ import com.summer.itis.curatorapp.utils.Const.CURATOR_KEY
 import com.summer.itis.curatorapp.utils.Const.EDIT_CURATOR
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import kotlinx.android.synthetic.main.fragment_change_profile.*
-import kotlinx.android.synthetic.main.toolbar_edit.*
+import kotlinx.android.synthetic.main.toolbar_back_done.*
 
 class EditCuratorFragment : BaseFragment<EditCuratorPresenter>(), EditCuratorView, View.OnClickListener {
 
@@ -70,12 +70,8 @@ class EditCuratorFragment : BaseFragment<EditCuratorPresenter>(), EditCuratorVie
     }
 
     private fun setToolbarData() {
-        mainListener.setToolbar(toolbar_edit)
-        btn_edit.visibility = View.GONE
-        btn_ok.visibility = View.VISIBLE
-        btn_back.visibility = View.VISIBLE
-        toolbar_edit.title = curator.getFullName()
-
+        mainListener.setToolbar(toolbar_back_done)
+        toolbar_title.text = getString(R.string.edit_profile)
     }
 
     private fun setListeners() {

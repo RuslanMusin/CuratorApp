@@ -10,7 +10,7 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.DescriptionFragment
+import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.CuratorDescFragment
 import com.summer.itis.curatorapp.ui.curator.curator_item.edit.EditCuratorFragment
 import com.summer.itis.curatorapp.ui.login.LoginActivity
 import com.summer.itis.curatorapp.ui.skill.skill_list.view.SkillListFragment
@@ -117,7 +117,7 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
         args.putString(DESC_KEY, curator.description)
         args.putString(TYPE, CURATOR_TYPE)
         args.putString(USER_ID, curator.id)
-        val fragment = DescriptionFragment.newInstance(args, mainListener)
+        val fragment = CuratorDescFragment.newInstance(args, mainListener)
         mainListener.pushFragments(fragment, true)
     }
 

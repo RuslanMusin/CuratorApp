@@ -77,7 +77,7 @@ class AddStepFragment : BaseFragment<AddStepPresenter>(), AddStepView, View.OnCl
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_back_done)
-        toolbar_title.text = getString(R.string.add_material)
+        toolbar_title.text = getString(R.string.add_step)
     }
 
     private fun setListeners() {
