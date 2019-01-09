@@ -13,6 +13,7 @@ import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.CuratorDescFragment.Companion.EDIT_DESC
 import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.AppHelper.Companion.setMultiline
 import com.summer.itis.curatorapp.utils.Const.DESC_KEY
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.TYPE
@@ -47,6 +48,10 @@ class ChangeDescFragment : BaseFragment<ChangeDescPresenter>(), ChangeDescView, 
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -70,6 +75,12 @@ class ChangeDescFragment : BaseFragment<ChangeDescPresenter>(), ChangeDescView, 
         setToolbarData()
         setListeners()
         setUserData()
+        setEditText()
+        mainListener.hideLoading()
+    }
+
+    private fun setEditText() {
+        setMultiline(et_description)
     }
 
     private fun setToolbarData() {

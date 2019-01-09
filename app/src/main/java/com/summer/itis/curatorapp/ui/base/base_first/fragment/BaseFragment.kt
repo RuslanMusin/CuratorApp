@@ -22,4 +22,18 @@ abstract class BaseFragment<Presenter: BaseFragPresenter<*>> : MvpAppCompatFragm
         mainListener.onBackPressed()
     }
 
+    override fun showConnectionError() {
+        mainListener.showConnectionError()
+    }
+
+    override fun showConnectionError(errorMessage: Int) {
+        mainListener.showSnackBar(errorMessage)
+    }
+
+    override fun setRequest(request: () -> Unit) {
+        mainListener.setRequest(request)
+    }
+
+    abstract fun showBottomNavigation()
+
 }

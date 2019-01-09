@@ -17,7 +17,6 @@ import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.TAB_THEMES
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.CuratorDescFragment
 import com.summer.itis.curatorapp.ui.description.DescriptionFragment
 import com.summer.itis.curatorapp.ui.student.student_item.StudentFragment
 import com.summer.itis.curatorapp.ui.student.student_list.StudentListFragment
@@ -25,7 +24,6 @@ import com.summer.itis.curatorapp.ui.theme.edit_theme.EditThemeFragment
 import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const.DESC_KEY
 import com.summer.itis.curatorapp.utils.Const.EDIT_SUGGESTION
-import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.MAX_LENGTH
 import com.summer.itis.curatorapp.utils.Const.REQUEST_CODE
 import com.summer.itis.curatorapp.utils.Const.SEND_THEME
@@ -69,6 +67,10 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_theme, container, false)
         return view
@@ -89,6 +91,7 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
         setToolbarData()
         setListeners()
         setData()
+        mainListener.hideLoading()
     }
 
     private fun setToolbarData() {
@@ -138,8 +141,6 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
 
             R.id.btn_add -> sendToStudent()
 
-            R.id.li_student -> showStudent()
-
             R.id.li_desc -> showDesc()
 
             R.id.li_skills -> {
@@ -173,6 +174,7 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
                         dialog.dismiss()
                     }
                     .onPositive { dialog, which ->
+                        mainListener.showLoading()
                         val args = Bundle()
                         args.putInt(REQUEST_CODE, SEND_THEME)
                         val fragment = StudentListFragment.newInstance(args, mainListener)
@@ -184,6 +186,7 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
     }
 
     private fun showDesc() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(DESC_KEY, theme.description)
         val fragment = DescriptionFragment.newInstance(args, mainListener)
@@ -201,6 +204,7 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
                         dialog.dismiss()
                     }
                     .onPositive { dialog, which ->
+                        mainListener.showLoading()
                         val args = Bundle()
                         args.putString(THEME_KEY, gsonConverter.toJson(theme))
                         args.putString(TYPE, THEME_TYPE)
@@ -214,6 +218,7 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
     }
 
     private fun showStudent() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(USER_ID, theme.studentId)
         args.putString(TAB_NAME, TAB_THEMES)
@@ -232,7 +237,7 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
                         theme = gsonConverter.fromJson(json, Theme::class.java)
                         tv_subject.text = theme.subject.name
                         tv_title.text = theme.title
-                        expand_text_view.text = theme.description
+                        tv_desc.text = AppHelper.cutLongDescription(theme.description, MAX_LENGTH)
 
                         if(theme.skills.size != 0) {
                             li_skills.visibility = View.VISIBLE

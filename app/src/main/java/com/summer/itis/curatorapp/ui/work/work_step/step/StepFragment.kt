@@ -16,6 +16,7 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.step.Step
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.comment.CommentFragment
+import com.summer.itis.curatorapp.ui.description.DescriptionFragment
 import com.summer.itis.curatorapp.ui.work.work_step.edit_step.EditStepFragment
 import com.summer.itis.curatorapp.ui.work.work_step.material.list.MaterialListFragment
 import com.summer.itis.curatorapp.utils.AppHelper
@@ -23,6 +24,7 @@ import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.CURATOR_KEY
 import com.summer.itis.curatorapp.utils.Const.EDIT_STEP
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
+import com.summer.itis.curatorapp.utils.Const.MAX_LENGTH
 import com.summer.itis.curatorapp.utils.Const.STEP_KEY
 import com.summer.itis.curatorapp.utils.Const.WORK_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
@@ -59,6 +61,11 @@ class StepFragment: CommentFragment<StepPresenter>(), StepView, View.OnClickList
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.hideBottomNavigation()
+        mainListener.changeWindowsSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_step, container, false)
         return view
@@ -70,8 +77,6 @@ class StepFragment: CommentFragment<StepPresenter>(), StepView, View.OnClickList
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainListener.hideBottomNavigation()
-        mainListener.changeWindowsSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         arguments?.let {
             workId = it.getString(WORK_KEY)
             val stepId = it.getString(STEP_KEY)
@@ -88,10 +93,8 @@ class StepFragment: CommentFragment<StepPresenter>(), StepView, View.OnClickList
         tv_title.text = step.title
         tv_date_start.text = FormatterUtil.getStringFromDate(step.dateStart)
         tv_date_finish.text = FormatterUtil.getStringFromDate(step.dateFinish)
-        val tvDesc: ExpandableTextView = li_desc.findViewById(R.id.expand_text_view)
-//        val tvLinks: ExpandableTextView = li_links.findViewById(R.id.expand_text_view)
-        tvDesc.text = step.description
-//        tvLinks.content = step.links
+        tv_desc.text = AppHelper.cutLongDescription(step.description, MAX_LENGTH)
+        mainListener.hideLoading()
     }
 
     fun initViews() {
@@ -108,6 +111,7 @@ class StepFragment: CommentFragment<StepPresenter>(), StepView, View.OnClickList
         btn_back.setOnClickListener(this)
         btn_edit.setOnClickListener(this)
         li_links.setOnClickListener(this)
+        li_desc.setOnClickListener(this)
     }
 
     override fun onClick(v: View) {
@@ -118,10 +122,21 @@ class StepFragment: CommentFragment<StepPresenter>(), StepView, View.OnClickList
             R.id.btn_edit -> editStep()
 
             R.id.li_links -> showMaterials()
+
+            R.id.li_desc -> showDesc()
         }
     }
 
+    private fun showDesc() {
+        mainListener.showLoading()
+        val args = Bundle()
+        args.putString(Const.DESC_KEY, step.description)
+        val fragment = DescriptionFragment.newInstance(args, mainListener)
+        mainListener.pushFragments(fragment, true)
+    }
+
     private fun showMaterials() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(WORK_KEY, workId)
         args.putString(Const.STEP_KEY, step.id)
@@ -130,6 +145,7 @@ class StepFragment: CommentFragment<StepPresenter>(), StepView, View.OnClickList
     }
 
     private fun editStep() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(STEP_KEY, gsonConverter.toJson(step))
         args.putString(ID_KEY, workId)
@@ -150,10 +166,7 @@ class StepFragment: CommentFragment<StepPresenter>(), StepView, View.OnClickList
                         tv_title.text = step.title
                         tv_date_start.text = FormatterUtil.getStringFromDate(step.dateStart)
                         tv_date_finish.text = FormatterUtil.getStringFromDate(step.dateFinish)
-                        val tvDesc: ExpandableTextView = li_desc.findViewById(R.id.expand_text_view)
-//                        val tvLinks: ExpandableTextView = li_links.findViewById(R.id.expand_text_view)
-                        tvDesc.text = step.description
-//                        tvLinks.content = step.links
+                        tv_desc.text = AppHelper.cutLongDescription(step.description, MAX_LENGTH)
 
                         mainListener.showSnackBar(getString(R.string.changes_updated))
 

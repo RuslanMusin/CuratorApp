@@ -60,6 +60,10 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -74,32 +78,7 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
         super.onViewCreated(view, savedInstanceState)
         initViews()
         presenter.loadCuratorSkills(AppHelper.currentCurator.id)
-//        loadSuggestions()
     }
-
-   /* private fun loadSuggestions() {
-//        presenter.loadWorks(AppHelper.currentCurator.id)
-        if(curator.skills.size == 0) {
-            skills = ArrayList()
-            for (i in 1..10) {
-                val skill = Skill()
-                skill.id = "$i"
-                if(i / 2 == 0) {
-                    skill.level = getString(R.string.low_level)
-                    skill.name = "Machine Learning $i"
-                } else {
-                    skill.level = getString(R.string.high_level)
-                    skill.name = "Android $i"
-                }
-                skills.add(skill)
-            }
-
-        } else {
-            skills = curator.skills
-        }
-        changeDataSet(skills)
-
-    }*/
 
     private fun initViews() {
         setToolbarData()
@@ -183,6 +162,7 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
     override fun showSkills(skills: List<Skill>) {
         this.skills = skills.toMutableList()
         changeDataSet(this.skills)
+        mainListener.hideLoading()
     }
 
     override fun returnAfterEdit() {
@@ -194,30 +174,16 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
     }
 
     private fun addSkill() {
-        /*val fragment = ChooseSkillFragment.newInstance(mainListener)
-        fragment.setTargetFragment(this, ADD_SKILL)
-        mainListener.showFragment(SHOW_PROFILE, this, fragment)*/
+        mainListener.showLoading()
         val fragment = ChooseAddSkillFragment.newInstance(mainListener)
         fragment.setTargetFragment(this, CHOOSE_SKILL)
         mainListener.showFragment(this, fragment)
     }
 
-   /* override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.search_menu, menu)
-        menu?.let { setSearchMenuItem(it) }
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-*/
     private fun setSearchMenuItem() {
-       /*val searchItem = menu.findItem(R.id.action_search)
-
-        val searchView: SearchView = searchItem.actionView as SearchView
-        val finalSearchView = searchView*/
        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
            override fun onQueryTextSubmit(query: String): Boolean {
-//                presenter.loadOfficialTestsByQUery(query)
-
                return false
            }
 

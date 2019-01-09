@@ -4,4 +4,8 @@ import com.arellomobile.mvp.MvpView
 
 interface BaseFragView: MvpView {
 
+    fun showConnectionError()
+    fun showConnectionError(errorMessage: Int)
+    fun setRequest(request: () -> Unit)
+
 }

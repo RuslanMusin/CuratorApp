@@ -11,17 +11,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"
-        >
+        android:layout_above="@id/bottom_navigation"
+    >
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="@string/offline_connection"
-            android:textSize="@dimen/text.24"/>
+        <include
+                android:id="@+id/layout_connectivity"
+                layout="@layout/layout_connectivity"
+                android:visibility="gone"
+        />
+
+        <include
+                android:id="@+id/layout_loading"
+                layout="@layout/layout_loading"
+                android:visibility="gone"
+        />
 
 
     </RelativeLayout>
+
 
     <FrameLayout
         android:id="@+id/container"

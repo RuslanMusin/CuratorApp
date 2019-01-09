@@ -25,13 +25,13 @@ import com.summer.itis.curatorapp.ui.student.search.choose_skill.ChooseAddSkillF
 import com.summer.itis.curatorapp.ui.student.student_list.StudentListFragment
 import com.summer.itis.curatorapp.ui.subject.add_subject.AddSubjectFragment
 import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.AppHelper.Companion.setMultiline
 import com.summer.itis.curatorapp.utils.Const.ADD_STUDENT
 import com.summer.itis.curatorapp.utils.Const.ADD_SUBJECT
 import com.summer.itis.curatorapp.utils.Const.ADD_THEME_TYPE
 import com.summer.itis.curatorapp.utils.Const.ALL_CHOOSED
 import com.summer.itis.curatorapp.utils.Const.CHOOSE_SKILL
 import com.summer.itis.curatorapp.utils.Const.EDIT_CHOOSED_SKILLS
-import com.summer.itis.curatorapp.utils.Const.EDIT_SUGGESTION
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.ONE_CHOOSED
 import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
@@ -72,8 +72,6 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
 
     companion object {
 
-
-
         fun newInstance(args: Bundle, mainListener: NavigationView): Fragment {
             val fragment = AddThemeFragment()
             fragment.arguments = args
@@ -86,6 +84,10 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
             fragment.mainListener = mainListener
             return fragment
         }
+    }
+
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -101,6 +103,13 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
     private fun initViews() {
         setToolbarData()
         setListeners()
+        setEditText()
+        mainListener.hideLoading()
+    }
+
+    private fun setEditText() {
+        setMultiline(et_theme_name)
+        setMultiline(et_theme_desc)
     }
 
     private fun setToolbarData() {
@@ -161,12 +170,14 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
             }
 
             R.id.tv_add_subject -> {
+                mainListener.showLoading()
                 val fragment = AddSubjectFragment.newInstance(mainListener)
                 fragment.setTargetFragment(this, ADD_SUBJECT)
                 mainListener.showFragment(this, fragment)
             }
 
             R.id.tv_add_student -> {
+                mainListener.showLoading()
                 val fragment = StudentListFragment.newInstance(mainListener)
                 fragment.setTargetFragment(this, ADD_STUDENT)
                 mainListener.showFragment(this, fragment)
@@ -186,6 +197,7 @@ class AddThemeFragment : BaseFragment<AddThemePresenter>(), AddThemeView, View.O
     }
 
     private fun addSkill() {
+        mainListener.showLoading()
         val fragment = ChooseAddSkillFragment.newInstance(mainListener)
         fragment.setTargetFragment(this, CHOOSE_SKILL)
         mainListener.showFragment(this, fragment)

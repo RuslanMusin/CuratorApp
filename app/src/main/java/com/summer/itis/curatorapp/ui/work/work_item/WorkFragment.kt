@@ -21,7 +21,6 @@ import com.summer.itis.curatorapp.utils.Const.TYPE
 import com.summer.itis.curatorapp.utils.Const.WATCHER_TYPE
 import com.summer.itis.curatorapp.utils.Const.WORK_KEY
 import kotlinx.android.synthetic.main.fragment_work.*
-import kotlinx.android.synthetic.main.layout_expandable_text_view.*
 import kotlinx.android.synthetic.main.toolbar_back.*
 
 class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListener {
@@ -46,6 +45,10 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
             fragment.mainListener = navigationView
             return fragment
         }
+    }
+
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -93,6 +96,7 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
         }
         tv_subject.text = work.theme.subject.name
         tv_desc.text = AppHelper.cutLongDescription(work.theme.description, MAX_LENGTH)
+        mainListener.hideLoading()
     }
 
     override fun onClick(v: View) {
@@ -107,6 +111,7 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
     }
 
     private fun showDesc() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(Const.DESC_KEY, work.theme.description)
         val fragment = DescriptionFragment.newInstance(args, mainListener)
@@ -114,6 +119,7 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
     }
 
     private fun showSteps() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(WORK_KEY, work.id)
         if(AppHelper.currentCurator.id.equals(work.theme.curator?.id)) {

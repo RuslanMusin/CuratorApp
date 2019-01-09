@@ -27,15 +27,15 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginActView, View.OnClick
         Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_login)
         setListeners()
-//        checkUserSession()
+        checkUserSession()
     }
 
     private fun checkUserSession() {
         val sharedPreferences: SharedPreferences = getSharedPreferences(USER_DATA_PREFERENCES, Context.MODE_PRIVATE)
         if(sharedPreferences.contains(USER_USERNAME)) {
             val email: String = sharedPreferences.getString(USER_USERNAME,"")
-            val passwored: String = sharedPreferences.getString(USER_PASSWORD,"")
-            presenter.signIn(email,passwored)
+            val password: String = sharedPreferences.getString(USER_PASSWORD,"")
+            presenter.signIn(email,password)
         }
     }
 
@@ -74,8 +74,8 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginActView, View.OnClick
             }
 
             R.id.tv_name -> {
-                et_email.setText("Прохор.Куклев.Брониславович")
-                et_password.setText("Прохор.Куклев.Брониславович")
+                et_email.setText("Феликс.Туполев.Ипатович")
+                et_password.setText("Феликс.Туполев.Ипатович")
 
             }
 

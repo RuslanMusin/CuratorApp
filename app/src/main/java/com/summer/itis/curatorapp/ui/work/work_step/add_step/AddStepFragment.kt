@@ -12,6 +12,7 @@ import com.summer.itis.curatorapp.model.step.Step
 import com.summer.itis.curatorapp.model.theme.Status
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
+import com.summer.itis.curatorapp.utils.AppHelper.Companion.setMultiline
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.IN_PROCESS
 import com.summer.itis.curatorapp.widget.DatePickerFragment
@@ -32,6 +33,11 @@ class AddStepFragment : BaseFragment<AddStepPresenter>(), AddStepView, View.OnCl
     lateinit var dialogStart: DatePickerFragment
     lateinit var dialogFinish: DatePickerFragment
 
+    override fun showBottomNavigation() {
+        mainListener.hideBottomNavigation()
+        mainListener.changeWindowsSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    }
+
     companion object {
 
         fun newInstance(args: Bundle, mainListener: NavigationView): Fragment {
@@ -49,8 +55,6 @@ class AddStepFragment : BaseFragment<AddStepPresenter>(), AddStepView, View.OnCl
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mainListener.hideBottomNavigation()
-        mainListener.changeWindowsSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         val view = inflater.inflate(R.layout.fragment_add_step, container, false)
         return view
     }
@@ -66,6 +70,13 @@ class AddStepFragment : BaseFragment<AddStepPresenter>(), AddStepView, View.OnCl
         setTime()
         setToolbarData()
         setListeners()
+        setEditText()
+        mainListener.hideLoading()
+    }
+
+    private fun setEditText() {
+        setMultiline(et_title)
+        setMultiline(et_description)
     }
 
     private fun setTime() {
@@ -130,7 +141,8 @@ class AddStepFragment : BaseFragment<AddStepPresenter>(), AddStepView, View.OnCl
 
     private fun validateData(): Boolean{
         if(step.title.equals("") || step.description.equals("")
-            || step.dateStart.equals(step.dateFinish) || step.links.equals("")) {
+            || step.dateStart.after(step.dateFinish) || step.dateStart.after(Date())
+            || step.links.equals("")) {
             return false
         } else {
             return true

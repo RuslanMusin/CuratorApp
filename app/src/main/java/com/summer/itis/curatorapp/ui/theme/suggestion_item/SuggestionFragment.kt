@@ -19,7 +19,6 @@ import com.summer.itis.curatorapp.model.theme.Progress
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.TAB_THEMES
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.comment.CommentFragment
-import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.CuratorDescFragment
 import com.summer.itis.curatorapp.ui.description.DescriptionFragment
 import com.summer.itis.curatorapp.ui.student.student_item.StudentFragment
 import com.summer.itis.curatorapp.ui.theme.edit_suggestion.EditSuggestionFragment
@@ -32,7 +31,6 @@ import com.summer.itis.curatorapp.utils.Const.CHANGED_STUDENT
 import com.summer.itis.curatorapp.utils.Const.CURATOR_KEY
 import com.summer.itis.curatorapp.utils.Const.DESC_KEY
 import com.summer.itis.curatorapp.utils.Const.EDIT_SUGGESTION
-import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_CURATOR
 import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_STUDENT
 import com.summer.itis.curatorapp.utils.Const.MAX_LENGTH
@@ -41,18 +39,14 @@ import com.summer.itis.curatorapp.utils.Const.REJECTED_CURATOR_NUM
 import com.summer.itis.curatorapp.utils.Const.REJECTED_STUDENT
 import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
 import com.summer.itis.curatorapp.utils.Const.SUGGESTION_KEY
-import com.summer.itis.curatorapp.utils.Const.SUGGESTION_TYPE
 import com.summer.itis.curatorapp.utils.Const.TAB_NAME
 import com.summer.itis.curatorapp.utils.Const.TAG_LOG
 import com.summer.itis.curatorapp.utils.Const.THEME_KEY
-import com.summer.itis.curatorapp.utils.Const.TYPE
 import com.summer.itis.curatorapp.utils.Const.USER_ID
 import com.summer.itis.curatorapp.utils.Const.WAITING_CURATOR
 import com.summer.itis.curatorapp.utils.Const.WAITING_STUDENT
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
-import com.summer.itis.curatorapp.utils.SkillViewHelper
 import kotlinx.android.synthetic.main.layout_add_comment.*
-import kotlinx.android.synthetic.main.layout_expandable_text_view.*
 import kotlinx.android.synthetic.main.layout_suggestion.*
 import kotlinx.android.synthetic.main.toolbar_edit.*
 import java.util.*
@@ -85,6 +79,11 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.hideBottomNavigation()
+        mainListener.changeWindowsSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_suggestion, container, false)
         return view
@@ -97,8 +96,6 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mainListener.hideBottomNavigation()
-        mainListener.changeWindowsSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
         arguments?.let {
             suggestion = gsonConverter.fromJson(it.getString(THEME_KEY), Suggestion::class.java)
             map[CURATOR_KEY] = AppHelper.currentCurator.id
@@ -111,6 +108,8 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
         setListeners()
         setData()
         setBtnsVisibility()
+        mainListener.hideLoading()
+
     }
 
     private fun setBtnsVisibility() {
@@ -125,11 +124,10 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
     }
 
     private fun setListeners() {
-        setActionListeners()
+        setActionListeners(suggestion.status.name)
         btn_edit.setOnClickListener(this)
         btn_back.setOnClickListener(this)
 
-        li_student.setOnClickListener(this)
         li_desc.setOnClickListener(this)
 
         btn_accept.setOnClickListener(this)
@@ -137,8 +135,8 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
         btn_revision.setOnClickListener(this)
     }
 
-    private fun setActionListeners() {
-        when (suggestion.status.name) {
+    private fun setActionListeners(status: String) {
+        when (status) {
 
             WAITING_CURATOR -> {
                 if(!suggestion.type.equals(STUDENT_TYPE)) {
@@ -153,8 +151,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
 
             IN_PROGRESS_CURATOR -> {
                 btn_accept.visibility = View.GONE
-                btn_reject.visibility = View.GONE
-                btn_revision.text = getText(R.string.send_changes)
+                btn_revision.visibility = View.GONE
             }
 
             IN_PROGRESS_STUDENT -> {
@@ -205,8 +202,6 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
 
             R.id.btn_edit -> editProfile()
 
-            R.id.li_student -> showStudent()
-
             R.id.li_desc -> showDesc()
 
             R.id.btn_accept -> acceptTheme()
@@ -250,9 +245,11 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
 
         }
         tv_status.text = uiStatus
+        setActionListeners(status)
     }
 
     private fun showDesc() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(DESC_KEY, suggestion.getCorrectDesc())
         val fragment = DescriptionFragment.newInstance(args, mainListener)
@@ -260,6 +257,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
     }
 
     private fun editProfile() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(THEME_KEY, gsonConverter.toJson(suggestion))
         val fragment = EditSuggestionFragment.newInstance(args, mainListener)
@@ -268,6 +266,7 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
     }
 
     private fun showStudent() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(USER_ID, suggestion.studentId)
         args.putString(TAB_NAME, TAB_THEMES)
@@ -321,11 +320,14 @@ class SuggestionFragment : CommentFragment<SuggestionPresenter>(), SuggestionVie
                 EDIT_SUGGESTION -> {
                     val json = data?.getStringExtra(THEME_KEY)
                     json?.let {
-                        val themeProgress = gsonConverter.fromJson(json, Progress::class.java)
-                        tv_title.text = themeProgress.title
-                        expand_text_view.text = themeProgress.description
+                        val progress = gsonConverter.fromJson(json, Progress::class.java)
+                        tv_title.text = progress.title
+                        tv_desc.text = AppHelper.cutLongDescription(progress.description, MAX_LENGTH)
 
-                        suggestion.progress = themeProgress
+                        suggestion.progress = progress
+                        suggestion.status = AppHelper.getStatus(Const.CHANGED_CURATOR)
+                        hideEdit(suggestion.status)
+                        presenter.changeSuggestionStatus(AppHelper.currentCurator.id, suggestion)
 
                         mainListener.showSnackBar(getString(R.string.changes_updated))
                     }

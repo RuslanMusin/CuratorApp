@@ -46,7 +46,8 @@
                         android:layout_marginTop="@dimen/margin.small"
                         android:textColor="@color/secondary_text"
                         android:textSize="@dimen/text.14"
-                        tools:text="Authors" />
+                        android:text="@string/theme_name"
+                />
 
             </LinearLayout>
 

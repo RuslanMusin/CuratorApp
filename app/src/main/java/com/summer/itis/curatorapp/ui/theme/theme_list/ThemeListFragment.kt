@@ -54,6 +54,10 @@ class ThemeListFragment : BaseFragment<ThemeListPresenter>(), ThemeListView {
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -76,6 +80,7 @@ class ThemeListFragment : BaseFragment<ThemeListPresenter>(), ThemeListView {
         tab_layout.setupWithViewPager(viewpager)
         viewpager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tab_layout))
         setTabListener()
+        mainListener.hideLoading()
     }
 
     private fun setTabListener() {
@@ -142,30 +147,4 @@ class ThemeListFragment : BaseFragment<ThemeListPresenter>(), ThemeListView {
 
     }
 
-    override fun onDestroyView() {
-//        tab_layout.visibility = View.GONE
-        super.onDestroyView()
-
-    }
-
-
-   /* private fun findFromList(query: String) {
-        val pattern: Pattern = Pattern.compile("${query.toLowerCase()}.*")
-        val list: MutableList<Skill> = java.util.ArrayList()
-        for(skill in steps) {
-            if(pattern.matcher(skill.name.toLowerCase()).matches()) {
-                list.add(skill)
-            }
-        }
-        changeDataSet(list)
-    }*/
-
-   /* override fun setCurrentType(type: String) {
-        Log.d(TAG_LOG, "current type = $type")
-        this.currentType = type
-    }
-
-    fun getCurrentType(): String? {
-        return currentType
-    }*/
 }

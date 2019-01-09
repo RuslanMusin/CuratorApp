@@ -1,9 +1,12 @@
 package com.summer.itis.curatorapp.ui.curator.curator_item.view
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
@@ -23,8 +26,11 @@ import com.summer.itis.curatorapp.utils.Const.EDIT_CURATOR
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.MAX_LENGTH
 import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
+import com.summer.itis.curatorapp.utils.Const.TAG_LOG
 import com.summer.itis.curatorapp.utils.Const.TYPE
 import com.summer.itis.curatorapp.utils.Const.USER_ID
+import com.summer.itis.curatorapp.utils.Const.USER_PASSWORD
+import com.summer.itis.curatorapp.utils.Const.USER_USERNAME
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.layout_personal.*
@@ -54,6 +60,10 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
         return view
@@ -65,6 +75,7 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
         arguments?.let {
             val curatorId = it.getString(ID_KEY)
             curatorId?.let {
+                Log.d(TAG_LOG, "findCurator")
                 presenter.findCurator(curatorId)
             }
         }
@@ -76,6 +87,8 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
         findViews()
         setToolbarData()
         setListeners()
+        Log.d(TAG_LOG, "hide loading")
+        mainListener.hideLoading()
     }
 
     private fun setToolbarData() {
@@ -106,13 +119,17 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
 
             R.id.li_skills -> showSkills()
 
-            R.id.li_logout -> presenter.logout()
+            R.id.li_logout -> {
+                mainListener.hideLoading()
+                presenter.logout()
+            }
 
             R.id.li_desc -> showDesc()
         }
     }
 
     private fun showDesc() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(DESC_KEY, curator.description)
         args.putString(TYPE, CURATOR_TYPE)
@@ -122,6 +139,7 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
     }
 
     private fun editProfile() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(CURATOR_KEY, gsonConverter.toJson(curator))
         val fragment = EditCuratorFragment.newInstance(args, mainListener)
@@ -130,10 +148,21 @@ class CuratorFragment : BaseFragment<CuratorPresenter>(), CuratorView, View.OnCl
     }
 
     override fun logout() {
-        activity?.let { LoginActivity.start(it) }
+        activity?.let {
+            val sharedPreferences: SharedPreferences = it.getSharedPreferences(Const.USER_DATA_PREFERENCES, Context.MODE_PRIVATE)
+            if(sharedPreferences.contains(Const.USER_USERNAME)) {
+                sharedPreferences.edit()?.let {
+                    it.remove(USER_USERNAME)
+                    it.remove(USER_PASSWORD)
+                    it.apply()
+                }
+            }
+            LoginActivity.start(it)
+        }
     }
 
     private fun showSkills() {
+        mainListener.showLoading()
         val args: Bundle = Bundle()
         val userJson = Const.gsonConverter.toJson(curator)
         args.putString(Const.USER_KEY, userJson)

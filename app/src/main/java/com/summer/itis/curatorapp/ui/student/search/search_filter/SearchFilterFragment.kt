@@ -74,6 +74,10 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)

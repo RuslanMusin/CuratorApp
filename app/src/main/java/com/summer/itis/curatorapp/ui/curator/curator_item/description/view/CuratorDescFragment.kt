@@ -54,6 +54,10 @@ class CuratorDescFragment : BaseFragment<CuratorDescPresenter>(), CuratorDescVie
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -67,6 +71,7 @@ class CuratorDescFragment : BaseFragment<CuratorDescPresenter>(), CuratorDescVie
         }
 
     }
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_description, container, false)
@@ -82,6 +87,7 @@ class CuratorDescFragment : BaseFragment<CuratorDescPresenter>(), CuratorDescVie
         setData()
         setToolbarData()
         setListeners()
+        mainListener.hideLoading()
     }
 
     private fun setToolbarData() {
@@ -115,6 +121,7 @@ class CuratorDescFragment : BaseFragment<CuratorDescPresenter>(), CuratorDescVie
     }
 
     private fun editDesc() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(DESC_KEY, description)
         args.putString(TYPE, type)

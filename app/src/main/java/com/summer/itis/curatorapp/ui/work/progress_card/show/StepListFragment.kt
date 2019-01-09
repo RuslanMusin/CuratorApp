@@ -57,6 +57,10 @@ class StepListFragment : BaseFragment<StepListPresenter>(),
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -80,6 +84,7 @@ class StepListFragment : BaseFragment<StepListPresenter>(),
     override fun showSteps(steps: List<Step>) {
         this.steps = steps.toMutableList()
         changeDataSet(this.steps)
+        mainListener.hideLoading()
     }
 
     private fun initViews() {
@@ -139,6 +144,7 @@ class StepListFragment : BaseFragment<StepListPresenter>(),
 
     override fun onItemClick(item: Step) {
         if(type.equals(OWNER_TYPE)) {
+            mainListener.showLoading()
             val args = Bundle()
             args.putString(WORK_KEY, workId)
             args.putString(STEP_KEY, item.id)
@@ -158,6 +164,7 @@ class StepListFragment : BaseFragment<StepListPresenter>(),
     }
 
     private fun addStep() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(Const.ID_KEY, workId)
         val fragment = AddStepFragment.newInstance(args, mainListener)

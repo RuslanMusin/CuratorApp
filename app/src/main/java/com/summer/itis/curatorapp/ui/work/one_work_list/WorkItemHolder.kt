@@ -15,7 +15,7 @@ class WorkItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     fun bind(item: Work) {
         itemView.tv_work.text = item.theme.title
-        itemView.tv_subject.text = item.theme.subject.name
+        itemView.tv_student.text = item.theme.subject.name
     }
 
 

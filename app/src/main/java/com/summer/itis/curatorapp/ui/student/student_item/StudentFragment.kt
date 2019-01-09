@@ -57,6 +57,10 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_student, container, false)
         return view
@@ -96,6 +100,7 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
         tv_username.text = student.getFullName()
         tv_group.text = context?.getString(R.string.group_course, student.group.name, student.course)
         tv_desc.text = AppHelper.cutLongDescription(this.student.description, MAX_LENGTH)
+        mainListener.hideLoading()
     }
 
     override fun onClick(v: View) {
@@ -114,6 +119,7 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
     }
 
     private fun showDesc() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(DESC_KEY, student.description)
         val fragment = DescriptionFragment.newInstance(args, mainListener)
@@ -136,6 +142,7 @@ class StudentFragment : BaseFragment<StudentPresenter>(), StudentView, View.OnCl
     }
 
     private fun showSkills() {
+        mainListener.showLoading()
         val args: Bundle = Bundle()
         val userJson = Const.gsonConverter.toJson(student)
         args.putString(Const.USER_KEY, userJson)

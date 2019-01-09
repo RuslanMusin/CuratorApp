@@ -55,6 +55,10 @@ class ChooseAddSkillFragment : BaseFragment<ChooseSkilllPresenter>(), ChooseSkil
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -75,6 +79,7 @@ class ChooseAddSkillFragment : BaseFragment<ChooseSkilllPresenter>(), ChooseSkil
     override fun showSkills(skills: List<Skill>) {
         this.skills = skills.toMutableList()
         changeDataSet(this.skills)
+        mainListener.hideLoading()
     }
 
     private fun initViews() {

@@ -36,7 +36,7 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
     var themes: MutableList<Theme> = ArrayList()
     lateinit var userId: String
 
-    lateinit var fakeStudents: List<Student>
+    var fakeStudents: List<Student> = ArrayList()
 
     @InjectPresenter
     lateinit var presenter: MyThemeListPresenter
@@ -44,10 +44,6 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
     private var fakeStudentNum = 0
 
     companion object {
-
-        const val TAG_SKILLS = "TAG_SKILLS"
-
-        const val EDIT_SKILLS = 1
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
             val fragment = MyThemeListFragment()
@@ -63,6 +59,10 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_theme_list, container, false)
         return view
@@ -75,7 +75,6 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
             initViews()
             presenter.loadSkills(userId)
             presenter.loadFakeStudents()
-
         }
     }
 
@@ -93,9 +92,9 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
 
     override fun showThemes(themes: List<Theme>) {
         this.themes = themes.toMutableList()
-        Log.d(TAG_LOG, "date = ${themes[0].dateCreation}")
-        Log.d(TAG_LOG, "dateStr = ${FormatterUtil.getStringFromDate(themes[0].dateCreation)}")
         changeDataSet(this.themes)
+        mainListener.hideLoading()
+        Log.d(TAG_LOG, "hideLoading")
     }
 
     override fun reloadList() {
@@ -163,6 +162,7 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
     }
 
     override fun onItemClick(item: Theme) {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(Const.THEME_KEY, Const.gsonConverter.toJson(item))
         val fragment = ThemeFragment.newInstance(args, mainListener)
@@ -170,16 +170,19 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
     }
 
     override fun openStudentAction(adapterPosition: Int) {
-        val theme = themes[adapterPosition]
-        if(theme.targetType.equals(ALL_CHOOSED)) {
-            this.activity?.let {
-                MaterialDialog.Builder(it)
+        if(fakeStudents.size > 0) {
+            val theme = themes[adapterPosition]
+            if (theme.targetType.equals(ALL_CHOOSED)) {
+                this.activity?.let {
+                    MaterialDialog.Builder(it)
                         .title(R.string._should_user_fake_choose_theme)
                         .items(getFakeNames())
-                        .itemsCallbackSingleChoice(0, MaterialDialog.ListCallbackSingleChoice { dialog, view, which, text ->
-                            fakeStudentNum = which
-                            true
-                        })
+                        .itemsCallbackSingleChoice(
+                            0,
+                            MaterialDialog.ListCallbackSingleChoice { dialog, view, which, text ->
+                                fakeStudentNum = which
+                                true
+                            })
                         .alwaysCallSingleChoiceCallback()
                         .positiveText(R.string.button_ok)
                         .negativeText(R.string.cancel)
@@ -192,10 +195,10 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
                             }
                         }
                         .show()
-            }
-        } else {
-            this.activity?.let {
-                MaterialDialog.Builder(it)
+                }
+            } else {
+                this.activity?.let {
+                    MaterialDialog.Builder(it)
                         .title(R.string.student_fake_theme)
                         .content(R.string.should_user_send_fake_theme)
                         .positiveText(R.string.button_ok)
@@ -205,10 +208,14 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
                         }
                         .onPositive { dialog, which ->
                             this.context?.let { it1 ->
-                                presenter.addFakeStudentSuggestion(themes[adapterPosition], fakeStudents.get(fakeStudentNum))
+                                presenter.addFakeStudentSuggestion(
+                                    themes[adapterPosition],
+                                    fakeStudents.get(fakeStudentNum)
+                                )
                             }
                         }
                         .show()
+                }
             }
         }
     }
@@ -228,12 +235,10 @@ class MyThemeListFragment : BaseFragment<MyThemeListPresenter>(), MyThemeListVie
         when(view.id) {
 
             R.id.btn_add_theme -> {
-
+                mainListener.showLoading()
                 val args = Bundle()
                 args.putString(Const.ID_KEY, userId)
                 val fragment = AddThemeFragment.newInstance(args, mainListener)
-              /*  val tabLayout = parentFragment?.view?.findViewById<TabLayout>(R.id.tab_layout)
-                tabLayout?.visibility = View.GONE*/
                 mainListener.pushFragments(fragment, true)            }
         }
     }

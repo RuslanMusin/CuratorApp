@@ -130,7 +130,15 @@
                             android:textColor="@color/primary_text"
                             android:textSize="@dimen/text.16" />
 
-                    <include layout="@layout/layout_expandable_text_view"/>
+                    <TextView
+                            android:id="@+id/tv_desc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin.small"
+                            android:textColor="@color/secondary_text"
+                            android:textSize="@dimen/text.14"
+                            android:text="@string/desc"
+                    />
 
                 </LinearLayout>
 

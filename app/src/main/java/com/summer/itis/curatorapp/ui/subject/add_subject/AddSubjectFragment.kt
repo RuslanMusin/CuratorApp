@@ -47,6 +47,10 @@ class AddSubjectFragment : BaseFragment<AddSubjectPresenter>(), AddSubjectView, 
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -66,6 +70,7 @@ class AddSubjectFragment : BaseFragment<AddSubjectPresenter>(), AddSubjectView, 
     override fun showSubjects(subjects: List<Subject>) {
         this.subjects = subjects.toMutableList()
         changeDataSet(subjects)
+        mainListener.hideLoading()
     }
 
     private fun initViews() {

@@ -55,6 +55,10 @@ class AddSkillFragment : BaseFragment<AddSkillPresenter>(), AddSkillView, View.O
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -75,6 +79,7 @@ class AddSkillFragment : BaseFragment<AddSkillPresenter>(), AddSkillView, View.O
         setToolbarData()
         initRecycler()
         setListeners()
+        mainListener.hideLoading()
     }
 
     private fun setToolbarData() {

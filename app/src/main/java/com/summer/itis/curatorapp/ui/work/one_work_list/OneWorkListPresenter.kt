@@ -16,7 +16,8 @@ class OneWorkListPresenter(): BaseFragPresenter<OneWorkListView>() {
     fun loadWorks(userId: String) {
         Log.d(Const.TAG_LOG, "id = $userId")
         val disposable = RepositoryProvider.worksRepository.findStudentWorks(userId).subscribe { res ->
-            interceptResponse(res, showWorks())
+            interceptSecondResponse(res, showWorks(),
+                { loadWorks(userId)})
         }
         compositeDisposable.add(disposable)
     }

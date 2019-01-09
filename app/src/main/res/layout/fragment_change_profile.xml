@@ -43,8 +43,11 @@
                     android:hint="@string/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    />
+                    android:minLines="1"
+                    android:maxLines="3"
+                    android:inputType="textMultiLine"
+                    android:maxLength="150"
+                />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -58,8 +61,11 @@
                     android:hint="@string/lastname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    />
+                    android:minLines="1"
+                    android:maxLines="3"
+                    android:inputType="textMultiLine"
+                    android:maxLength="150"
+                />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -73,8 +79,11 @@
                     android:hint="@string/patronymic"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    />
+                    android:minLines="1"
+                    android:maxLines="3"
+                    android:inputType="textMultiLine"
+                    android:maxLength="150"
+                />
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>

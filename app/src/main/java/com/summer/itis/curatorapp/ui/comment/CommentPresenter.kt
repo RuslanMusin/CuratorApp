@@ -1,10 +1,9 @@
 package com.summer.itis.curatorapp.ui.comment
 
-import android.util.Log
+import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.comment.Comment
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
-import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.CURATOR_KEY
 import com.summer.itis.curatorapp.utils.Const.STEP_KEY
 import com.summer.itis.curatorapp.utils.Const.STEP_TYPE
@@ -36,9 +35,10 @@ open class CommentPresenter<View: CommentView>: BaseFragPresenter<View>() {
             it.doOnSubscribe({ viewState.showLoading(it) })
                 .doAfterTerminate({ viewState.hideLoading() })
                 .subscribe { res ->
-                   interceptResponse(res) {
+                   interceptSecondResponse(res, {
                        viewState.showComments(it)
-                   }
+                   },
+                       R.string.failed_load_comments)
                 }
         }
         disposable?.let { compositeDisposable.add(it) }
@@ -59,8 +59,8 @@ open class CommentPresenter<View: CommentView>: BaseFragPresenter<View>() {
         }
         val disposable = single
             ?.subscribe { res ->
-                interceptResponse(res) {}
-        }
+                interceptSecondResponse(res, {}, R.string.failed_post_comment)
+            }
         disposable?.let { compositeDisposable.add(it) }
     }
 

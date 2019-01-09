@@ -52,7 +52,6 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
 
     private var requestCode = ADD_STUDENT
 
-
     companion object {
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
@@ -67,6 +66,10 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
             fragment.mainListener = navigationView
             return fragment
         }
+    }
+
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,6 +94,7 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
     override fun showStudents(students: List<Student>) {
         this.students = students.toMutableList()
         changeDataSet(this.students)
+        mainListener.hideLoading()
     }
 
     private fun initViews() {
@@ -143,6 +147,7 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
     }
 
     override fun onItemClick(item: Student) {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(ID_KEY, item.id)
         args.putInt(REQUEST_CODE, requestCode)
@@ -150,7 +155,6 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
         val fragment = StudentFragment.newInstance(args, mainListener)
         fragment.setTargetFragment(this, requestCode)
         mainListener.showFragment(this, fragment)
-//        mainListener.pushFragments(TAB_STUDENTS, fragment, true)
     }
 
     override fun onClick(v: View) {

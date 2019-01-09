@@ -1,7 +1,7 @@
 package com.summer.itis.curatorapp.ui.theme.theme_item
 
-import android.util.Log
 import com.arellomobile.mvp.InjectViewState
+import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.theme.Status
 import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.model.theme.Theme
@@ -41,10 +41,11 @@ class  ThemePresenter(): BaseFragPresenter<ThemeView>() {
                 RepositoryProvider.suggestionRepository
                     .postCuratorSuggestion(AppHelper.currentCurator.id, suggestionTheme)
                     .subscribe { res ->
-                        interceptResponse(res) {
+                        interceptSecondResponse(res, {
                             AppHelper.currentCurator.suggestions.add(0, suggestionTheme)
-                        }
-                }
+                        },
+                            R.string.failed_send_suggestion)
+                    }
         compositeDisposable.add(disposable)
     }
 

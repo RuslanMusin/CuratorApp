@@ -13,6 +13,7 @@ import android.view.WindowManager
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.ui.base.base_first.activity.BaseActivity
+import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.curator.curator_item.view.CuratorFragment
 import com.summer.itis.curatorapp.ui.student.student_list.StudentListFragment
 import com.summer.itis.curatorapp.ui.theme.theme_list.ThemeListFragment
@@ -21,12 +22,13 @@ import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.TAG_LOG
 import kotlinx.android.synthetic.main.activity_base.*
+import kotlinx.android.synthetic.main.layout_connectivity.*
 import java.util.*
 import kotlin.collections.HashMap
 
 
 //АКТИВИТИ РОДИТЕЛЬ ДЛЯ ОСНОВНОЙ НАВИГАЦИИ(БОКОВОЙ). ЮЗАТЬ МЕТОДЫ supportActionBar И setBackArrow(ЕСЛИ НУЖНА СТРЕЛКА НАЗАД)
-class NavigationBaseActivity : BaseActivity<NavigationPresenter>(), NavigationView {
+class NavigationBaseActivity : BaseActivity<NavigationPresenter>(), NavigationView, View.OnClickListener {
 
     @InjectPresenter
     override lateinit var presenter: NavigationPresenter
@@ -36,6 +38,8 @@ class NavigationBaseActivity : BaseActivity<NavigationPresenter>(), NavigationVi
 
     var currentTab: String = TAB_WORKS
     private var showTab: String = SHOW_WORKS
+
+    var lastRequest: (() -> Unit)? = null
 
     companion object {
 
@@ -60,6 +64,7 @@ class NavigationBaseActivity : BaseActivity<NavigationPresenter>(), NavigationVi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_base)
         initBottomNavigation()
+        initListeners()
 
         stacks = HashMap()
         stacks[TAB_PROFILE] = Stack()
@@ -75,6 +80,47 @@ class NavigationBaseActivity : BaseActivity<NavigationPresenter>(), NavigationVi
         relativeTabs[TAB_WORKS] = SHOW_WORKS
 
         bottom_navigation.selectedItemId = R.id.action_works
+    }
+
+    private fun initListeners() {
+        iv_reconnect.setOnClickListener(this)
+    }
+
+    override fun onClick(v: View) {
+        when(v.id) {
+
+            R.id.iv_reconnect -> {
+                lastRequest?.let {
+                    showLoading()
+                    it()
+                }
+            }
+        }
+    }
+
+    override fun showConnectionError() {
+        Log.d(TAG_LOG, "connection error")
+        li_offline.visibility = View.VISIBLE
+        layout_connectivity.visibility = View.VISIBLE
+        container.visibility = View.GONE
+        layout_loading.visibility = View.GONE
+    }
+
+    override fun showLoading() {
+        li_offline.visibility = View.VISIBLE
+        layout_loading.visibility = View.VISIBLE
+        layout_connectivity.visibility = View.GONE
+        container.visibility = View.GONE
+    }
+
+    override fun hideLoading() {
+        li_offline.visibility = View.GONE
+        layout_loading.visibility = View.GONE
+        container.visibility = View.VISIBLE
+    }
+
+    override fun setRequest(request: () -> Unit) {
+        lastRequest = request
     }
 
     override fun supportActionBar(toolbar: Toolbar) {
@@ -110,6 +156,8 @@ class NavigationBaseActivity : BaseActivity<NavigationPresenter>(), NavigationVi
     }
 
     private fun selectedTab(tabId: String) {
+        showLoading()
+        val lastTab = currentTab
         currentTab = tabId
         relativeTabs[currentTab]?.let { showTab = it }
         val size = stacks[tabId]?.size
@@ -131,12 +179,28 @@ class NavigationBaseActivity : BaseActivity<NavigationPresenter>(), NavigationVi
                     pushFragments(it, false)
                 }
             } else {
-                stacks[showTab]?.lastElement()?.let {
-                    val ft = supportFragmentManager.beginTransaction()
-                    ft.replace(R.id.container, it)
-                         ft.commit()
+                val ft = supportFragmentManager.beginTransaction()
+                val iterator = stacks[showTab]?.iterator()
+                iterator?.let {
+                    stacks[showTab]?.firstElement()?.let { it1 -> ft.replace(R.id.container, it1) }
+                    for((i, frag) in iterator.withIndex()) {
+                        if(i > 0) {
+                            ft.hide(frag.targetFragment!!).add(R.id.container, frag).show(frag)
+                        }
+                    }
                 }
+//                stacks[showTab]?.lastElement()?.let {
+//                (it as BaseFragment<*>).showBottomNavigation()
+//                ft.hide(it.targetFragment!!).add(R.id.container, it).show(it)
+                    ft.commit()
+
+                    //                    ft.replace(R.id.container, it)
+//                    ft.hide(it.targetFragment!!).add(R.id.container, it).show(it)
+                    /*  stacks[lastTab]?.lastElement()?.let { it1 ->
+                        ft.hide(it1).add(R.id.container, it).show(it)*/
             }
+
+
         }
     }
 
@@ -147,6 +211,7 @@ class NavigationBaseActivity : BaseActivity<NavigationPresenter>(), NavigationVi
         }
         val manager = supportFragmentManager
         val ft = manager.beginTransaction()
+        (fragment as BaseFragment<*>).showBottomNavigation()
         ft.replace(R.id.container, fragment)
         ft.commit()
     }
@@ -176,14 +241,16 @@ class NavigationBaseActivity : BaseActivity<NavigationPresenter>(), NavigationVi
 
         val manager = supportFragmentManager
         val ft = manager.beginTransaction()
-        fragment?.let { ft.replace(R.id.container, it) }
+        fragment?.let {
+            (it as BaseFragment<*>).showBottomNavigation()
+            ft.replace(R.id.container, it) }
         ft.commit()
     }
 
     override fun hideFragment() {
         val num = stacks[showTab]?.size?.minus(2)
         Log.d(TAG_LOG, "num = ${num} and size = ${stacks[showTab]?.size}")
-        val fragment = num?.let { stacks[showTab]?.elementAt(it) }
+        var fragment = num?.let { stacks[showTab]?.elementAt(it) }
 
         val fragmentBefore = stacks[showTab]?.pop()
         val manager = supportFragmentManager
@@ -193,7 +260,11 @@ class NavigationBaseActivity : BaseActivity<NavigationPresenter>(), NavigationVi
         if(size!! == 1){
             stacks[showTab]?.pop()
         }
-        fragment?.let { ft.show(it) }
+        fragment?.let {
+            (it as BaseFragment<*>).showBottomNavigation()
+            Log.d(TAG_LOG, "show")
+            ft.show(it)
+        }
 
         ft.commit()
     }
@@ -205,7 +276,10 @@ class NavigationBaseActivity : BaseActivity<NavigationPresenter>(), NavigationVi
         stacks[showTab]?.push(fragment)
         val manager = supportFragmentManager
         val ft = manager.beginTransaction()
-        lastFragment.let {ft.hide(it).add(R.id.container, fragment).show(fragment)}
+        lastFragment.let {
+            (it as BaseFragment<*>).showBottomNavigation()
+            ft.hide(it).add(R.id.container, fragment).show(fragment)
+        }
         ft.commit()
     }
 

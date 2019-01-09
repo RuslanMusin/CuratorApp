@@ -4,7 +4,6 @@ import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -50,10 +49,6 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
 
     companion object {
 
-        const val TAG_SKILLS = "TAG_SKILLS"
-
-        const val EDIT_SKILLS = 1
-
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
             val fragment = SuggestionListFragment()
             fragment.arguments = args
@@ -66,6 +61,10 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
             fragment.mainListener = navigationView
             return fragment
         }
+    }
+
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -85,6 +84,8 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
     override fun showSuggestions(suggestions: List<Suggestion>) {
         this.suggestions = suggestions.toMutableList()
         changeDataSet(this.suggestions)
+        mainListener.hideLoading()
+        Log.d(TAG_LOG, "hideLoading")
     }
 
     override fun reloadList() {
@@ -221,7 +222,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
         val pattern: Pattern = Pattern.compile("${query.toLowerCase()}.*")
         val list: MutableList<Suggestion> = java.util.ArrayList()
         for(skill in suggestions) {
-            if(pattern.matcher(skill.theme?.title?.toLowerCase()).matches()) {
+            if(pattern.matcher(skill.getCorrectTitle()?.toLowerCase()).matches()) {
                 list.add(skill)
             }
         }
@@ -232,6 +233,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
         when(view.id) {
 
             R.id.btn_add_theme -> {
+                mainListener.showLoading()
                 val args = Bundle()
                 args.putString(ID_KEY, userId)
                 val fragment = AddThemeFragment.newInstance(args, mainListener)

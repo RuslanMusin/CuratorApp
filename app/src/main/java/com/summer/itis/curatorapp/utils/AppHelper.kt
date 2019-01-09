@@ -4,9 +4,11 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.text.InputType
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
@@ -131,6 +133,11 @@ class AppHelper {
                 ACCEPTED_BOTH -> status = Status(ACCEPTED_BOTH_NUM, statusStr)
             }
             return status
+        }
+
+        fun setMultiline(editText: EditText) {
+            editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+            editText.setRawInputType(InputType.TYPE_CLASS_TEXT);
         }
 
     }

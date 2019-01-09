@@ -56,6 +56,10 @@ class ChooseSkillFragment : BaseFragment<ChooseSkillMainPresenter>(), ChooseSkil
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -74,6 +78,7 @@ class ChooseSkillFragment : BaseFragment<ChooseSkillMainPresenter>(), ChooseSkil
     private fun initViews() {
         setToolbarData()
         setListeners()
+        mainListener.hideLoading()
     }
 
     private fun setToolbarData() {
@@ -83,12 +88,6 @@ class ChooseSkillFragment : BaseFragment<ChooseSkillMainPresenter>(), ChooseSkil
     private fun setListeners() {
         btn_cancel.setOnClickListener(this)
         btn_ok.setOnClickListener(this)
-      /*  spinner_skill.setItems("Выберите компетенцию")
-        spinner_skill.setOnClickListener {
-            val fragment = ChooseAddSkillFragment.newInstance(mainListener)
-            fragment.setTargetFragment(this, CHOOSE_SKILL)
-            mainListener.showFragment(SHOW_THEMES, this, fragment)
-        }*/
         tv_skill.text = "Выберите компетенцию"
         li_choose_skill.setOnClickListener{
             val fragment = ChooseAddSkillFragment.newInstance(mainListener)
@@ -114,7 +113,6 @@ class ChooseSkillFragment : BaseFragment<ChooseSkillMainPresenter>(), ChooseSkil
 
     private fun addSkill() {
         val intent = Intent()
-//        level?.let { skill?.level = it }
         val skillJson = gsonConverter.toJson(skill)
         intent.putExtra(SKILL_KEY, skillJson)
         targetFragment?.onActivityResult(ADD_SKILL, RESULT_OK, intent)

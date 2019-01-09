@@ -14,8 +14,9 @@ class MaterialListPresenter(): BaseFragPresenter<MaterialListView>() {
         val disposable = RepositoryProvider.materialRepository
             .findAll(workId, stepId)
             .subscribe { res ->
-                interceptResponse(res) { viewState.showMaterials(it) }
-        }
+                interceptSecondResponse(res, { viewState.showMaterials(it) },
+                    { loadMaterials(workId, stepId) })
+            }
         compositeDisposable.add(disposable)
     }
 

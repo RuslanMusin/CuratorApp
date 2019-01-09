@@ -12,10 +12,11 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.AppHelper.Companion.setMultiline
 import com.summer.itis.curatorapp.utils.Const.CURATOR_KEY
 import com.summer.itis.curatorapp.utils.Const.EDIT_CURATOR
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
+import kotlinx.android.synthetic.main.fragment_add_step.*
 import kotlinx.android.synthetic.main.fragment_change_profile.*
 import kotlinx.android.synthetic.main.toolbar_back_done.*
 
@@ -43,6 +44,10 @@ class EditCuratorFragment : BaseFragment<EditCuratorPresenter>(), EditCuratorVie
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -67,6 +72,14 @@ class EditCuratorFragment : BaseFragment<EditCuratorPresenter>(), EditCuratorVie
         setToolbarData()
         setListeners()
         setUserData()
+        setEditText()
+        mainListener.hideLoading()
+    }
+
+    private fun setEditText() {
+        setMultiline(et_name)
+        setMultiline(et_lastname)
+        setMultiline(et_patronymic)
     }
 
     private fun setToolbarData() {

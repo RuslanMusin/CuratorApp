@@ -51,6 +51,10 @@ class MaterialListFragment : BaseFragment<MaterialListPresenter>(), MaterialList
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -74,6 +78,7 @@ class MaterialListFragment : BaseFragment<MaterialListPresenter>(), MaterialList
     override fun showMaterials(skills: List<Material>) {
         this.skills = skills.toMutableList()
         changeDataSet(this.skills)
+        mainListener.hideLoading()
     }
 
     private fun initViews() {

@@ -2,6 +2,7 @@ package com.summer.itis.curatorapp.ui.curator.curator_item.view
 
 import android.util.Log
 import com.arellomobile.mvp.InjectViewState
+import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
@@ -21,7 +22,8 @@ class CuratorPresenter(): BaseFragPresenter<CuratorView>() {
             if(res.response()?.code() == 200) {
                 viewState.logout()
             } else {
-                interceptResponse(res) { Log.d(TAG_LOG, "intercept")}
+                interceptSecondResponse(res, { Log.d(TAG_LOG, "intercept")},
+                    R.string.failed_logout)
             }
         }
         compositeDisposable.add(disposable)
@@ -29,7 +31,8 @@ class CuratorPresenter(): BaseFragPresenter<CuratorView>() {
 
     fun findCurator(curatorId: String) {
         val disposable = RepositoryProvider.curatorRepository.findById(curatorId).subscribe { res ->
-            interceptResponse(res, handleCurator())
+            interceptSecondResponse(res, handleCurator(),
+                { findCurator(curatorId) })
         }
         compositeDisposable.add(disposable)
     }
@@ -40,6 +43,7 @@ class CuratorPresenter(): BaseFragPresenter<CuratorView>() {
             if (AppHelper.currentCurator.id.equals(it.id)) {
                 type = OWNER_TYPE
             }
+            Log.d(TAG_LOG, "handle curator")
             viewState.initViews(it, type)
         }
     }

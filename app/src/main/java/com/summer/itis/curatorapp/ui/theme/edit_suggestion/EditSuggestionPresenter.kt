@@ -1,14 +1,13 @@
 package com.summer.itis.curatorapp.ui.theme.edit_suggestion
 
 import android.content.Intent
-import android.util.Log
 import com.arellomobile.mvp.InjectViewState
+import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.theme.Progress
 import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
 import com.summer.itis.curatorapp.utils.AppHelper
-import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.THEME_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import io.reactivex.disposables.CompositeDisposable
@@ -22,7 +21,8 @@ class EditSuggestionPresenter(): BaseFragPresenter<EditSuggestionView>() {
         suggestion.setApiFileds()
         val disposable = RepositoryProvider.suggestionRepository.
             updateCuratorProgress(AppHelper.currentCurator.id, suggestion).subscribe { res ->
-                interceptResponse(res, handleUpdateSuggestion(suggestion))
+                interceptSecondResponse(res, handleUpdateSuggestion(suggestion),
+                    R.string.failed_update_suggestion)
         }
         compositeDisposable.add(disposable)
     }

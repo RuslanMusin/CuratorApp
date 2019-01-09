@@ -61,6 +61,10 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -94,6 +98,7 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
     override fun showSkills(skills: List<Skill>) {
         this.skills = skills.toMutableList()
         changeDataSet(this.skills)
+        mainListener.hideLoading()
     }
 
     private fun initViews() {
@@ -166,6 +171,7 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
     }
 
     private fun editSkills() {
+        mainListener.showLoading()
         val fragment = EditSkillsFragment.newInstance(mainListener)
         fragment.setTargetFragment(this, EDIT_SKILLS)
         mainListener.showFragment(this, fragment)

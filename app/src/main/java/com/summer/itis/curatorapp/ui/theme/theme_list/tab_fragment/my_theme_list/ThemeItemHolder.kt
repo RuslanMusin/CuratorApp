@@ -33,7 +33,7 @@ class ThemeItemHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     }
 
     private fun getStudentName(view: View, theme: Theme): String? {
-        var name = theme.student?.name
+        var name = theme.student?.getFullName()
         if(name == null) {
             name = view.context.getString(R.string.theme_not_choosed)
         }

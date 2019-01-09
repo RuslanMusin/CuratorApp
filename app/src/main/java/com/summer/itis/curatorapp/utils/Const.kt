@@ -30,7 +30,7 @@ object Const {
 
     const val TAB_NAME = "TAB_NAME"
 
-    const val MAX_LENGTH = 80
+    const val MAX_LENGTH = 50
     const val MORE_TEXT = "..."
 
     const val SPACE = " "

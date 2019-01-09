@@ -1,6 +1,7 @@
 package com.summer.itis.curatorapp.ui.work.progress_card.show
 
 import com.arellomobile.mvp.InjectViewState
+import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.step.Step
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
@@ -16,10 +17,10 @@ class StepListPresenter(): BaseFragPresenter<StepListView>() {
         val disposable = RepositoryProvider.workStepRepository
             .findAll(workId)
             .subscribe { res ->
-                interceptResponse(res) {
+                interceptSecondResponse(res, {
                     viewState.showSteps(it.sortedWith(compareBy (Step::dateFinish)))
-                }
-        }
+                },{ loadSteps(workId) })
+            }
         compositeDisposable.add(disposable)
     }
 
@@ -28,8 +29,9 @@ class StepListPresenter(): BaseFragPresenter<StepListView>() {
         val disposable = RepositoryProvider.workStepRepository
             .updateCuratorWorkStep(AppHelper.currentCurator.id, workId, step)
             .subscribe { res ->
-                interceptResponse(res) {
-                }
+                interceptSecondResponse(res, {
+                },
+                    R.string.failed_change_step_status)
             }
         compositeDisposable.add(disposable)
     }

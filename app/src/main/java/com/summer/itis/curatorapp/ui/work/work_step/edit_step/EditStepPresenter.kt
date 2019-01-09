@@ -1,8 +1,8 @@
 package com.summer.itis.curatorapp.ui.work.work_step.edit_step
 
 import android.content.Intent
-import android.util.Log
 import com.arellomobile.mvp.InjectViewState
+import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.step.Step
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
@@ -21,7 +21,9 @@ class EditStepPresenter(): BaseFragPresenter<EditStepView>() {
         val disposable = RepositoryProvider.workStepRepository
             .updateCuratorWorkStep(AppHelper.currentCurator.id, workId, step)
             .subscribe { res ->
-                interceptResponse(res, handleStep())
+                interceptSecondResponse(res, handleStep(),
+                    R.string.failed_update_step
+                    )
             }
         compositeDisposable.add(disposable)
 

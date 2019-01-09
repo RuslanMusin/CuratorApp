@@ -61,6 +61,10 @@ class EditChooseLIstFragment : BaseFragment<EditChosePreseter>(), EditChooseView
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -90,6 +94,7 @@ class EditChooseLIstFragment : BaseFragment<EditChosePreseter>(), EditChooseView
         if(skills.size != 0) {
             changeDataSet(skills)
         }
+        mainListener.hideLoading()
     }
 
     private fun setToolbarData() {
@@ -159,7 +164,6 @@ class EditChooseLIstFragment : BaseFragment<EditChosePreseter>(), EditChooseView
         intent.putExtra(SKILL_KEY, listJson)
         targetFragment?.onActivityResult(EDIT_CHOOSED_SKILLS, Activity.RESULT_OK, intent)
         mainListener.hideFragment()
-//        backFragment()
     }
 
     private fun setSearchMenuItem() {

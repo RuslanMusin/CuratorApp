@@ -1,13 +1,12 @@
 package com.summer.itis.curatorapp.ui.theme.edit_theme
 
 import android.content.Intent
-import android.util.Log
 import com.arellomobile.mvp.InjectViewState
+import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.theme.Theme
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
 import com.summer.itis.curatorapp.utils.AppHelper
-import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.THEME_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import io.reactivex.disposables.CompositeDisposable
@@ -22,7 +21,8 @@ class EditThemePresenter(): BaseFragPresenter<EditThemeView>() {
         val disposable = RepositoryProvider.themeRepository
             .updateCuratorTheme(AppHelper.currentCurator.id, theme)
             .subscribe { res ->
-                interceptResponse(res, handleUpdateTheme())
+                interceptSecondResponse(res, handleUpdateTheme(),
+                    R.string.failed_update_theme)
         }
         compositeDisposable.add(disposable)
     }

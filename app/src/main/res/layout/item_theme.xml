@@ -29,6 +29,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin.small"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textColor="@color/secondary_text"
             android:textSize="@dimen/text.14"
             tools:text="Authors" />

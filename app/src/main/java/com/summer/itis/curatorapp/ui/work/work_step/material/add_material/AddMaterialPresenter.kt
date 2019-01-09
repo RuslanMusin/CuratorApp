@@ -1,11 +1,10 @@
 package com.summer.itis.curatorapp.ui.work.work_step.material.add_material
 
-import android.util.Log
 import com.arellomobile.mvp.InjectViewState
+import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.material.Material
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
-import com.summer.itis.curatorapp.utils.Const
 import io.reactivex.disposables.CompositeDisposable
 
 @InjectViewState
@@ -21,8 +20,11 @@ class AddMaterialPresenter(): BaseFragPresenter<AddMaterialView>() {
                 stepId,
                 material
             ).subscribe { res ->
-                interceptResponse(res) { viewState.showChanges(it) }
-        }
+                interceptSecondResponse(res,
+                    { viewState.showChanges(it) },
+                    R.string.failed_post_material
+                    )
+            }
         compositeDisposable.add(disposable)
 
     }

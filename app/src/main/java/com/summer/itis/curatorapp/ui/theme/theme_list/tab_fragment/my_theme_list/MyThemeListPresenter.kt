@@ -1,7 +1,7 @@
 package com.summer.itis.curatorapp.ui.theme.theme_list.tab_fragment.my_theme_list
 
-import android.util.Log
 import com.arellomobile.mvp.InjectViewState
+import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.theme.Status
 import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.model.theme.Theme
@@ -10,10 +10,8 @@ import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.repository.RepositoryProvider
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragPresenter
 import com.summer.itis.curatorapp.utils.AppHelper
-import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.CURATOR_TYPE
 import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
-import com.summer.itis.curatorapp.utils.Const.TAG_LOG
 import com.summer.itis.curatorapp.utils.Const.WAITING_CURATOR
 import com.summer.itis.curatorapp.utils.Const.WAITING_CURATOR_NUM
 import io.reactivex.disposables.CompositeDisposable
@@ -64,10 +62,20 @@ class MyThemeListPresenter(): BaseFragPresenter<MyThemeListView>() {
         val disposable = RepositoryProvider.suggestionRepository
             .postCuratorSuggestion(curatorId, suggestion)
             .subscribe { res ->
-                interceptResponse(res) {
-                    AppHelper.currentCurator.suggestions.add(0, suggestion)
-                }
-        }
+                interceptSecondResponse(res, {
+                    it.status = AppHelper.getStatus(WAITING_CURATOR)
+                    RepositoryProvider.suggestionRepository
+                        .updateCuratorSuggestion(curatorId, it)
+                        .subscribe { res ->
+                            interceptSecondResponse(res, {
+                                AppHelper.currentCurator.suggestions.add(0, suggestion)
+                            },
+                                R.string.failed_post_suggestion
+                            )
+                        }
+                },
+                    R.string.failed_post_suggestion)
+            }
         compositeDisposable.add(disposable)
     }
 
@@ -75,10 +83,10 @@ class MyThemeListPresenter(): BaseFragPresenter<MyThemeListView>() {
         val disposable = RepositoryProvider.themeRepository
             .findCuratorThemes(userId)
             .subscribe { res ->
-                interceptResponse(res) {
-                    viewState.showThemes(it)
-                }
-        }
+                interceptSecondResponse(res, {
+                    viewState.showThemes(it.reversed())
+                }, { loadSkills(userId) })
+            }
         compositeDisposable.add(disposable)
     }
 
@@ -86,10 +94,11 @@ class MyThemeListPresenter(): BaseFragPresenter<MyThemeListView>() {
         val disposable = RepositoryProvider.studentRepository
             .findAll()
             .subscribe { res ->
-                interceptResponse(res) {
+                interceptSecondResponse(res, {
                     viewState.updateFakeStudents(it.subList(0, 3))
-                }
-        }
+                },
+                    R.string.failed_load_fake_students)
+            }
         compositeDisposable.add(disposable)
     }
 

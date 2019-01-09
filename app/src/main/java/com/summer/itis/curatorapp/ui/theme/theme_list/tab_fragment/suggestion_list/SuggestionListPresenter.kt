@@ -33,10 +33,10 @@ class SuggestionListPresenter(): BaseFragPresenter<SuggestionListView>() {
         val disposable = RepositoryProvider.suggestionRepository
             .findCuratorSuggestions(userId)
             .subscribe { res ->
-                interceptResponse(res) {
+                interceptSecondResponse(res, {
                     viewState.showSuggestions(it.reversed())
-                }
-        }
+                },{ loadSuggestions(userId) })
+            }
         compositeDisposable.add(disposable)
     }
 

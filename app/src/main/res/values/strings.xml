@@ -61,7 +61,7 @@
     <string name="lender_name">Lender name</string>
     <string name="debtor_name">Debtor name</string>
 
-    <string name="loading">Loading…</string>
+    <string name="loading">Загрузка…</string>
     <string name="change_data">Изменить данные</string>
     <string name="photo">Фото</string>
 
@@ -408,6 +408,25 @@
     <string name="edit_theme">Редактирование темы</string>
     <string name="edit_profile">Изменение профиля</string>
     <string name="edit_desc">Изменение описания</string>
+
+    <string name="failedPostTheme">Ошибка сервера.Не удалось добавить тему.Попробуйте заново</string>
+    <string name="failedPostSuggestion">Ошибка сервера.Не удалось добавить предложение.Попробуйте добавить заново</string>
+    <string name="failed_save_curator_desc">Ошибка сервера.Не удалось изменить описание куратора</string>
+    <string name="failed_post_comment">Ошибка сервера.Не удалось добавить комментарий.Попробуйте заново</string>
+    <string name="failed_logout">Ошибка сервера.Не удалось выйте из аккаунта.Попробуйте заново</string>
+    <string name="failed_update_curator">Ошибка сервера.Не удалось обновить куратора. Попробуйте заново</string>
+    <string name="failed_update_suggestion">Ошибка сервера.Не удалось обновить предлжение.Попробуйте заново</string>
+    <string name="failed_update_theme">Ошибка сервера.Не удалось обновить тему.Попробуйте заноов</string>
+    <string name="failed_post_suggestion">Ошибка сервера.Не удалось добавить предложение.Попробуйте заново</string>
+    <string name="failed_load_fake_students">Ошибка сервера.Не удалось загрузить студентов.Попробуйте перезайти на страницу</string>
+    <string name="failed_update_status">Ошибка сервера.Не удалось изменить статус.Попробуйте заново</string>
+    <string name="failed_post_material">Ошибка сервера.Не удалось добавить материал</string>
+    <string name="failed_add_step">Ошибка сервера.Не удалось добавить шаг.Попробуйте заново</string>
+    <string name="failed_update_skills">Ошибка сервера.Не удалось обновить компетенции.Попробуйте заново</string>
+    <string name="failed_load_comments">Ошибка сервера.Не удалось загрузить комментарии.Попробуйте заново</string>
+    <string name="failed_update_step">Ошибка сервера.Не удалось обновить шаг курсовой.Попробуйте заново</string>
+    <string name="failed_change_step_status">Ошибка сервера.Не удалось изменить статус шага.Попробуйте заново</string>
+    <string name="failed_send_suggestion">Ошибка сервера.Не удалось отправить предложение</string>
 
 
     <string-array name="courses">

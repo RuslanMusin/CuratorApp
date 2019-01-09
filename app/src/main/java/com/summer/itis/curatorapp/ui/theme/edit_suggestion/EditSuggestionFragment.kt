@@ -12,7 +12,10 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
+import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.AppHelper.Companion.setMultiline
 import com.summer.itis.curatorapp.utils.Const.ALL_CHOOSED
+import com.summer.itis.curatorapp.utils.Const.CHANGED_CURATOR
 import com.summer.itis.curatorapp.utils.Const.EDIT_SUGGESTION
 import com.summer.itis.curatorapp.utils.Const.THEME_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
@@ -46,6 +49,10 @@ class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSugg
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -68,6 +75,13 @@ class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSugg
         setToolbarData()
         setListeners()
         setThemeData()
+        setEditText()
+        mainListener.hideLoading()
+    }
+
+    private fun setEditText() {
+        setMultiline(et_theme_name)
+        setMultiline(et_theme_desc)
     }
 
     private fun setThemeData() {
@@ -95,6 +109,7 @@ class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSugg
 
                     suggestion.progress?.title = title
                     suggestion.progress?.description = desc
+                    suggestion.status = AppHelper.getStatus(CHANGED_CURATOR)
 
                     presenter.updateSuggestion(suggestion)
                 }

@@ -137,11 +137,11 @@ abstract class BaseActivity<Presenter: BasePresenter<*>> : MvpAppCompatActivity(
     fun setStatus(status: String) {
         Log.d(TAG_BASE_ACT,"current status = $status")
         AppHelper.userStatus = status
-        AppHelper.onlineFunction = onlineMode()
-        AppHelper.offlineFunction = offlineMode()
+      /*  AppHelper.onlineFunction = onlineMode()
+        AppHelper.offlineFunction = offlineMode()*/
     }
 
-    fun offlineMode(): () -> (Unit) {
+   /* fun offlineMode(): () -> (Unit) {
         return {
             Log.d(Const.TAG_LOG,"offline mode")
             if(li_offline != null && container != null) {
@@ -159,6 +159,6 @@ abstract class BaseActivity<Presenter: BasePresenter<*>> : MvpAppCompatActivity(
                 li_offline.visibility = View.GONE
             }
         }
-    }
+    }*/
 
 }

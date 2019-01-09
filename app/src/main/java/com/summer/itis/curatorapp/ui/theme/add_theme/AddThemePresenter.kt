@@ -1,6 +1,7 @@
 package com.summer.itis.curatorapp.ui.theme.add_theme
 
 import com.arellomobile.mvp.InjectViewState
+import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.theme.Status
 import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.model.theme.Theme
@@ -33,7 +34,9 @@ class AddThemePresenter(): BaseFragPresenter<AddThemeView>() {
         val disposable = RepositoryProvider.themeRepository
             .postCuratorTheme(curatorId, theme)
             .subscribe { res ->
-                interceptResponse(res, handlePostSuggestion(theme, student, curatorId))
+                interceptSecondResponse(res,
+                    handlePostSuggestion(theme, student, curatorId),
+                    R.string.failedPostTheme)
         }
         compositeDisposable.add(disposable)
     }
@@ -68,7 +71,9 @@ class AddThemePresenter(): BaseFragPresenter<AddThemeView>() {
         val disposable = RepositoryProvider.suggestionRepository
             .postCuratorSuggestion(curatorId, suggestionTheme)
             .subscribe { res ->
-                interceptResponse(res, handlePostSuggestion())
+                interceptSecondResponse(res,
+                    handlePostSuggestion(),
+                    R.string.failedPostSuggestion)
         }
         compositeDisposable.add(disposable)
     }

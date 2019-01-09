@@ -55,6 +55,10 @@ class WorkListFragment : BaseFragment<WorkListPresenter>(), WorkListView, View.O
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -79,6 +83,7 @@ class WorkListFragment : BaseFragment<WorkListPresenter>(), WorkListView, View.O
     override fun showWorks(works: List<Work>) {
         this.works = works.toMutableList()
         changeDataSet(this.works)
+        mainListener.hideLoading()
     }
 
     private fun initViews() {
@@ -90,13 +95,9 @@ class WorkListFragment : BaseFragment<WorkListPresenter>(), WorkListView, View.O
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar)
         mainListener.setToolbarTitle(getString(R.string.works))
-       /* btn_back.visibility = View.VISIBLE
-        btn_edit.visibility = View.GONE*/
     }
 
     private fun setListeners() {
-//        btn_edit.setOnClickListener(this)
-//        btn_back.setOnClickListener(this)
     }
 
     override fun setNotLoading() {
@@ -134,6 +135,7 @@ class WorkListFragment : BaseFragment<WorkListPresenter>(), WorkListView, View.O
     }
 
     override fun onItemClick(item: Work) {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(Const.ID_KEY, item.id)
         val fragment = WorkFragment.newInstance(args, mainListener)
@@ -143,28 +145,10 @@ class WorkListFragment : BaseFragment<WorkListPresenter>(), WorkListView, View.O
     override fun onClick(v: View) {
         when (v.id) {
 
-            R.id.btn_edit -> editSkills()
-
             R.id.btn_back -> backFragment()
 
         }
     }
-
-    private fun editSkills() {
-       /* val fragment = EditSkillsFragment.newInstance(mainListener)
-        fragment.setTargetFragment(this, EDIT_SKILLS)
-        mainListener.loadFragment(fragment)*/
-    }
-
-   /* override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when(requestCode) {
-
-              EDIT_SKILLS -> changeDataSet(step.subjects)
-            }
-        }
-    }*/
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.search_menu, menu)

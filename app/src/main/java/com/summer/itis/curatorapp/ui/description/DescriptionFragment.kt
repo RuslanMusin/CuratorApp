@@ -41,6 +41,10 @@ class DescriptionFragment : BaseFragment<DescriptionPresenter>(), DescriptionVie
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -63,6 +67,7 @@ class DescriptionFragment : BaseFragment<DescriptionPresenter>(), DescriptionVie
         setToolbarData()
         setListeners()
         setData()
+        mainListener.hideLoading()
     }
 
     private fun setToolbarData() {
@@ -78,6 +83,7 @@ class DescriptionFragment : BaseFragment<DescriptionPresenter>(), DescriptionVie
 
     private fun setData() {
         tv_desc_name.text = description
+        mainListener.hideLoading()
     }
 
 
