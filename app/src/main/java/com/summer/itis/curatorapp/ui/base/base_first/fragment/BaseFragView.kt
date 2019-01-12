@@ -8,4 +8,8 @@ interface BaseFragView: MvpView {
     fun showConnectionError(errorMessage: Int)
     fun setRequest(request: () -> Unit)
 
+    fun startTimeout(errorMessage: Int)
+    fun startTimeout(request: () -> Unit)
+    fun stopTimeout()
+
 }

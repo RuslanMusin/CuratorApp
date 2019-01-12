@@ -47,10 +47,12 @@ class  SuggestionPresenter(): CommentPresenter<SuggestionView>() {
 
     fun changeSuggestionStatus(curatorId: String, sug: Suggestion) {
         sug.setApiFileds()
+        viewState.startTimeout ( R.string.failed_update_status)
         val disposable = RepositoryProvider.suggestionRepository
             .updateCuratorSuggestion(curatorId, sug)
             .subscribe { res ->
                 interceptSecondResponse(res, {
+                    viewState.stopTimeout()
                     viewState.setStatus(sug.status.name)
                 },
                     R.string.failed_update_status)

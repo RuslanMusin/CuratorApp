@@ -80,10 +80,12 @@ class MyThemeListPresenter(): BaseFragPresenter<MyThemeListView>() {
     }
 
     fun loadSkills(userId: String) {
+        viewState.startTimeout { loadSkills(userId) }
         val disposable = RepositoryProvider.themeRepository
             .findCuratorThemes(userId)
             .subscribe { res ->
                 interceptSecondResponse(res, {
+                    viewState.stopTimeout()
                     viewState.showThemes(it.reversed())
                 }, { loadSkills(userId) })
             }
@@ -91,10 +93,12 @@ class MyThemeListPresenter(): BaseFragPresenter<MyThemeListView>() {
     }
 
     fun loadFakeStudents() {
+        viewState.startTimeout(R.string.failed_load_fake_students)
         val disposable = RepositoryProvider.studentRepository
             .findAll()
             .subscribe { res ->
                 interceptSecondResponse(res, {
+                    viewState.stopTimeout()
                     viewState.updateFakeStudents(it.subList(0, 3))
                 },
                     R.string.failed_load_fake_students)

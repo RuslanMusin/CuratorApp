@@ -29,11 +29,13 @@ class SuggestionListPresenter(): BaseFragPresenter<SuggestionListView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun loadSuggestions(userId: String) {
+        viewState.startTimeout { loadSuggestions(userId) }
         Log.d(TAG_LOG, "id = $userId")
         val disposable = RepositoryProvider.suggestionRepository
             .findCuratorSuggestions(userId)
             .subscribe { res ->
                 interceptSecondResponse(res, {
+                    viewState.stopTimeout()
                     viewState.showSuggestions(it.reversed())
                 },{ loadSuggestions(userId) })
             }

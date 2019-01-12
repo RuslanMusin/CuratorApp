@@ -14,10 +14,12 @@ class StepListPresenter(): BaseFragPresenter<StepListView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun loadSteps(workId: String) {
+        viewState.startTimeout { loadSteps(workId) }
         val disposable = RepositoryProvider.workStepRepository
             .findAll(workId)
             .subscribe { res ->
                 interceptSecondResponse(res, {
+                    viewState.stopTimeout()
                     viewState.showSteps(it.sortedWith(compareBy (Step::dateFinish)))
                 },{ loadSteps(workId) })
             }
@@ -26,10 +28,12 @@ class StepListPresenter(): BaseFragPresenter<StepListView>() {
 
     fun changeStatus(workId: String, step: Step) {
         step.setApiFields()
+        viewState.startTimeout (R.string.failed_change_step_status)
         val disposable = RepositoryProvider.workStepRepository
             .updateCuratorWorkStep(AppHelper.currentCurator.id, workId, step)
             .subscribe { res ->
                 interceptSecondResponse(res, {
+                    viewState.stopTimeout()
                 },
                     R.string.failed_change_step_status)
             }

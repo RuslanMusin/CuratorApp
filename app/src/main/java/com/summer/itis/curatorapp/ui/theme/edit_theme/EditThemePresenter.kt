@@ -18,6 +18,7 @@ class EditThemePresenter(): BaseFragPresenter<EditThemeView>() {
 
     fun updateTheme(theme: Theme) {
        theme.setApiFields()
+        viewState.startTimeout (R.string.failed_update_theme)
         val disposable = RepositoryProvider.themeRepository
             .updateCuratorTheme(AppHelper.currentCurator.id, theme)
             .subscribe { res ->
@@ -29,6 +30,7 @@ class EditThemePresenter(): BaseFragPresenter<EditThemeView>() {
 
     private fun handleUpdateTheme(): (theme: Theme) -> Unit {
         return {
+            viewState.stopTimeout()
             AppHelper.currentCurator.themes.add(0, it)
             val intent = Intent()
             intent.putExtra(THEME_KEY , gsonConverter.toJson(it))

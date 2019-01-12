@@ -11,8 +11,10 @@ class StudentPresenter(): BaseFragPresenter<StudentView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun loadStudent(studentId: String) {
+        viewState.startTimeout { loadStudent(studentId) }
         val disposable = RepositoryProvider.studentRepository.findById(studentId).subscribe { res ->
             interceptSecondResponse(res, {
+                viewState.stopTimeout()
                 viewState.showStudent(it)
             },{ loadStudent(studentId) })
         }

@@ -18,11 +18,12 @@ class CuratorPresenter(): BaseFragPresenter<CuratorView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun logout() {
+        viewState.startTimeout ( R.string.failed_logout)
         val disposable = RepositoryProvider.authRepository.logout().subscribe { res ->
             if(res.response()?.code() == 200) {
                 viewState.logout()
             } else {
-                interceptSecondResponse(res, { Log.d(TAG_LOG, "intercept")},
+                interceptSecondResponse(res, { viewState.stopTimeout() },
                     R.string.failed_logout)
             }
         }
@@ -30,6 +31,7 @@ class CuratorPresenter(): BaseFragPresenter<CuratorView>() {
     }
 
     fun findCurator(curatorId: String) {
+        viewState.startTimeout { findCurator(curatorId) }
         val disposable = RepositoryProvider.curatorRepository.findById(curatorId).subscribe { res ->
             interceptSecondResponse(res, handleCurator(),
                 { findCurator(curatorId) })
@@ -39,6 +41,7 @@ class CuratorPresenter(): BaseFragPresenter<CuratorView>() {
 
     private fun handleCurator(): (curator: Curator) -> Unit {
         return {
+            viewState.stopTimeout()
             var type = WATCHER_TYPE
             if (AppHelper.currentCurator.id.equals(it.id)) {
                 type = OWNER_TYPE

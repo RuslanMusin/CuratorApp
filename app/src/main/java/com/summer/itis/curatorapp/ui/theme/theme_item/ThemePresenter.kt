@@ -36,12 +36,13 @@ class  ThemePresenter(): BaseFragPresenter<ThemeView>() {
         themeProgress.description = theme.description
 
         suggestionTheme.progress = themeProgress
-
+        viewState.startTimeout(R.string.failed_send_suggestion)
         val disposable =
                 RepositoryProvider.suggestionRepository
                     .postCuratorSuggestion(AppHelper.currentCurator.id, suggestionTheme)
                     .subscribe { res ->
                         interceptSecondResponse(res, {
+                            viewState.stopTimeout()
                             AppHelper.currentCurator.suggestions.add(0, suggestionTheme)
                         },
                             R.string.failed_send_suggestion)

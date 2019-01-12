@@ -14,6 +14,7 @@ class OneWorkListPresenter(): BaseFragPresenter<OneWorkListView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun loadWorks(userId: String) {
+        viewState.startTimeout { loadWorks(userId) }
         Log.d(Const.TAG_LOG, "id = $userId")
         val disposable = RepositoryProvider.worksRepository.findStudentWorks(userId).subscribe { res ->
             interceptSecondResponse(res, showWorks(),
@@ -24,6 +25,7 @@ class OneWorkListPresenter(): BaseFragPresenter<OneWorkListView>() {
 
     private fun showWorks(): (works: List<Work>) -> Unit {
         return {
+            viewState.stopTimeout()
             viewState.showWorks(it)
         }
     }

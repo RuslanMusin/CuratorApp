@@ -11,8 +11,12 @@ class  WorkPresenter(): BaseFragPresenter<WorkView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun loadWork(workId: String) {
+        viewState.startTimeout { loadWork(workId) }
         val disposable = RepositoryProvider.worksRepository.findById(workId).subscribe { res ->
-            interceptSecondResponse(res, { viewState.showWork(it) },{ loadWork(workId)})
+            interceptSecondResponse(res, {
+                viewState.stopTimeout()
+                viewState.showWork(it)
+            },{ loadWork(workId)})
         }
         compositeDisposable.add(disposable)
     }

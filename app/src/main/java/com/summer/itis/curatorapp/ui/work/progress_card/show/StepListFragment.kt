@@ -100,11 +100,7 @@ class StepListFragment : BaseFragment<StepListPresenter>(),
     }
 
     private fun setListeners() {
-        if(type.equals(WATCHER_TYPE)) {
-            btn_add.visibility = View.GONE
-        } else {
-            btn_add.setOnClickListener(this)
-        }
+        btn_add.setOnClickListener(this)
         btn_back.setOnClickListener(this)
     }
 

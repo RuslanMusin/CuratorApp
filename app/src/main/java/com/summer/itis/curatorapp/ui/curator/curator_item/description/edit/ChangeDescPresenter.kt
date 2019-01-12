@@ -14,6 +14,7 @@ class ChangeDescPresenter(): BaseFragPresenter<ChangeDescView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun saveCuratorDesc(curator: Curator) {
+        viewState.startTimeout (R.string.failed_save_curator_desc)
         val disposable = RepositoryProvider.curatorRepository.update(curator.id, curator).subscribe { res ->
             interceptSecondResponse(res, saveChanges(),
                 R.string.failed_save_curator_desc)
@@ -23,6 +24,7 @@ class ChangeDescPresenter(): BaseFragPresenter<ChangeDescView>() {
 
     private fun saveChanges(): (curator: Curator) -> Unit {
         return {
+            viewState.stopTimeout()
             AppHelper.currentCurator.description = it.description
             viewState.showChanges()
         }

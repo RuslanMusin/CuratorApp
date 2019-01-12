@@ -13,8 +13,10 @@ class AddSubjectPresenter(): BaseFragPresenter<AddSubjectView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun loadSubjects() {
+        viewState.startTimeout { loadSubjects() }
         val disposable = subjectRepository.findAll().subscribe { res ->
             interceptSecondResponse(res, {
+                viewState.stopTimeout()
                 viewState.showSubjects(it)
             }, {
                 loadSubjects()

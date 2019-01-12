@@ -19,6 +19,7 @@ class EditSuggestionPresenter(): BaseFragPresenter<EditSuggestionView>() {
 
     fun updateSuggestion(suggestion: Suggestion) {
         suggestion.setApiFileds()
+        viewState.startTimeout (R.string.failed_update_suggestion)
         val disposable = RepositoryProvider.suggestionRepository.
             updateCuratorProgress(AppHelper.currentCurator.id, suggestion).subscribe { res ->
                 interceptSecondResponse(res, handleUpdateSuggestion(suggestion),
@@ -29,6 +30,7 @@ class EditSuggestionPresenter(): BaseFragPresenter<EditSuggestionView>() {
 
     private fun handleUpdateSuggestion(suggestion: Suggestion): (progress: Progress) -> Unit {
         return {
+            viewState.stopTimeout()
             val intent = Intent()
             intent.putExtra(THEME_KEY , gsonConverter.toJson(suggestion.progress))
             viewState.returnEditResult(intent)

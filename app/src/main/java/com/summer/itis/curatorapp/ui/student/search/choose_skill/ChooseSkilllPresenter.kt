@@ -11,8 +11,10 @@ class ChooseSkilllPresenter(): BaseFragPresenter<ChooseSkillView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun loadSkills() {
+        viewState.startTimeout { loadSkills() }
         val disposable = RepositoryProvider.skillRepository.findAll().subscribe { res ->
             interceptSecondResponse(res, {
+                viewState.stopTimeout()
                 viewState.showSkills(it)
 
             },{ loadSkills() })

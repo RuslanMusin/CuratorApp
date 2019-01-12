@@ -18,6 +18,7 @@ class EditStepPresenter(): BaseFragPresenter<EditStepView>() {
 
     fun updateStep(workId: String, step: Step) {
         step.setApiFields()
+        viewState.startTimeout ( R.string.failed_update_step)
         val disposable = RepositoryProvider.workStepRepository
             .updateCuratorWorkStep(AppHelper.currentCurator.id, workId, step)
             .subscribe { res ->
@@ -31,6 +32,7 @@ class EditStepPresenter(): BaseFragPresenter<EditStepView>() {
 
     private fun handleStep(): (step: Step) -> Unit {
         return {
+            viewState.stopTimeout()
             val intent = Intent()
             intent.putExtra(Const.STEP_KEY, Const.gsonConverter.toJson(it))
             viewState.backAfterEdit(intent)

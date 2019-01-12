@@ -11,8 +11,10 @@ class StudentListPresenter(): BaseFragPresenter<StudentListView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun loadStudents() {
+        viewState.startTimeout { loadStudents() }
         val disposable = RepositoryProvider.studentRepository.findAll().subscribe { res ->
            interceptSecondResponse(res, {
+               viewState.stopTimeout()
                viewState.showStudents(it)
            },
                { loadStudents() })

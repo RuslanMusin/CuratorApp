@@ -31,6 +31,7 @@ class AddThemePresenter(): BaseFragPresenter<AddThemeView>() {
             theme.targetType = ONE_CHOOSED
             theme.student = null
         }
+        viewState.startTimeout (R.string.failedPostTheme)
         val disposable = RepositoryProvider.themeRepository
             .postCuratorTheme(curatorId, theme)
             .subscribe { res ->
@@ -43,6 +44,7 @@ class AddThemePresenter(): BaseFragPresenter<AddThemeView>() {
 
     private fun handlePostSuggestion(theme: Theme, student: Student?, curatorId: String): (theme: Theme) -> Unit {
         return {
+            viewState.stopTimeout()
             theme.id = it.id
             AppHelper.currentCurator.themes.add(0, theme)
             if(student != null) {

@@ -15,10 +15,14 @@ class AddStepPresenter(): BaseFragPresenter<AddStepView>() {
 
     fun addStep(workId: String, step: Step) {
         step.setApiFields()
+        viewState.startTimeout(R.string.failed_add_step)
         val disposable = RepositoryProvider.workStepRepository
             .postCuratorWorkStep(AppHelper.currentCurator.id, workId, step)
             .subscribe { res ->
-                interceptSecondResponse(res, { viewState.backAfterAdd() },
+                interceptSecondResponse(res, {
+                    viewState.stopTimeout()
+                    viewState.backAfterAdd()
+                },
                     R.string.failed_add_step)
             }
         compositeDisposable.add(disposable)

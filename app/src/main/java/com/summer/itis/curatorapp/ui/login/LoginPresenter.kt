@@ -29,6 +29,7 @@ class LoginPresenter: BasePresenter<LoginActView>() {
         viewState.showProgressDialog(R.string.progress_message)
 
         val curator = Curator(email, password)
+
         val disposable = authRepository.login(curator).subscribe { res ->
             val response = res?.response()
             if(response == null) {

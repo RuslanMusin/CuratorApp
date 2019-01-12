@@ -13,8 +13,10 @@ class EditCuratorPresenter(): BaseFragPresenter<EditCuratorView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun updateCurator(curator: Curator) {
+        viewState.startTimeout (R.string.failed_update_curator)
         val disposable = RepositoryProvider.curatorRepository.update(curator.id, curator).subscribe { res ->
            interceptSecondResponse(res, {
+               viewState.stopTimeout()
                viewState.returnAfterEdit()
            },
                R.string.failed_update_curator)

@@ -13,6 +13,7 @@ class AddMaterialPresenter(): BaseFragPresenter<AddMaterialView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun postMaterial(curatorId: String, workId: String, stepId: String, material: Material) {
+        viewState.startTimeout (R.string.failed_post_material)
         val disposable = RepositoryProvider.materialRepository
             .postMaterial(
                 curatorId,
@@ -21,7 +22,9 @@ class AddMaterialPresenter(): BaseFragPresenter<AddMaterialView>() {
                 material
             ).subscribe { res ->
                 interceptSecondResponse(res,
-                    { viewState.showChanges(it) },
+                    {
+                        viewState.stopTimeout()
+                        viewState.showChanges(it) },
                     R.string.failed_post_material
                     )
             }

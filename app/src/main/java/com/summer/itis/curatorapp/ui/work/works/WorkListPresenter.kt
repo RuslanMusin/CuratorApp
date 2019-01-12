@@ -13,9 +13,13 @@ class WorkListPresenter(): BaseFragPresenter<WorkListView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun loadWorks(userId: String) {
+        viewState.startTimeout { loadWorks(userId) }
         Log.d(Const.TAG_LOG, "id = $userId")
         val disposable = RepositoryProvider.worksRepository.findCuratorWorks(userId).subscribe { res ->
-            interceptSecondResponse(res, { viewState.showWorks(it.reversed())},{ loadWorks(userId)})
+            interceptSecondResponse(res, {
+                viewState.stopTimeout()
+                viewState.showWorks(it.reversed())
+            },{ loadWorks(userId)})
         }
         compositeDisposable.add(disposable)
     }

@@ -8,9 +8,13 @@ import com.summer.itis.curatorapp.ui.comment.CommentPresenter
 class  StepPresenter(): CommentPresenter<StepView>() {
 
     fun loadStep(workId: String, stepId: String) {
+        viewState.startTimeout { loadStep(workId, stepId) }
         val disposable = RepositoryProvider.workStepRepository.findById(workId, stepId)
             .subscribe { res ->
-                interceptSecondResponse(res, { viewState.showStep(it) },
+                interceptSecondResponse(res, {
+                    viewState.stopTimeout()
+                    viewState.showStep(it)
+                },
                     { loadStep(workId, stepId)})
             }
         compositeDisposable.add(disposable)

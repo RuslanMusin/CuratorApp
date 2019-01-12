@@ -19,6 +19,7 @@ open class CommentPresenter<View: CommentView>: BaseFragPresenter<View>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun loadComments(map: HashMap<String, String>, type: String) {
+        viewState.startTimeout(R.string.failed_load_comments)
         var single: Single<Result<List<Comment>>>? = null
         when(type) {
             STEP_TYPE -> {
@@ -36,6 +37,7 @@ open class CommentPresenter<View: CommentView>: BaseFragPresenter<View>() {
                 .doAfterTerminate({ viewState.hideLoading() })
                 .subscribe { res ->
                    interceptSecondResponse(res, {
+                       viewState.stopTimeout()
                        viewState.showComments(it)
                    },
                        R.string.failed_load_comments)
@@ -45,6 +47,7 @@ open class CommentPresenter<View: CommentView>: BaseFragPresenter<View>() {
     }
 
     fun createComment(map: HashMap<String, String>, type: String, comment: Comment) {
+        viewState.startTimeout (R.string.failed_post_comment)
         var single: Single<Result<Comment>>? = null
         when(type) {
             STEP_TYPE -> {
@@ -59,7 +62,7 @@ open class CommentPresenter<View: CommentView>: BaseFragPresenter<View>() {
         }
         val disposable = single
             ?.subscribe { res ->
-                interceptSecondResponse(res, {}, R.string.failed_post_comment)
+                interceptSecondResponse(res, {viewState.stopTimeout()}, R.string.failed_post_comment)
             }
         disposable?.let { compositeDisposable.add(it) }
     }

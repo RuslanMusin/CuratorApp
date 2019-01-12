@@ -11,19 +11,23 @@ class SkillListPresenter(): BaseFragPresenter<SkillListView>() {
     val compositeDisposable: CompositeDisposable = CompositeDisposable()
 
     fun loadCuratorSkills(userId: String) {
+        viewState.startTimeout { loadCuratorSkills(userId) }
         val disposable = RepositoryProvider.skillRepository.findCuratorSkills(userId).subscribe { res ->
             interceptSecondResponse(res, {
+                viewState.stopTimeout()
                 viewState.showSkills(it)
-            },{})
+            },{loadCuratorSkills(userId)})
         }
         compositeDisposable.add(disposable)
     }
 
     fun loadStudentSkills(userId: String) {
+        viewState.startTimeout { loadStudentSkills(userId) }
         val disposable = RepositoryProvider.skillRepository.findStudentSkills(userId).subscribe { res ->
             interceptSecondResponse(res, {
+                viewState.stopTimeout()
                 viewState.showSkills(it)
-            },{})
+            },{loadStudentSkills(userId)})
         }
         compositeDisposable.add(disposable)
     }
