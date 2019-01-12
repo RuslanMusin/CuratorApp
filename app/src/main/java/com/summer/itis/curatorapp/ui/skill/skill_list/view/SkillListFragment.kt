@@ -6,37 +6,28 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.google.gson.reflect.TypeToken
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.skill.Skill
-import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.utils.Const
-import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
-import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.layout_recycler_list.*
-import kotlinx.android.synthetic.main.toolbar_edit.*
-import android.view.MenuInflater
-import com.summer.itis.curatorapp.model.user.Person
-import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.ui.skill.skill_list.edit.EditSkillsFragment
 import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const.CURATOR_TYPE
+import com.summer.itis.curatorapp.utils.Const.ID_KEY
+import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
 import com.summer.itis.curatorapp.utils.Const.PERSON_TYPE
 import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
 import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
 import com.summer.itis.curatorapp.utils.Const.WATCHER_TYPE
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
-import java.util.regex.Pattern
-import com.google.gson.reflect.TypeToken
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_PROFILE
-import com.summer.itis.curatorapp.utils.Const.ID_KEY
+import io.reactivex.disposables.Disposable
+import kotlinx.android.synthetic.main.layout_recycler_list.*
+import kotlinx.android.synthetic.main.toolbar_edit.*
 import java.util.*
+import java.util.regex.Pattern
 
 
 class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, View.OnClickListener {
@@ -54,8 +45,6 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
 
     companion object {
 
-        const val TAG_SKILLS = "TAG_SKILLS"
-
         const val EDIT_SKILLS = 1
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
@@ -70,6 +59,10 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
             fragment.mainListener = navigationView
             return fragment
         }
+    }
+
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,44 +93,13 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
         } else {
             presenter.loadCuratorSkills(userId)
         }
-//        loadSkills()
     }
 
     override fun showSkills(skills: List<Skill>) {
         this.skills = skills.toMutableList()
         changeDataSet(this.skills)
+        mainListener.hideLoading()
     }
-
-    /*private fun loadSkills() {
-//        presenter.loadWorks(AppHelper.currentCurator.id)
-        if(user.skills.size == 0) {
-            this.activity?.let { skills = AppHelper.getMySkillList(it).toMutableList()}
-          *//*  var skill: Skill = Skill()
-
-            skill.name = "Java"
-            skill.id = "101"
-            skill.level = getString(R.string.high_level)
-            skills.add(skill)
-            var level: Int
-            var levelStr: String = getString(R.string.low_level)
-            for (i in 1..10) {
-                skill = Skill()
-                skill.id = "$i"
-                skill.name = "Machine learning $i"
-                level = Random().nextInt(3)
-                this.activity?.let { levelStr = AppHelper.getLevelStr(level, it) }
-                skill.level = levelStr
-                skills.add(skill)
-            }*//*
-            AppHelper.currentCurator.skills = skills
-            saveCuratorState()
-
-        } else {
-            skills = user.skills
-        }
-        changeDataSet(skills)
-
-    }*/
 
     private fun initViews() {
         setToolbarData()
@@ -147,6 +109,7 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_edit)
+        toolbar_title.text = getString(R.string.skills)
         btn_back.visibility = View.VISIBLE
         if(type.equals(WATCHER_TYPE)) {
             btn_edit.visibility = View.GONE
@@ -195,7 +158,6 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
     }
 
     override fun onItemClick(item: Skill) {
-//        TestActivity.start(this, item)
     }
 
     override fun onClick(v: View) {
@@ -209,11 +171,10 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
     }
 
     private fun editSkills() {
+        mainListener.showLoading()
         val fragment = EditSkillsFragment.newInstance(mainListener)
         fragment.setTargetFragment(this, EDIT_SKILLS)
-//        mainListener.loadFragment(fragment)
-//        mainListener.pushFragments(TAB_PROFILE, fragment, true)
-        mainListener.showFragment(SHOW_PROFILE, this, fragment)
+        mainListener.showFragment(this, fragment)
 
     }
 
@@ -223,16 +184,13 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
             when(requestCode) {
 
                 EDIT_SKILLS -> {
-//                    step = AppHelper.currentCurator as Person
                     data?.getStringExtra(SKILL_KEY)?.let {
                         val founderListType = object : TypeToken<ArrayList<Skill>>(){}.type
                         val skills: List<Skill> = gsonConverter.fromJson(it, founderListType)
-                       /* steps.add(0, skill)*/
                         AppHelper.currentCurator.skills = skills.toMutableList()
-                        saveCuratorState()
+                        this.skills = skills.toMutableList()
                         changeDataSet(skills)
                     }
-//                    changeDataSet(step.subjects)
                 }
             }
         }
@@ -252,8 +210,6 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String): Boolean {
-//                presenter.loadOfficialTestsByQUery(query)
-//                findFromList(query)
                 if (!finalSearchView.isIconified) {
                     finalSearchView.isIconified = true
                 }
@@ -266,19 +222,6 @@ class SkillListFragment : BaseFragment<SkillListPresenter>(), SkillListView, Vie
                 return false
             }
         })
-
-      /*  val editItem = menu.findItem(R.id.action_edit)
-        editItem.setVisible(true)
-        editItem.setOnMenuItemClickListener { menuItem ->
-            when(menuItem.itemId) {
-                R.id.action_edit -> {
-                    editSkills()
-
-                }
-            }
-            true
-        }*/
-
 
     }
 

@@ -18,7 +18,7 @@ import com.summer.itis.curatorapp.utils.Const.SUBJECT_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.layout_recycler_list.*
-import kotlinx.android.synthetic.main.toolbar_add.*
+import kotlinx.android.synthetic.main.toolbar_back.*
 import java.util.regex.Pattern
 
 class AddSubjectFragment : BaseFragment<AddSubjectPresenter>(), AddSubjectView, View.OnClickListener {
@@ -32,8 +32,6 @@ class AddSubjectFragment : BaseFragment<AddSubjectPresenter>(), AddSubjectView, 
     lateinit var presenter: AddSubjectPresenter
 
     companion object {
-
-        const val TAG_SKILLS = "TAG_SKILLS"
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
             val fragment = AddSubjectFragment()
@@ -49,13 +47,16 @@ class AddSubjectFragment : BaseFragment<AddSubjectPresenter>(), AddSubjectView, 
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-//        mainListener.hideBottomNavigation()
         val view = inflater.inflate(R.layout.fragment_student_list, container, false)
         return view
     }
@@ -69,6 +70,7 @@ class AddSubjectFragment : BaseFragment<AddSubjectPresenter>(), AddSubjectView, 
     override fun showSubjects(subjects: List<Subject>) {
         this.subjects = subjects.toMutableList()
         changeDataSet(subjects)
+        mainListener.hideLoading()
     }
 
     private fun initViews() {
@@ -78,8 +80,8 @@ class AddSubjectFragment : BaseFragment<AddSubjectPresenter>(), AddSubjectView, 
     }
 
     private fun setToolbarData() {
-        mainListener.setToolbar(toolbar_add)
-        btn_add.visibility = View.GONE
+        mainListener.setToolbar(toolbar_back)
+        toolbar_title.text = getString(R.string.subjects)
     }
 
     private fun setListeners() {
@@ -127,7 +129,6 @@ class AddSubjectFragment : BaseFragment<AddSubjectPresenter>(), AddSubjectView, 
 
         targetFragment?.onActivityResult(ADD_SUBJECT,RESULT_OK, intent)
         mainListener.hideFragment()
-//        mainListener.setResultAndBack(args)
     }
 
     override fun onClick(v: View) {
@@ -135,7 +136,6 @@ class AddSubjectFragment : BaseFragment<AddSubjectPresenter>(), AddSubjectView, 
 
             R.id.btn_back -> {
                 mainListener.hideFragment()
-//                backFragment()
             }
 
         }
@@ -156,7 +156,7 @@ class AddSubjectFragment : BaseFragment<AddSubjectPresenter>(), AddSubjectView, 
 
             override fun onQueryTextSubmit(query: String): Boolean {
 //                presenter.loadOfficialTestsByQUery(query)
-                findFromList(query)
+
 
                 if (!finalSearchView.isIconified) {
                     finalSearchView.isIconified = true
@@ -166,6 +166,7 @@ class AddSubjectFragment : BaseFragment<AddSubjectPresenter>(), AddSubjectView, 
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
+                findFromList(newText)
                 return false
             }
         })

@@ -21,7 +21,7 @@ import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.layout_recycler_list.*
-import kotlinx.android.synthetic.main.toolbar_edit.*
+import kotlinx.android.synthetic.main.toolbar_back.*
 import java.util.*
 import java.util.regex.Pattern
 
@@ -55,6 +55,10 @@ class ChooseAddSkillFragment : BaseFragment<ChooseSkilllPresenter>(), ChooseSkil
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -62,7 +66,7 @@ class ChooseAddSkillFragment : BaseFragment<ChooseSkilllPresenter>(), ChooseSkil
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_skills, container, false)
+        val view = inflater.inflate(R.layout.fragment_student_list, container, false)
         return view
     }
 
@@ -75,37 +79,7 @@ class ChooseAddSkillFragment : BaseFragment<ChooseSkilllPresenter>(), ChooseSkil
     override fun showSkills(skills: List<Skill>) {
         this.skills = skills.toMutableList()
         changeDataSet(this.skills)
-    }
-
-    private fun loadSkills() {
-//        presenter.loadWorks(AppHelper.currentCurator.id)
-        this.activity?.let { skills = AppHelper.getSkillsList(it).toMutableList() }
-       /* var skill: Skill = Skill()
-
-        skill.name = "Java"
-        skill.id = "101"
-        skill.level = getString(R.string.medium_level)
-        skills.add(skill)
-
-        var level: Int
-        var levelStr: String = getString(R.string.low_level)
-        for(i in 1..10) {
-            skill = Skill()
-            skill.id = "$i"
-            if(i % 2 == 0) {
-                skill.level = getString(R.string.low_level)
-                skill.name = "Machine Learning $i"
-            } else {
-                skill.level = getString(R.string.high_level)
-                skill.name = "Android $i"
-            }
-            level = Random().nextInt(3)
-            this.activity?.let { levelStr = AppHelper.getLevelStr(level, it) }
-            skill.level = levelStr
-            skills.add(skill)
-        }*/
-
-        changeDataSet(skills)
+        mainListener.hideLoading()
     }
 
     private fun initViews() {
@@ -115,10 +89,8 @@ class ChooseAddSkillFragment : BaseFragment<ChooseSkilllPresenter>(), ChooseSkil
     }
 
     private fun setToolbarData() {
-        mainListener.setToolbar(toolbar_edit)
-        btn_back.visibility = View.VISIBLE
-        btn_ok.visibility = View.GONE
-        btn_edit.visibility = View.GONE
+        mainListener.setToolbar(toolbar_back)
+        toolbar_title.text = getString(R.string.skills)
     }
 
     private fun setListeners() {
@@ -189,18 +161,15 @@ class ChooseAddSkillFragment : BaseFragment<ChooseSkilllPresenter>(), ChooseSkil
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String): Boolean {
-//                presenter.loadOfficialTestsByQUery(query)
-
+                if (!finalSearchView.isIconified) {
+                    finalSearchView.isIconified = true
+                }
+                searchItem.collapseActionView()
                 return false
             }
 
             override fun onQueryTextChange(newText: String): Boolean {
                 findFromList(newText)
-
-                if (!finalSearchView.isIconified) {
-                    finalSearchView.isIconified = true
-                }
-                searchItem.collapseActionView()
                 return false
             }
         })

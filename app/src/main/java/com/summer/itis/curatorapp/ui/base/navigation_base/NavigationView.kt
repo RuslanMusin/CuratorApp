@@ -6,11 +6,19 @@ import com.summer.itis.curatorapp.ui.base.base_first.activity.BaseActView
 
 interface NavigationView: BaseActView {
 
+    fun showLoading()
+
+    fun hideLoading()
+
+    fun setRequest(request: () -> Unit)
+
+    fun showConnectionError()
+
     fun supportActionBar(toolbar: Toolbar)
 
-    fun pushFragments(tag: String, fragment: Fragment, shouldAdd: Boolean)
+    fun pushFragments(fragment: Fragment, shouldAdd: Boolean)
 
-    fun showFragment(tabId: String, lastFragment: Fragment, fragment: Fragment)
+    fun showFragment(lastFragment: Fragment, fragment: Fragment)
 
     fun hideFragment()
 

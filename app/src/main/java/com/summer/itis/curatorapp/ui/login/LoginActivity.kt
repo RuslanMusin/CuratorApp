@@ -6,19 +6,16 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.crashlytics.android.Crashlytics
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.ui.base.base_first.activity.BaseActivity
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity
-import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const.USER_DATA_PREFERENCES
 import com.summer.itis.curatorapp.utils.Const.USER_PASSWORD
 import com.summer.itis.curatorapp.utils.Const.USER_USERNAME
-import kotlinx.android.synthetic.main.activity_login.*
-import com.crashlytics.android.Crashlytics
 import io.fabric.sdk.android.Fabric
-
-
+import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : BaseActivity<LoginPresenter>(), LoginActView, View.OnClickListener {
 
@@ -30,15 +27,15 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginActView, View.OnClick
         Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_login)
         setListeners()
-//        checkUserSession()
+        checkUserSession()
     }
 
     private fun checkUserSession() {
         val sharedPreferences: SharedPreferences = getSharedPreferences(USER_DATA_PREFERENCES, Context.MODE_PRIVATE)
         if(sharedPreferences.contains(USER_USERNAME)) {
             val email: String = sharedPreferences.getString(USER_USERNAME,"")
-            val passwored: String = sharedPreferences.getString(USER_PASSWORD,"")
-            presenter.signIn(email,passwored)
+            val password: String = sharedPreferences.getString(USER_PASSWORD,"")
+            presenter.signIn(email,password)
         }
     }
 
@@ -77,8 +74,8 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginActView, View.OnClick
             }
 
             R.id.tv_name -> {
-                et_email.setText("rast@ma.ru")
-                et_password.setText("rastamka")
+                et_email.setText("Феликс.Туполев.Ипатович")
+                et_password.setText("Феликс.Туполев.Ипатович")
 
             }
 
@@ -90,14 +87,9 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginActView, View.OnClick
     }
 
     override fun goToProfile(curator: Curator) {
-//        AppHelper.setCurrentState(curator.email, this)
         NavigationBaseActivity.start(this)
     }
 
-  /*  private fun goToRegistration() {
-        RegistrationActivity.start(this)
-    }
-*/
     override fun showError() {
         ti_email.error = getString(R.string.enter_correct_name)
         ti_password.error = getString(R.string.enter_correct_password)
@@ -114,8 +106,6 @@ class LoginActivity : BaseActivity<LoginPresenter>(), LoginActView, View.OnClick
     }
 
     companion object {
-
-        const val  TAG_LOGIN = "TAG_LOGIN"
 
         fun start(activity: Context) {
             val intent = Intent(activity, LoginActivity::class.java)

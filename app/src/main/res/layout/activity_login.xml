@@ -13,13 +13,6 @@
         android:paddingLeft="24dp"
         android:paddingRight="24dp">
 
-       <!-- <ImageView
-            android:id="@+id/iv_cover"
-            android:src="@drawable/teacher"
-            android:layout_width="wrap_content"
-            android:layout_height="72dp"
-            android:layout_marginBottom="4dp"
-            android:layout_gravity="center_horizontal" />-->
 
         <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_cover"
@@ -42,7 +35,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="24dp"
             />
-
 
 
         <!-- Email Label -->

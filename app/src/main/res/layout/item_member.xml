@@ -35,9 +35,8 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
             android:textColor="@color/primary_text"
-            android:textSize="@dimen/text.20"
+            android:textSize="@dimen/text.18"
             android:textStyle="bold"
             tools:text="Iron Man" />
 

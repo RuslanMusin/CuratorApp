@@ -1,7 +1,6 @@
 package com.summer.itis.curatorapp.model.skill
 
 import com.summer.itis.curatorapp.model.common.Identified
-import com.summer.itis.curatorapp.utils.Const.LOW_LEVEL
 
 class Skill: Identified {
 

@@ -1,8 +1,5 @@
 package com.summer.itis.curatorapp.api.services
 
-import com.summer.itis.curatorapp.model.comment.Comment
-import com.summer.itis.curatorapp.model.step.Step
-import com.summer.itis.curatorapp.model.theme.Theme
 import com.summer.itis.curatorapp.model.work.Work
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
@@ -35,5 +32,14 @@ interface WorkService {
                           @Path(value = "work_id") workId: String,
                           @Body work: Work): Single<Result<Work>>
 
+    @GET("students/{student_id}/works")
+    fun findStudentWorks(
+        @Path(value = "student_id") studentId: String
+    ): Single<Result<List<Work>>>
 
+    @GET("students/{student_id}/works/{work_id}")
+    fun findStudentWork(
+        @Path(value = "student_id") studentId: String,
+        @Path(value = "work_id") workId: String
+    ): Single<Result<Work>>
 }

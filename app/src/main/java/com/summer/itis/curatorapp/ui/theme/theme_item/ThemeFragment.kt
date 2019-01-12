@@ -15,17 +15,16 @@ import com.summer.itis.curatorapp.model.skill.Skill
 import com.summer.itis.curatorapp.model.theme.Theme
 import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_THEMES
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.TAB_THEMES
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.DescriptionFragment
+import com.summer.itis.curatorapp.ui.description.DescriptionFragment
 import com.summer.itis.curatorapp.ui.student.student_item.StudentFragment
 import com.summer.itis.curatorapp.ui.student.student_list.StudentListFragment
 import com.summer.itis.curatorapp.ui.theme.edit_theme.EditThemeFragment
 import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const.DESC_KEY
 import com.summer.itis.curatorapp.utils.Const.EDIT_SUGGESTION
-import com.summer.itis.curatorapp.utils.Const.ID_KEY
+import com.summer.itis.curatorapp.utils.Const.MAX_LENGTH
 import com.summer.itis.curatorapp.utils.Const.REQUEST_CODE
 import com.summer.itis.curatorapp.utils.Const.SEND_THEME
 import com.summer.itis.curatorapp.utils.Const.TAB_NAME
@@ -68,6 +67,10 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_theme, container, false)
         return view
@@ -88,12 +91,12 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
         setToolbarData()
         setListeners()
         setData()
+        mainListener.hideLoading()
     }
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_back_add_edit)
         toolbar_title.text = getString(R.string.theme)
-//        mainListener.setToolbarTitle(theme.title)
     }
 
     private fun setListeners() {
@@ -106,6 +109,7 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
         }
         btn_back.setOnClickListener(this)
         li_skills.setOnClickListener(this)
+        li_desc.setOnClickListener(this)
     }
 
     private fun setData() {
@@ -115,8 +119,6 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
             for(skill in theme.skills) {
                 addSkillView(skill)
             }
-
-//            tv_content.content = this.activity?.let { SkillViewHelper.getSkillsText(theme.skills, it) }
         }
         tv_title.text = theme.title
         tv_curator.text = theme.curator?.getFullName()
@@ -127,7 +129,7 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
             tv_student.text = name
         }
         tv_subject.text = theme.subject.name
-        expand_text_view.text = theme.description
+        tv_desc.text = AppHelper.cutLongDescription(theme.description, MAX_LENGTH)
     }
 
     override fun onClick(v: View) {
@@ -139,24 +141,21 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
 
             R.id.btn_add -> sendToStudent()
 
-            R.id.li_student -> showStudent()
-
             R.id.li_desc -> showDesc()
 
             R.id.li_skills -> {
                 expandable_layout.toggle()
-                val divider = li_skills.findViewById<View>(R.id.divider)
                 if(expandable_layout.isExpanded) {
-                    divider.visibility = View.GONE
+                    iv_arrow.rotation = 180f
                 } else {
-                    divider.visibility = View.VISIBLE
+                    iv_arrow.rotation = 0f
                 }
             }
         }
     }
 
     private fun addSkillView(skill: Skill) {
-        val view: View = layoutInflater.inflate(R.layout.layout_item_skill, li_added_skills,false)
+        val view: View = layoutInflater.inflate(R.layout.item_skill_small, li_added_skills,false)
         val tvAddedSkill: TextView = view.findViewById(R.id.tv_added_skill_name)
 
         tvAddedSkill.text = skill.name
@@ -175,24 +174,23 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
                         dialog.dismiss()
                     }
                     .onPositive { dialog, which ->
+                        mainListener.showLoading()
                         val args = Bundle()
                         args.putInt(REQUEST_CODE, SEND_THEME)
                         val fragment = StudentListFragment.newInstance(args, mainListener)
                         fragment.setTargetFragment(this, SEND_THEME)
-                        mainListener.showFragment(SHOW_THEMES,this, fragment)
+                        mainListener.showFragment(this, fragment)
                     }
                     .show()
         }
     }
 
     private fun showDesc() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(DESC_KEY, theme.description)
-        args.putString(TYPE, THEME_TYPE)
-        args.putString(USER_ID, AppHelper.currentCurator.id)
-        args.putString(ID_KEY, theme.id)
         val fragment = DescriptionFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(TAB_THEMES, fragment, true)
+        mainListener.pushFragments(fragment, true)
     }
 
     private fun editProfile() {
@@ -206,12 +204,13 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
                         dialog.dismiss()
                     }
                     .onPositive { dialog, which ->
+                        mainListener.showLoading()
                         val args = Bundle()
                         args.putString(THEME_KEY, gsonConverter.toJson(theme))
                         args.putString(TYPE, THEME_TYPE)
                         val fragment = EditThemeFragment.newInstance(args, mainListener)
                         fragment.setTargetFragment(this, EDIT_SUGGESTION)
-                        mainListener.showFragment(SHOW_THEMES,this, fragment)
+                        mainListener.showFragment(this, fragment)
                     }
                     .show()
         }
@@ -219,11 +218,12 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
     }
 
     private fun showStudent() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(USER_ID, theme.studentId)
         args.putString(TAB_NAME, TAB_THEMES)
         val fragment = StudentFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(TAB_THEMES, fragment, true)
+        mainListener.pushFragments(fragment, true)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -237,7 +237,7 @@ class ThemeFragment : BaseFragment<ThemePresenter>(), ThemeView, View.OnClickLis
                         theme = gsonConverter.fromJson(json, Theme::class.java)
                         tv_subject.text = theme.subject.name
                         tv_title.text = theme.title
-                        expand_text_view.text = theme.description
+                        tv_desc.text = AppHelper.cutLongDescription(theme.description, MAX_LENGTH)
 
                         if(theme.skills.size != 0) {
                             li_skills.visibility = View.VISIBLE

@@ -11,7 +11,7 @@ import java.util.*
 
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
 
-    var year = 2017
+    var year = 2018
     var month = 12
     var day = 30
 
@@ -20,8 +20,6 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
     lateinit var callback: DateListener
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        // Use the current date as the default date in the picker
-        // Create a new instance of DatePickerDialog and return it
         return DatePickerDialog(activity, this, year, month, day)
     }
 

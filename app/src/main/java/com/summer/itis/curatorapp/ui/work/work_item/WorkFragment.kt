@@ -9,22 +9,18 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.work.Work
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.TAB_WORKS
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.student.student_item.StudentFragment
-import com.summer.itis.curatorapp.ui.work.progress_card.StepListFragment
+import com.summer.itis.curatorapp.ui.description.DescriptionFragment
+import com.summer.itis.curatorapp.ui.work.progress_card.show.StepListFragment
 import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
+import com.summer.itis.curatorapp.utils.Const.MAX_LENGTH
 import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
-import com.summer.itis.curatorapp.utils.Const.TAB_NAME
 import com.summer.itis.curatorapp.utils.Const.TYPE
-import com.summer.itis.curatorapp.utils.Const.USER_ID
-import com.summer.itis.curatorapp.utils.Const.USER_KEY
 import com.summer.itis.curatorapp.utils.Const.WATCHER_TYPE
 import com.summer.itis.curatorapp.utils.Const.WORK_KEY
-import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import kotlinx.android.synthetic.main.fragment_work.*
-import kotlinx.android.synthetic.main.layout_expandable_text_view.*
 import kotlinx.android.synthetic.main.toolbar_back.*
 
 class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListener {
@@ -36,10 +32,6 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
     lateinit var presenter: WorkPresenter
 
     companion object {
-
-        const val TAG_CURATOR = "TAG_CURATOR"
-
-        const val EDIT_CURATOR = 1
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
             val fragment = WorkFragment()
@@ -53,6 +45,10 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
             fragment.mainListener = navigationView
             return fragment
         }
+    }
+
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -80,13 +76,12 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_back)
         toolbar_title.text = getString(R.string.work)
-//        mainListener.setToolbarTitle(getString(R.string.work))
     }
 
     private fun setListeners() {
         btn_back.setOnClickListener(this)
         li_skills.setOnClickListener(this)
-//        li_student.setOnClickListener(this)
+        li_desc.setOnClickListener(this)
     }
 
     override fun showWork(work: Work) {
@@ -100,7 +95,8 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
             tv_student.text = name
         }
         tv_subject.text = work.theme.subject.name
-        expand_text_view.text = work.theme.description
+        tv_desc.text = AppHelper.cutLongDescription(work.theme.description, MAX_LENGTH)
+        mainListener.hideLoading()
     }
 
     override fun onClick(v: View) {
@@ -108,30 +104,30 @@ class WorkFragment: BaseFragment<WorkPresenter>(), WorkView, View.OnClickListene
 
             R.id.btn_back -> backFragment()
 
-//            R.id.li_student -> showStudent()
-
             R.id.li_skills -> showSteps()
+
+            R.id.li_desc -> showDesc()
         }
     }
 
-    private fun showStudent() {
+    private fun showDesc() {
+        mainListener.showLoading()
         val args = Bundle()
-        args.putString(USER_ID, work.theme.student?.id)
-        args.putString(TAB_NAME, TAB_WORKS)
-        val fragment = StudentFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(TAB_WORKS, fragment, true)
+        args.putString(Const.DESC_KEY, work.theme.description)
+        val fragment = DescriptionFragment.newInstance(args, mainListener)
+        mainListener.pushFragments(fragment, true)
     }
 
     private fun showSteps() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(WORK_KEY, work.id)
-        args.putString(TAB_NAME, TAB_WORKS)
         if(AppHelper.currentCurator.id.equals(work.theme.curator?.id)) {
             args.putString(TYPE, OWNER_TYPE)
         } else {
             args.putString(TYPE, WATCHER_TYPE)
         }
         val fragment = StepListFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(TAB_WORKS, fragment, true)
+        mainListener.pushFragments(fragment, true)
     }
 }

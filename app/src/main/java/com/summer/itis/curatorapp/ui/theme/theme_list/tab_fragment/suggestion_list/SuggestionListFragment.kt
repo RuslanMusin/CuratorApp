@@ -4,33 +4,21 @@ import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.view.*
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.afollestad.materialdialogs.MaterialDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
-import com.summer.itis.curatorapp.model.theme.Theme
-import com.summer.itis.curatorapp.model.theme.ThemeProgress
-import com.summer.itis.curatorapp.model.user.Curator
+import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.theme.theme_list.ThemeListView
-
-import com.summer.itis.curatorapp.utils.AppHelper
-
-import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.layout_recycler_list.*
-import java.util.regex.Pattern
-import android.support.v7.widget.RecyclerView
-import android.util.Log
-import com.afollestad.materialdialogs.MaterialDialog
-import com.summer.itis.curatorapp.model.skill.Subject
-import com.summer.itis.curatorapp.model.user.Student
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.TAB_THEMES
 import com.summer.itis.curatorapp.ui.theme.add_theme.AddThemeFragment
 import com.summer.itis.curatorapp.ui.theme.suggestion_item.SuggestionFragment
+import com.summer.itis.curatorapp.ui.theme.theme_list.ThemeListView
 import com.summer.itis.curatorapp.utils.Const.CHANGED_CURATOR
 import com.summer.itis.curatorapp.utils.Const.CHANGED_STUDENT
-import com.summer.itis.curatorapp.utils.Const.CURATOR_TYPE
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_CURATOR
 import com.summer.itis.curatorapp.utils.Const.IN_PROGRESS_STUDENT
@@ -39,8 +27,10 @@ import com.summer.itis.curatorapp.utils.Const.THEME_KEY
 import com.summer.itis.curatorapp.utils.Const.WAITING_CURATOR
 import com.summer.itis.curatorapp.utils.Const.WAITING_STUDENT
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_theme_list.*
-import kotlin.collections.ArrayList
+import kotlinx.android.synthetic.main.layout_recycler_list.*
+import java.util.regex.Pattern
 
 
 class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), SuggestionListView, View.OnClickListener {
@@ -49,7 +39,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
     lateinit var fragmentParent: ThemeListView
     private lateinit var adapter: SuggestionAdapter
 
-    lateinit var suggestions: MutableList<SuggestionTheme>
+    var suggestions: MutableList<Suggestion> = ArrayList()
     lateinit var userId: String
 
     @InjectPresenter
@@ -58,10 +48,6 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
     var actionNumber: Int = 0
 
     companion object {
-
-        const val TAG_SKILLS = "TAG_SKILLS"
-
-        const val EDIT_SKILLS = 1
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
             val fragment = SuggestionListFragment()
@@ -77,6 +63,10 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_theme_list, container, false)
         return view
@@ -87,83 +77,23 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
         arguments?.let {
             userId = it.getString(ID_KEY)
             initViews()
-            presenter.loadSkills(userId)
+            presenter.loadSuggestions(userId)
         }
     }
 
-    override fun showSuggestions(suggestions: List<SuggestionTheme>) {
+    override fun showSuggestions(suggestions: List<Suggestion>) {
         this.suggestions = suggestions.toMutableList()
         changeDataSet(this.suggestions)
+        mainListener.hideLoading()
+        Log.d(TAG_LOG, "hideLoading")
     }
 
-    /*private fun loadWorks() {
-//        presenter.loadWorks(AppHelper.currentCurator.id)
-        if(student.suggestions.size == 0) {
-            suggestions = ArrayList()
-
-            for (i in 1..10) {
-                val suggestionTheme = SuggestionTheme()
-                suggestionTheme.id = "$i"
-
-                val curator = AppHelper.currentCurator
-                suggestionTheme.curator = curator
-                suggestionTheme.curatorId = curator.id
-
-                val student = Student()
-                student.name = "Ruslan"
-                student.lastname = "Musin"
-                student.patronymic = "Maratovich"
-                suggestionTheme.student = student
-                suggestionTheme.studentId = i.toString()
-
-                val theme = Theme()
-                theme.id = "$i"
-
-                suggestionTheme.theme = theme
-                suggestionTheme.themeId = "$i"
-
-                suggestionTheme.themeProgress = ThemeProgress()
-                suggestionTheme.themeProgress?.id = "$i"
-                suggestionTheme.themeProgressId = "$i"
-
-                suggestionTheme.themeProgress?.description = "Simple App for students"
-                suggestionTheme.theme?.description = "Simple App for students"
-                if(i % 2 == 0) {
-                    val title = "Приложение для обмена книгами $i"
-                    suggestionTheme.theme?.title = title
-                    suggestionTheme.themeProgress?.title = title
-
-                    val subject = Subject()
-                    subject.name = "Android"
-                    subject.id  = "$i"
-                    suggestionTheme.themeProgress?.subject = subject
-                    suggestionTheme.status = WAITING_CURATOR
-                    suggestionTheme.type = CURATOR_TYPE
-                    suggestionTheme.themeProgress?.subject = subject
-                    suggestionTheme.theme?.subject = subject
-                } else {
-                    val title = "Web-платформа для создания интеллектуальных систем $i"
-                    suggestionTheme.theme?.title = title
-                    suggestionTheme.themeProgress?.title = title
-
-                    val subject = Subject()
-                    subject.id  = "$i"
-                    subject.name = "Интеллектуальные системы"
-                    suggestionTheme.themeProgress?.subject = subject
-                    suggestionTheme.status = WAITING_CURATOR
-                    suggestionTheme.themeProgress?.subject = subject
-                    suggestionTheme.theme?.subject = subject
-                }
-                suggestions.add(suggestionTheme)
-            }
-            student.suggestions = suggestions
-
-        } else {
-            suggestions = student.suggestions
+    override fun reloadList() {
+        if(suggestions.size > 0) {
+            presenter.loadSuggestions(userId)
         }
-        changeDataSet(suggestions)
+    }
 
-    }*/
 
     private fun initViews() {
         initRecycler()
@@ -171,8 +101,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
     }
 
     private fun setListeners() {
-        btn_add_theme.setOnClickListener(this)
-
+        btn_add_theme.visibility = View.GONE
     }
 
     override fun setNotLoading() {
@@ -191,7 +120,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
     }
 
 
-    override fun changeDataSet(tests: List<SuggestionTheme>) {
+    override fun changeDataSet(tests: List<Suggestion>) {
         adapter.changeDataSet(tests)
         hideLoading()
     }
@@ -207,28 +136,13 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
         rv_list.setEmptyView(tv_empty)
         adapter.attachToRecyclerView(rv_list)
         adapter.setOnItemClickListener(this)
-
-        rv_list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0 || dy < 0 && btn_add_theme.isShown())
-                    btn_add_theme.hide()
-            }
-
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    btn_add_theme.show()
-                }
-                super.onScrollStateChanged(recyclerView, newState)
-            }
-        })
     }
 
-    override fun onItemClick(item: SuggestionTheme) {
+    override fun onItemClick(item: Suggestion) {
         val args = Bundle()
         args.putString(THEME_KEY, gsonConverter.toJson(item))
         val fragment = SuggestionFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(TAB_THEMES, fragment, true)
+        mainListener.pushFragments(fragment, true)
     }
 
     override fun chooseUserFakeAction(pos: Int) {
@@ -277,7 +191,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
 
     }
 
-    private fun openFakeDialog(suggestionTheme: SuggestionTheme, listAction: MutableList<String>) {
+    private fun openFakeDialog(suggestion: Suggestion, listAction: MutableList<String>) {
         actionNumber = 0
         this.activity?.let {
             MaterialDialog.Builder(it)
@@ -296,7 +210,7 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
                     }
                     .onPositive { dialog, which ->
                         this.context?.let { it1 ->
-                            presenter.setFakeResponse(suggestionTheme, listAction[actionNumber], it1)
+                            presenter.setFakeResponse(suggestion, listAction[actionNumber], it1)
                         }
                     }
                     .show()
@@ -306,9 +220,9 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
 
     override fun findByQuery(query: String) {
         val pattern: Pattern = Pattern.compile("${query.toLowerCase()}.*")
-        val list: MutableList<SuggestionTheme> = java.util.ArrayList()
+        val list: MutableList<Suggestion> = java.util.ArrayList()
         for(skill in suggestions) {
-            if(pattern.matcher(skill.theme?.title?.toLowerCase()).matches()) {
+            if(pattern.matcher(skill.getCorrectTitle()?.toLowerCase()).matches()) {
                 list.add(skill)
             }
         }
@@ -319,10 +233,11 @@ class SuggestionListFragment : BaseFragment<SuggestionListPresenter>(), Suggesti
         when(view.id) {
 
             R.id.btn_add_theme -> {
+                mainListener.showLoading()
                 val args = Bundle()
                 args.putString(ID_KEY, userId)
                 val fragment = AddThemeFragment.newInstance(args, mainListener)
-                mainListener.pushFragments(TAB_THEMES, fragment, true)
+                mainListener.pushFragments(fragment, true)
             }
         }
     }

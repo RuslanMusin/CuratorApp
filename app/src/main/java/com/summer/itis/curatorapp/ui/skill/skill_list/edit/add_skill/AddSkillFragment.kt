@@ -55,6 +55,10 @@ class AddSkillFragment : BaseFragment<AddSkillPresenter>(), AddSkillView, View.O
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -69,44 +73,13 @@ class AddSkillFragment : BaseFragment<AddSkillPresenter>(), AddSkillView, View.O
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        loadSkills()
-    }
-
-    private fun loadSkills() {
-//        presenter.loadWorks(AppHelper.currentCurator.id)
-        this.activity?.let { skills = AppHelper.getSkillsList(it).toMutableList() }
-       /* var skill: Skill = Skill()
-
-        skill.name = "Java"
-        skill.id = "101"
-        skill.level = getString(R.string.medium_level)
-        skills.add(skill)
-
-        var level: Int
-        var levelStr: String = getString(R.string.low_level)
-        for(i in 1..10) {
-            skill = Skill()
-            skill.id = "$i"
-            if(i % 2 == 0) {
-                skill.level = getString(R.string.low_level)
-                skill.name = "Machine Learning $i"
-            } else {
-                skill.level = getString(R.string.high_level)
-                skill.name = "Android $i"
-            }
-            level = Random().nextInt(3)
-            this.activity?.let { levelStr = AppHelper.getLevelStr(level, it) }
-            skill.level = levelStr
-            skills.add(skill)
-        }*/
-
-        changeDataSet(skills)
     }
 
     private fun initViews() {
         setToolbarData()
         initRecycler()
         setListeners()
+        mainListener.hideLoading()
     }
 
     private fun setToolbarData() {

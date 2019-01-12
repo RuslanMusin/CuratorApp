@@ -2,7 +2,6 @@ package com.summer.itis.curatorapp.repository.work
 
 import com.summer.itis.curatorapp.api.services.WorkService
 import com.summer.itis.curatorapp.model.work.Work
-import com.summer.itis.curatorapp.repository.base.BaseRepositoryImpl
 import com.summer.itis.curatorapp.utils.RxUtils
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
@@ -32,5 +31,14 @@ class WorkRepositoryImpl(val apiService: WorkService): WorkRepository {
     override fun deleteCuratorWork(curatorId: String, workId: String): Single<Result<Work>> {
         return apiService.deleteCuratorWork(curatorId, workId).compose(RxUtils.asyncSingle())
     }
+
+    override fun findStudentWorks(studentId: String): Single<Result<List<Work>>> {
+        return apiService.findStudentWorks(studentId).compose(RxUtils.asyncSingle())
+    }
+
+    override fun findStudentWork(studentId: String, workId: String): Single<Result<Work>> {
+        return apiService.findStudentWork(studentId, workId).compose(RxUtils.asyncSingle())
+    }
+
 
 }

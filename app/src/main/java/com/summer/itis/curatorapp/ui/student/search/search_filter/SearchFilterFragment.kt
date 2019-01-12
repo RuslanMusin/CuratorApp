@@ -4,27 +4,34 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import com.afollestad.materialdialogs.MaterialDialog
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.google.gson.reflect.TypeToken
 import com.summer.itis.curatorapp.R
+import com.summer.itis.curatorapp.model.skill.Skill
 import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_THEMES
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.student.student_list.StudentAdapter
-import kotlinx.android.synthetic.main.fragment_search_filter.*
-import kotlinx.android.synthetic.main.toolbar_add_done.*
-import com.google.gson.reflect.TypeToken
-import com.summer.itis.curatorapp.model.skill.Skill
+import com.summer.itis.curatorapp.ui.student.search.choose_skill.ChooseAddSkillFragment
 import com.summer.itis.curatorapp.ui.student.search.choose_skill_main.ChooseSkillFragment
 import com.summer.itis.curatorapp.ui.student.search.edit_choose_skill.EditChooseLIstFragment
+import com.summer.itis.curatorapp.ui.student.student_list.StudentAdapter
+import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.ADD_SKILL
+import com.summer.itis.curatorapp.utils.Const.CHOOSE_SKILL
 import com.summer.itis.curatorapp.utils.Const.COURSE_KEY
 import com.summer.itis.curatorapp.utils.Const.EDIT_CHOOSED_SKILLS
 import com.summer.itis.curatorapp.utils.Const.FILTERS
 import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
+import kotlinx.android.synthetic.main.fragment_search_filter.*
+import kotlinx.android.synthetic.main.toolbar_back_done.*
 import java.util.*
 
 
@@ -45,14 +52,13 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
 
     private var selectedYears: MutableList<Int> = ArrayList()
 
+    private var imageViews: MutableList<ImageView> = ArrayList()
+    private var liViews: MutableList<LinearLayout> = ArrayList()
+    private lateinit var checkListener: View.OnClickListener
 
     companion object {
 
         const val TAG_SKILLS = "TAG_SKILLS"
-
-
-        const val ADD_COURSE = 3
-
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
             val fragment = SearchFilterFragment()
@@ -66,6 +72,10 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
             fragment.mainListener = navigationView
             return fragment
         }
+    }
+
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,30 +110,54 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
     private fun initViews() {
         setToolbarData()
         setListeners()
+        setData()
+    }
 
-        if(skills.size != 0) {
-            tv_added_skills.text = getSkillsText()
-        }
-        if(courses.size != 0) {
-            if(courses.size != 4) {
-                tv_added_courses.text = getCoursesText()
-            } else {
-                tv_added_courses.text = getString(R.string.doesnt_matter)
+    private fun setData() {
+        if(skills.size == 0) {
+            tv_added_skills.text = getString(R.string.doesnt_matter_for_all)
+        } else {
+            tv_added_skills.visibility = View.GONE
+            for (skill in skills) {
+                addSkillView(skill)
             }
         }
+        if(courses.size == 0) {
+            loadCourses()
+        }
+        if(courses.size != 4) {
+            tv_added_courses.text = getCoursesText()
+        } else {
+            tv_added_courses.text = getString(R.string.doesnt_matter)
+        }
+
     }
 
     private fun setToolbarData() {
-        mainListener.setToolbar(toolbar_add_done)
-        btn_add.visibility = View.GONE
+        mainListener.setToolbar(toolbar_back_done)
+        toolbar_title.text = getString(R.string.filter)
     }
 
     private fun setListeners() {
         btn_back.setOnClickListener(this)
         btn_ok.setOnClickListener(this)
-        btn_add_skill.setOnClickListener(this)
-        li_choose_course.setOnClickListener(this)
-        li_edit_skills.setOnClickListener(this)
+        tv_choose_course.setOnClickListener(this)
+        tv_add_skill.setOnClickListener(this)
+        checkListener = object: View.OnClickListener{
+            override fun onClick(v: View?) {
+                val ivRemove = v as ImageView
+                val index = imageViews.indexOf(ivRemove)
+                val liSkill = liViews[index]
+                li_added_skills.removeView(liSkill)
+                liViews.removeAt(index)
+                imageViews.removeAt(index)
+                skills.removeAt(index)
+
+                if(liViews.size == 0) {
+                    tv_added_skills.visibility = View.VISIBLE
+                }
+            }
+        }
     }
 
     override fun onClick(v: View) {
@@ -132,11 +166,9 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
 
             R.id.btn_back -> backFragment()
 
-            R.id.btn_add_skill -> addSkill()
+            R.id.tv_add_skill -> addSkill()
 
-            R.id.li_choose_course -> chooseCourse()
-
-            R.id.li_edit_skills -> editSkills()
+            R.id.tv_choose_course -> chooseCourse()
 
             R.id.btn_ok -> saveFilters()
         }
@@ -155,12 +187,14 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
     }
 
     private fun addSkill() {
-        val fragment = ChooseSkillFragment.newInstance(mainListener)
-        fragment.setTargetFragment(this, ADD_SKILL)
-        mainListener.showFragment(SHOW_THEMES, this, fragment)
+        val fragment = ChooseAddSkillFragment.newInstance(mainListener)
+        fragment.setTargetFragment(this, CHOOSE_SKILL)
+        mainListener.showFragment(this, fragment)
     }
 
     private fun chooseCourse() {
+        selectedYears.clear()
+        listCourses.clear()
         for(year in courses) {
             selectedYears.add((year - 1).toInt())
         }
@@ -169,12 +203,6 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
                 .title(R.string.choose_course)
                 .items(R.array.courses)
                 .itemsCallbackMultiChoice(selectedYears.toTypedArray(), { dialog, which, text ->
-                    /**
-                     * If you use alwaysCallMultiChoiceCallback(), which is discussed below,
-                     * returning false here won't allow the newly selected check box to actually be selected
-                     * (or the newly unselected check box to be unchecked).
-                     * See the limited multi choice dialog example in the sample project for details.
-                     */
                     listCourses = (text.toList() as List<String>).toMutableList()
                     tv_added_courses.text = getListString(listCourses)
                     if(courses.size != 0) {
@@ -185,26 +213,16 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
                     for(i in which.indices) {
                         courses.add((which[i] + 1).toLong())
                     }
-
+                    if(courses.size == 0) {
+                        loadCourses()
+                    }
                     if(courses.size == 4) {
                         tv_added_courses.text = getString(R.string.doesnt_matter)
                     }
-//                    mainListener.showSnackBar(getListString(listCourses))
                     true
                 })
                 .positiveText(R.string.choose)
                 .show()
-        }
-    }
-
-    private fun editSkills() {
-        if(!tv_added_skills.text.equals(getString(R.string.doesnt_matter_for_all))) {
-            val args = Bundle()
-            val listJson = gsonConverter.toJson(skills)
-            args.putString(SKILL_KEY, listJson)
-            val fragment = EditChooseLIstFragment.newInstance(args, mainListener)
-            fragment.setTargetFragment(this, EDIT_CHOOSED_SKILLS)
-            mainListener.showFragment(SHOW_THEMES, this, fragment)
         }
     }
 
@@ -215,30 +233,16 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
 
             when(reqCode) {
 
-                ADD_SKILL -> {
+                CHOOSE_SKILL -> {
                     data?.let {
                         val skillJson = it.getStringExtra(SKILL_KEY)
                         val skill = gsonConverter.fromJson(skillJson, Skill::class.java)
-                        skills.add(skill)
-                        val skillText = skill.name
-                        listSkills.add(skillText)
-                        tv_added_skills.text = getListString(listSkills)
-                    }
-                }
-
-                EDIT_CHOOSED_SKILLS -> {
-                    data?.let {
-                        val founderListType = object : TypeToken<ArrayList<Skill>>() { }.type
-                        val skillsJson = it.getStringExtra(SKILL_KEY)
-                        skills = gsonConverter.fromJson(skillsJson, founderListType)
-                        listSkills.clear()
-                        if(skills.size == 0) {
-                            tv_added_skills.text = getString(R.string.doesnt_matter_for_all)
-                        } else {
-                            for (i in listSkills.indices) {
-                                listSkills[i] = skills[i].name
+                        if(!skills.contains(skill)) {
+                            skills.add(skill)
+                            if (liViews.size == 0) {
+                                tv_added_skills.visibility = View.GONE
                             }
-                            tv_added_skills.text = getListString(listSkills)
+                            addSkillView(skill)
                         }
                     }
                 }
@@ -246,8 +250,21 @@ class SearchFilterFragment : BaseFragment<SearchFilterPresenter>(), SearchFilter
         }
     }
 
+    private fun addSkillView(skill: Skill) {
+        val view: View = layoutInflater.inflate(R.layout.item_skill_clear_margin_off, li_added_skills,false)
+        val ivRemoveSkill: ImageView = view.findViewById(R.id.iv_remove_skill)
+        val tvAddedSkill: TextView = view.findViewById(R.id.tv_added_skill_name)
+
+        ivRemoveSkill.setOnClickListener(checkListener)
+        tvAddedSkill.text = skill.name
+        imageViews.add(ivRemoveSkill)
+        liViews.add(view as LinearLayout)
+
+        li_added_skills.addView(view)
+    }
+
     private fun getListString(list: List<String>): String {
-        var listString: String = ""
+        var listString = ""
         for((i,item) in list.withIndex()) {
             listString += item
             if(i != list.lastIndex) {

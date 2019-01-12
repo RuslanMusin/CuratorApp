@@ -1,11 +1,9 @@
 package com.summer.itis.curatorapp.model.user
 
-class Curator: Person {
+class Curator: User {
 
-    constructor() {}
+    constructor()
 
-    constructor(email: String, username: String) {
-        this.email = email
-        this.name = username
-    }
+    constructor(email: String, password: String): super(email, password)
+
 }

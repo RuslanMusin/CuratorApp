@@ -24,30 +24,34 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/li_top"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                    android:id="@+id/li_title"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin.normal"
+                    android:layout_marginBottom="@dimen/margin.normal"
+            >
 
                 <TextView
-                    android:id="@+id/tv_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="@dimen/large_intrinsic_padding"
-                    android:paddingTop="@dimen/intrinsic_padding"
-                    android:text="@string/test_name"
-                    android:textColor="@color/primary_text"
-                    android:textSize="@dimen/text.20"
-                    android:textStyle="bold"
-                    />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/theme_name"
+                        android:textColor="@color/primary_text"
+                        android:textSize="@dimen/text.16" />
+
+                <TextView
+                        android:id="@+id/tv_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin.small"
+                        android:textColor="@color/secondary_text"
+                        android:textSize="@dimen/text.14"
+                        android:text="@string/theme_name"
+                />
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@android:color/darker_gray"/>
+            <include layout="@layout/layout_divider"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -58,12 +62,14 @@
                     android:id="@+id/li_curator"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin.normal"
+                    android:layout_marginBottom="@dimen/margin.normal"
+                >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin.normal"
                         android:text="@string/curator"
                         android:textColor="@color/primary_text"
                         android:textSize="@dimen/text.16" />
@@ -85,13 +91,15 @@
                     android:id="@+id/li_student"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin.normal"
+                    android:layout_marginBottom="@dimen/margin.normal"
+                >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin.normal"
-                        android:text="@string/student_name"
+                        android:text="@string/student"
                         android:textColor="@color/primary_text"
                         android:textSize="@dimen/text.16" />
 
@@ -112,12 +120,14 @@
                     android:id="@+id/li_subject"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin.normal"
+                    android:layout_marginBottom="@dimen/margin.normal"
+                >
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin.normal"
                         android:text="@string/subject"
                         android:textColor="@color/primary_text"
                         android:textSize="@dimen/text.16" />
@@ -135,10 +145,18 @@
 
                 <include layout="@layout/layout_divider"/>
 
+                <LinearLayout
+                    android:id="@+id/li_status"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin.normal"
+                    android:layout_marginBottom="@dimen/margin.normal"
+                >
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin.normal"
                     android:text="@string/theme_status"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/text.16" />
@@ -152,69 +170,37 @@
                     android:textSize="@dimen/text.14"
                     tools:text="Authors" />
 
-                <include layout="@layout/layout_divider"/>
-
-
-                <LinearLayout
-                    android:id="@+id/li_skills"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin.normal"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/skills"
-                        android:textColor="@color/primary_text"
-                        android:textSize="@dimen/text.16" />
-
-                    <com.ms.square.android.expandabletextview.ExpandableTextView
-                        xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/tv_skills"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        expandableTextView:maxCollapsedLines="4"
-                        expandableTextView:animDuration="200">
-                        <TextView
-                            android:id="@id/expandable_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="0dp"
-                            android:layout_marginEnd="10dp"
-                            android:textSize="16sp"
-                            android:textColor="#000000" />
-                        <ImageButton
-                            android:id="@id/expand_collapse"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:padding="8dp"
-                            android:layout_gravity="right|bottom"
-                            android:background="@android:color/transparent"/>
-                    </com.ms.square.android.expandabletextview.ExpandableTextView>
-
-                    <include layout="@layout/layout_divider"/>
-
                 </LinearLayout>
 
+                <include layout="@layout/layout_divider"/>
 
                 <LinearLayout
                     android:id="@+id/li_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin.normal"
+                    android:layout_marginBottom="@dimen/margin.normal"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv_desc_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/desc"
-                        android:textColor="@color/primary_text"
-                        android:textSize="@dimen/text.16" />
+                            android:id="@+id/tv_desc_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/desc"
+                            android:textColor="@color/primary_text"
+                            android:textSize="@dimen/text.16" />
 
-                    <include layout="@layout/layout_expandable_text_view"/>
+                    <TextView
+                            android:id="@+id/tv_desc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin.small"
+                            android:textColor="@color/secondary_text"
+                            android:textSize="@dimen/text.14"
+                            android:text="@string/desc"
+                    />
+
+                    <!--<include layout="@layout/layout_expandable_text_view"/>-->
 
                 </LinearLayout>
 
@@ -259,7 +245,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin.normal"
-                android:text="@string/comments"
+                android:layout_marginBottom="@dimen/margin.normal"                android:text="@string/comments"
                 android:textColor="@color/primary_text"
                 android:textSize="@dimen/text.16" />
 

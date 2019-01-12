@@ -11,13 +11,14 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.DescriptionFragment.Companion.EDIT_DESC
+import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.CuratorDescFragment.Companion.EDIT_DESC
 import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.AppHelper.Companion.setMultiline
 import com.summer.itis.curatorapp.utils.Const.DESC_KEY
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.TYPE
 import kotlinx.android.synthetic.main.fragment_change_description.*
-import kotlinx.android.synthetic.main.toolbar_edit.*
+import kotlinx.android.synthetic.main.toolbar_back_done.*
 
 class ChangeDescFragment : BaseFragment<ChangeDescPresenter>(), ChangeDescView, View.OnClickListener {
 
@@ -47,6 +48,10 @@ class ChangeDescFragment : BaseFragment<ChangeDescPresenter>(), ChangeDescView, 
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -70,15 +75,17 @@ class ChangeDescFragment : BaseFragment<ChangeDescPresenter>(), ChangeDescView, 
         setToolbarData()
         setListeners()
         setUserData()
+        setEditText()
+        mainListener.hideLoading()
+    }
+
+    private fun setEditText() {
+        setMultiline(et_description)
     }
 
     private fun setToolbarData() {
-        mainListener.setToolbar(toolbar_edit)
-        btn_edit.visibility = View.GONE
-        btn_ok.visibility = View.VISIBLE
-        btn_back.visibility = View.VISIBLE
-        toolbar_edit.title = getString(R.string.desc)
-
+        mainListener.setToolbar(toolbar_back_done)
+        toolbar_title.text = getString(R.string.edit_desc)
     }
 
     private fun setListeners() {
@@ -104,8 +111,6 @@ class ChangeDescFragment : BaseFragment<ChangeDescPresenter>(), ChangeDescView, 
         description = et_description.text.toString()
         AppHelper.currentCurator.description = description
         presenter.saveCuratorDesc(AppHelper.currentCurator)
-       /* presenter.saveDescription(description, type, id)
-        mainListener.hideFragment()*/
     }
 
     override fun showChanges() {

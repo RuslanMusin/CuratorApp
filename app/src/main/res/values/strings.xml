@@ -61,7 +61,7 @@
     <string name="lender_name">Lender name</string>
     <string name="debtor_name">Debtor name</string>
 
-    <string name="loading">Loading…</string>
+    <string name="loading">Загрузка…</string>
     <string name="change_data">Изменить данные</string>
     <string name="photo">Фото</string>
 
@@ -123,7 +123,7 @@
     <string name="duration_hours_shortest">%1$d h</string>
     <string name="duration_days_shortest">%1$d d</string>
     <string name="duration_week_shortest">%1$d w</string>
-    <string name="comments">Comments</string>
+    <string name="comments">Комментарии</string>
 
     <string name="text_take_photo">Take photo</string>
     <string name="text_pick_photo">Pick from Gallery</string>
@@ -332,7 +332,7 @@
     <string name="accept_theme">Принять тему</string>
     <string name="theme_status">Статус</string>
     <string name="subject">Область</string>
-    <string name="student_name">Студент</string>
+    <string name="student">Студент</string>
     <string name="curator">Куратор</string>
     <string name="suggestions">Предложения</string>
     <string name="my_themes">Мои темы</string>
@@ -361,8 +361,8 @@
     <string name="status_new">Новая</string>
     <string name="change_suggestion">Изменение предложения</string>
     <string name="should_send_theme">Хотите предложить тему?</string>
-    <string name="send_theme_content">При нажатии на OK вам нужно будет выбрать студента, которому вы хотите предложить этут тему</string>
-    <string name="theme_suggestions_will_be_changed">После редактирования темы все прошлые предложеия по ней будут изменены</string>
+    <string name="send_theme_content">При нажатии на OK вам нужно будет выбрать студента, которому вы хотите предложить эту тему</string>
+    <string name="theme_suggestions_will_be_changed">После редактирования темы все прошлые предложения по ней будут изменены</string>
     <string name="should_edit_theme">Хотите внести изменения ?</string>
     <string name="changes_updated">Изменения успешно сохранены</string>
     <string name="suggestion_was_sended">Предложение было отправлено</string>
@@ -399,6 +399,34 @@
     <string name="step">Шаг курсовой</string>
     <string name="connection_reset">Ошибка подключения к серверу. Попробуйте переподключиться</string>
     <string name="server_reset">Ошибка подключения</string>
+
+    <string name="group_course">%1$s , %2$d курс</string>
+    <string name="add_step">Добавление шага</string>
+    <string name="filter">Фильтр</string>
+    <string name="add_theme">Добавление темы</string>
+    <string name="subjects">Предметы</string>
+    <string name="edit_theme">Редактирование темы</string>
+    <string name="edit_profile">Изменение профиля</string>
+    <string name="edit_desc">Изменение описания</string>
+
+    <string name="failedPostTheme">Ошибка сервера.Не удалось добавить тему.Попробуйте заново</string>
+    <string name="failedPostSuggestion">Ошибка сервера.Не удалось добавить предложение.Попробуйте добавить заново</string>
+    <string name="failed_save_curator_desc">Ошибка сервера.Не удалось изменить описание куратора</string>
+    <string name="failed_post_comment">Ошибка сервера.Не удалось добавить комментарий.Попробуйте заново</string>
+    <string name="failed_logout">Ошибка сервера.Не удалось выйте из аккаунта.Попробуйте заново</string>
+    <string name="failed_update_curator">Ошибка сервера.Не удалось обновить куратора. Попробуйте заново</string>
+    <string name="failed_update_suggestion">Ошибка сервера.Не удалось обновить предлжение.Попробуйте заново</string>
+    <string name="failed_update_theme">Ошибка сервера.Не удалось обновить тему.Попробуйте заноов</string>
+    <string name="failed_post_suggestion">Ошибка сервера.Не удалось добавить предложение.Попробуйте заново</string>
+    <string name="failed_load_fake_students">Ошибка сервера.Не удалось загрузить студентов.Попробуйте перезайти на страницу</string>
+    <string name="failed_update_status">Ошибка сервера.Не удалось изменить статус.Попробуйте заново</string>
+    <string name="failed_post_material">Ошибка сервера.Не удалось добавить материал</string>
+    <string name="failed_add_step">Ошибка сервера.Не удалось добавить шаг.Попробуйте заново</string>
+    <string name="failed_update_skills">Ошибка сервера.Не удалось обновить компетенции.Попробуйте заново</string>
+    <string name="failed_load_comments">Ошибка сервера.Не удалось загрузить комментарии.Попробуйте заново</string>
+    <string name="failed_update_step">Ошибка сервера.Не удалось обновить шаг курсовой.Попробуйте заново</string>
+    <string name="failed_change_step_status">Ошибка сервера.Не удалось изменить статус шага.Попробуйте заново</string>
+    <string name="failed_send_suggestion">Ошибка сервера.Не удалось отправить предложение</string>
 
 
     <string-array name="courses">

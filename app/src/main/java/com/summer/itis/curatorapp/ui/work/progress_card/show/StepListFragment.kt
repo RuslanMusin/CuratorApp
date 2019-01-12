@@ -1,43 +1,36 @@
-package com.summer.itis.curatorapp.ui.work.progress_card
+package com.summer.itis.curatorapp.ui.work.progress_card.show
 
 import android.app.Activity
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.SearchView
-import android.view.*
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.step.Step
-import com.summer.itis.curatorapp.model.work.Work
+import com.summer.itis.curatorapp.model.theme.Status
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.work.work_item.WorkFragment
 import com.summer.itis.curatorapp.ui.work.work_step.add_step.AddStepFragment
 import com.summer.itis.curatorapp.ui.work.work_step.step.StepFragment
-import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const
-import com.summer.itis.curatorapp.utils.Const.CURATOR_TYPE
-import com.summer.itis.curatorapp.utils.Const.ID_KEY
 import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
-import com.summer.itis.curatorapp.utils.Const.PERSON_TYPE
-import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
-import com.summer.itis.curatorapp.utils.Const.TAB_NAME
+import com.summer.itis.curatorapp.utils.Const.STEP_KEY
+import com.summer.itis.curatorapp.utils.Const.TAG_LOG
 import com.summer.itis.curatorapp.utils.Const.TYPE
-import com.summer.itis.curatorapp.utils.Const.USER_KEY
 import com.summer.itis.curatorapp.utils.Const.WATCHER_TYPE
 import com.summer.itis.curatorapp.utils.Const.WORK_KEY
-import com.summer.itis.curatorapp.utils.FormatterUtil
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.layout_recycler_list.*
 import kotlinx.android.synthetic.main.toolbar_add.*
 import java.util.*
-import java.util.regex.Pattern
 
-class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.OnClickListener {
+class StepListFragment : BaseFragment<StepListPresenter>(),
+    StepListView, View.OnClickListener {
 
-    lateinit var tabName: String
     lateinit var workId: String
     var type: String = OWNER_TYPE
     lateinit override var mainListener: NavigationView
@@ -49,10 +42,6 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
     lateinit var presenter: StepListPresenter
 
     companion object {
-
-        const val TAG_SKILLS = "TAG_SKILLS"
-
-        const val EDIT_SKILLS = 1
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
             val fragment = StepListFragment()
@@ -68,11 +57,14 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         arguments?.let {
-            tabName = it.getString(TAB_NAME)
             workId = it.getString(WORK_KEY)
             type = it.getString(TYPE)
         }
@@ -87,12 +79,12 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
         super.onViewCreated(view, savedInstanceState)
         initViews()
         presenter.loadSteps(workId)
-//        loadSkills()
     }
 
     override fun showSteps(steps: List<Step>) {
         this.steps = steps.toMutableList()
         changeDataSet(this.steps)
+        mainListener.hideLoading()
     }
 
     private fun initViews() {
@@ -108,11 +100,7 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
     }
 
     private fun setListeners() {
-        if(type.equals(WATCHER_TYPE)) {
-            btn_add.visibility = View.GONE
-        } else {
-            btn_add.setOnClickListener(this)
-        }
+        btn_add.setOnClickListener(this)
         btn_back.setOnClickListener(this)
     }
 
@@ -142,7 +130,7 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
     }
 
     private fun initRecycler() {
-        adapter = StepAdapter(ArrayList())
+        adapter = StepAdapter(ArrayList(), this)
         val manager = LinearLayoutManager(activity as Activity)
         rv_list.layoutManager = manager
         rv_list.setEmptyView(tv_empty)
@@ -151,11 +139,14 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
     }
 
     override fun onItemClick(item: Step) {
-        val args = Bundle()
-        args.putString(WORK_KEY, workId)
-        args.putString(Const.STEP_KEY, item.id)
-        val fragment = StepFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(tabName, fragment, true)
+        if(type.equals(OWNER_TYPE)) {
+            mainListener.showLoading()
+            val args = Bundle()
+            args.putString(WORK_KEY, workId)
+            args.putString(STEP_KEY, item.id)
+            val fragment = StepFragment.newInstance(args, mainListener)
+            mainListener.pushFragments(fragment, true)
+        }
     }
 
     override fun onClick(v: View) {
@@ -169,10 +160,17 @@ class StepListFragment : BaseFragment<StepListPresenter>(), StepListView, View.O
     }
 
     private fun addStep() {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(Const.ID_KEY, workId)
         val fragment = AddStepFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(NavigationBaseActivity.TAB_WORKS, fragment, true)
+        mainListener.pushFragments(fragment, true)
+    }
+
+    override fun changeStatus(pos: Int, status: Status) {
+        val step = steps[pos]
+        Log.d(TAG_LOG, "step status = ${step.status.id} and status = ${status.id}")
+        presenter.changeStatus(workId, step)
     }
 
 }

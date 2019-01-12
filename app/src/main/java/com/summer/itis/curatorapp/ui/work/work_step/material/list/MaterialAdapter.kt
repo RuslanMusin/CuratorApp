@@ -2,9 +2,7 @@ package com.summer.itis.curatorapp.ui.work.work_step.material.list
 
 import android.view.ViewGroup
 import com.summer.itis.curatorapp.model.material.Material
-import com.summer.itis.curatorapp.model.skill.Skill
 import com.summer.itis.curatorapp.ui.base.base_first.BaseAdapter
-import com.summer.itis.curatorapp.ui.skill.skill_list.view.SkillItemHolder
 
 class MaterialAdapter(items: MutableList<Material>) : BaseAdapter<Material, MaterialItemHolder>(items) {
 

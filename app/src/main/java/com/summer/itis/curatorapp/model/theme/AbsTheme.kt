@@ -1,9 +1,9 @@
 package com.summer.itis.curatorapp.model.theme
 
 import com.google.gson.annotations.SerializedName
+import com.summer.itis.curatorapp.model.common.Identified
 import com.summer.itis.curatorapp.model.skill.Skill
 import com.summer.itis.curatorapp.model.skill.Subject
-import com.summer.itis.curatorapp.model.common.Identified
 import java.util.*
 
 abstract class AbsTheme: Identified {

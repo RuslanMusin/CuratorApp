@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               xmlns:tools="http://schemas.android.com/tools"
@@ -8,60 +7,95 @@
               android:layout_marginTop="8dp"
 >
 
-    <LinearLayout
-            android:id="@+id/li_title"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:layout_marginBottom="8dp">
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="horizontal"
+    >
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin.normal"
-                android:text="@string/title"
-                android:textColor="@color/primary_text"
-                android:textSize="@dimen/text.16" />
 
-        <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
+
+    <LinearLayout android:layout_width="0dp"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:layout_weight="3"
+    >
+
+        <LinearLayout
+                android:id="@+id/li_title"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin.small"
-                android:textColor="@color/secondary_text"
-                android:textSize="@dimen/text.14"
-                tools:text="Authors" />
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_marginBottom="8dp">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin.normal"
+                    android:text="@string/title"
+                    android:textColor="@color/primary_text"
+                    android:textSize="@dimen/text.16" />
+
+            <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin.small"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="@dimen/text.14"
+                    tools:text="Authors" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+                android:id="@+id/li_date"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:layout_marginBottom="8dp">
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin.normal"
+                    android:text="@string/date"
+                    android:textColor="@color/primary_text"
+                    android:textSize="@dimen/text.16" />
+
+            <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin.small"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="@dimen/text.14"
+                    tools:text="Authors" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
+        <LinearLayout android:layout_width="wrap_content"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical"
+                      android:layout_marginEnd="@dimen/margin.large"
+                      android:gravity="center"
+        >
 
-    <LinearLayout
-            android:id="@+id/li_date"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:layout_marginBottom="8dp">
+            <ImageView android:id="@+id/iv_check_status"
+                    android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:src="@drawable/ic_radio_button_unchecked_black_24dp"
 
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin.normal"
-                android:text="@string/date"
-                android:textColor="@color/primary_text"
-                android:textSize="@dimen/text.16" />
+            />
 
-        <TextView
-                android:id="@+id/tv_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin.small"
-                android:textColor="@color/secondary_text"
-                android:textSize="@dimen/text.14"
-                tools:text="Authors" />
+        </LinearLayout>
 
     </LinearLayout>
 

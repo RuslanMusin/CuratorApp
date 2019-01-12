@@ -9,9 +9,10 @@ import android.util.Log
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
+import com.summer.itis.curatorapp.ui.base.base_custom.SearchListener
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.base.base_custom.SearchListener
+import com.summer.itis.curatorapp.ui.theme.theme_list.tab_fragment.ReloadableListView
 import com.summer.itis.curatorapp.ui.theme.theme_list.tab_fragment.my_theme_list.MyThemeListFragment
 import com.summer.itis.curatorapp.ui.theme.theme_list.tab_fragment.suggestion_list.SuggestionListFragment
 import com.summer.itis.curatorapp.utils.AppHelper
@@ -53,6 +54,10 @@ class ThemeListFragment : BaseFragment<ThemeListPresenter>(), ThemeListView {
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -75,6 +80,7 @@ class ThemeListFragment : BaseFragment<ThemeListPresenter>(), ThemeListView {
         tab_layout.setupWithViewPager(viewpager)
         viewpager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tab_layout))
         setTabListener()
+        mainListener.hideLoading()
     }
 
     private fun setTabListener() {
@@ -82,7 +88,7 @@ class ThemeListFragment : BaseFragment<ThemeListPresenter>(), ThemeListView {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 Log.d(TAG_LOG, "on tab selected")
                 viewpager.currentItem = tab.position
-//                this@TestListActivity.changeAdapter(tab.position)
+                (fragments[tab.position] as ReloadableListView).reloadList()
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
@@ -95,11 +101,6 @@ class ThemeListFragment : BaseFragment<ThemeListPresenter>(), ThemeListView {
         })
     }
 
-   /* override fun changeAdapter(position: Int) {
-        val fragment = (viewpager.adapter as FragViewPagerAdapter<*>).getFragmentForChange(position)
-        (fragment as TestListFragment).changeDataInAdapter()
-    }
-*/
 
     private fun setupViewPager(viewPager: ViewPager) {
         val adapter = FragViewPagerAdapter(childFragmentManager)
@@ -146,30 +147,4 @@ class ThemeListFragment : BaseFragment<ThemeListPresenter>(), ThemeListView {
 
     }
 
-    override fun onDestroyView() {
-//        tab_layout.visibility = View.GONE
-        super.onDestroyView()
-
-    }
-
-
-   /* private fun findFromList(query: String) {
-        val pattern: Pattern = Pattern.compile("${query.toLowerCase()}.*")
-        val list: MutableList<Skill> = java.util.ArrayList()
-        for(skill in steps) {
-            if(pattern.matcher(skill.name.toLowerCase()).matches()) {
-                list.add(skill)
-            }
-        }
-        changeDataSet(list)
-    }*/
-
-   /* override fun setCurrentType(type: String) {
-        Log.d(TAG_LOG, "current type = $type")
-        this.currentType = type
-    }
-
-    fun getCurrentType(): String? {
-        return currentType
-    }*/
 }

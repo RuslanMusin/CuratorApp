@@ -12,10 +12,8 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.material.Material
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.curator.curator_item.description.edit.ChangeDescPresenter
-import com.summer.itis.curatorapp.ui.curator.curator_item.description.edit.ChangeDescView
-import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.DescriptionFragment
 import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.AppHelper.Companion.setMultiline
 import com.summer.itis.curatorapp.utils.Const
 import com.summer.itis.curatorapp.utils.Const.ADD_MATERIAL
 import com.summer.itis.curatorapp.utils.Const.MATERIAL_KEY
@@ -51,6 +49,10 @@ class AddMaterialFragment : BaseFragment<AddMaterialPresenter>(), AddMaterialVie
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         material = Material()
@@ -74,6 +76,11 @@ class AddMaterialFragment : BaseFragment<AddMaterialPresenter>(), AddMaterialVie
     fun initViews() {
         setToolbarData()
         setListeners()
+        setEditText()
+    }
+
+    private fun setEditText() {
+        setMultiline(et_description)
     }
 
     private fun setToolbarData() {
@@ -98,7 +105,7 @@ class AddMaterialFragment : BaseFragment<AddMaterialPresenter>(), AddMaterialVie
 
     private fun changeData() {
         material.content = et_description.text.toString()
-        presenter.postMaterial(AppHelper.currentCurator.id, stepId, workId, material)
+        presenter.postMaterial(AppHelper.currentCurator.id, workId, stepId, material)
     }
 
     override fun showChanges(material: Material) {

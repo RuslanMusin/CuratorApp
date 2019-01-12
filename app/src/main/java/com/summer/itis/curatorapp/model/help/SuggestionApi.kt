@@ -2,7 +2,7 @@ package com.summer.itis.curatorapp.model.help
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
+import com.summer.itis.curatorapp.model.theme.Suggestion
 import java.util.*
 
 
@@ -25,7 +25,7 @@ class SuggestionApi {
 
     constructor()
 
-    constructor(suggestion: SuggestionTheme) {
+    constructor(suggestion: Suggestion) {
         this.id = suggestion.id
         this.curatorId = suggestion.curator?.id
         this.studentId = suggestion.student?.id

@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
-                xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -32,12 +31,14 @@
                         android:id="@+id/li_title"
                         android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin.normal"
+                        android:layout_marginBottom="@dimen/margin.normal"
+                >
 
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin.normal"
                             android:text="@string/title"
                             android:textColor="@color/primary_text"
                             android:textSize="@dimen/text.16" />
@@ -59,12 +60,14 @@
                         android:id="@+id/li_date_start"
                         android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin.normal"
+                        android:layout_marginBottom="@dimen/margin.normal"
+                >
 
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin.normal"
                             android:text="@string/date_start"
                             android:textColor="@color/primary_text"
                             android:textSize="@dimen/text.16" />
@@ -86,12 +89,14 @@
                         android:id="@+id/li_date_finish"
                         android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/margin.normal"
+                        android:layout_marginBottom="@dimen/margin.normal"
+                >
 
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/margin.normal"
                             android:text="@string/date_finish"
                             android:textColor="@color/primary_text"
                             android:textSize="@dimen/text.16" />
@@ -114,6 +119,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin.normal"
+                        android:layout_marginBottom="@dimen/margin.normal"
                         android:orientation="vertical">
 
                     <TextView
@@ -124,7 +130,15 @@
                             android:textColor="@color/primary_text"
                             android:textSize="@dimen/text.16" />
 
-                    <include layout="@layout/layout_expandable_text_view"/>
+                    <TextView
+                            android:id="@+id/tv_desc"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/margin.small"
+                            android:textColor="@color/secondary_text"
+                            android:textSize="@dimen/text.14"
+                            android:text="@string/desc"
+                    />
 
                 </LinearLayout>
 
@@ -135,6 +149,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/margin.normal"
+                        android:layout_marginBottom="@dimen/margin.normal"
                         android:orientation="vertical">
 
                     <TextView
@@ -158,6 +173,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin.normal"
+                    android:layout_marginBottom="@dimen/margin.normal"
                     android:text="@string/comments"
                     android:textColor="@color/primary_text"
                     android:textSize="@dimen/text.16" />

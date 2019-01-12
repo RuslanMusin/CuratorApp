@@ -14,16 +14,13 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.skill.Skill
 import com.summer.itis.curatorapp.model.skill.Subject
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
+import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.model.theme.Theme
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_THEMES
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.student.search.choose_skill.ChooseAddSkillFragment
-import com.summer.itis.curatorapp.ui.student.search.choose_skill_main.ChooseSkillFragment
+import com.summer.itis.curatorapp.utils.AppHelper.Companion.setMultiline
 import com.summer.itis.curatorapp.utils.Const
-import com.summer.itis.curatorapp.utils.Const.ADD_SKILL
 import com.summer.itis.curatorapp.utils.Const.ADD_THEME_TYPE
 import com.summer.itis.curatorapp.utils.Const.ALL_CHOOSED
 import com.summer.itis.curatorapp.utils.Const.CHOOSE_SKILL
@@ -31,6 +28,7 @@ import com.summer.itis.curatorapp.utils.Const.EDIT_SUGGESTION
 import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
 import com.summer.itis.curatorapp.utils.Const.THEME_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
+import kotlinx.android.synthetic.main.fragment_add_material.*
 import kotlinx.android.synthetic.main.fragment_edit_theme.*
 import kotlinx.android.synthetic.main.toolbar_back_done.*
 import java.util.*
@@ -38,7 +36,7 @@ import java.util.*
 class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, View.OnClickListener {
 
     private lateinit var theme: Theme
-    private var suggestionTheme: SuggestionTheme? = null
+    private var suggestion: Suggestion? = null
 
     private var type = ADD_THEME_TYPE
 
@@ -62,8 +60,6 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
 
     companion object {
 
-        const val ADD_SUBJECT: Int = 1
-
         fun newInstance(args: Bundle, mainListener: NavigationView): Fragment {
             val fragment = EditThemeFragment()
             fragment.arguments = args
@@ -76,6 +72,10 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
             fragment.mainListener = mainListener
             return fragment
         }
+    }
+
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,7 +98,14 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
     private fun initViews() {
         setToolbarData()
         setListeners()
+        setEditText()
         setThemeData()
+        mainListener.hideLoading()
+    }
+
+    private fun setEditText() {
+        setMultiline(et_theme_name)
+        setMultiline(et_theme_desc)
     }
 
     private fun setThemeData() {
@@ -116,12 +123,11 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
                 addSkillView(skill)
             }
         }
-
-//        tv_added_skills.content = getSkillsText()
     }
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_back_done)
+        toolbar_title.text = getString(R.string.edit_theme)
     }
 
     private fun setListeners() {
@@ -148,7 +154,7 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
     }
 
     private fun addSkillView(skill: Skill) {
-        val view: View = layoutInflater.inflate(R.layout.item_skill_clear, li_added_skills,false)
+        val view: View = layoutInflater.inflate(R.layout.item_skill_clear_margin_off, li_added_skills,false)
         val ivRemoveSkill: ImageView = view.findViewById(R.id.iv_remove_skill)
         val tvAddedSkill: TextView = view.findViewById(R.id.tv_added_skill_name)
 
@@ -182,12 +188,10 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
     }
 
     private fun addSkill() {
-        /*val fragment = ChooseSkillFragment.newInstance(mainListener)
-        fragment.setTargetFragment(this, ADD_SKILL)
-        mainListener.showFragment(SHOW_THEMES, this, fragment)*/
+        mainListener.showLoading()
         val fragment = ChooseAddSkillFragment.newInstance(mainListener)
         fragment.setTargetFragment(this, Const.CHOOSE_SKILL)
-        mainListener.showFragment(NavigationBaseActivity.SHOW_PROFILE, this, fragment)
+        mainListener.showFragment(this, fragment)
     }
 
     override fun returnEditResult(intent: Intent?) {
@@ -206,9 +210,6 @@ class EditThemeFragment : BaseFragment<EditThemePresenter>(), EditThemeView, Vie
                         val skillJson = it.getStringExtra(SKILL_KEY)
                         val skill = gsonConverter.fromJson(skillJson, Skill::class.java)
                         skills.add(skill)
-                        /*val skillText = "${skill.name} ${getString(R.string.level)} ${skill.level}"
-                        listSkills.add(skillText)
-                        tv_added_skills.content = getListString(listSkills)*/
                         tv_added_skills.visibility = View.GONE
                         addSkillView(skill)
                     }

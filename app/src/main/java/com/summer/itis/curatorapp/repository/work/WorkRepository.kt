@@ -1,9 +1,6 @@
 package com.summer.itis.curatorapp.repository.work
 
-import com.summer.itis.curatorapp.model.comment.Comment
-import com.summer.itis.curatorapp.model.step.Step
 import com.summer.itis.curatorapp.model.work.Work
-import com.summer.itis.curatorapp.repository.base.BaseRepository
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
 
@@ -17,5 +14,7 @@ interface WorkRepository {
     fun updateCuratorWork(curatorId: String, work: Work): Single<Result<Work>>
     fun deleteCuratorWork(curatorId: String, workId: String): Single<Result<Work>>
 
+    fun findStudentWorks(studentId: String): Single<Result<List<Work>>>
+    fun findStudentWork(studentId: String, workId: String): Single<Result<Work>>
 
 }

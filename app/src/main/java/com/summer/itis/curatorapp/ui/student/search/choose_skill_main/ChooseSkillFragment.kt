@@ -13,7 +13,6 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.skill.Skill
 import com.summer.itis.curatorapp.model.user.Student
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_THEMES
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.student.search.choose_skill.ChooseAddSkillFragment
 import com.summer.itis.curatorapp.ui.student.student_list.StudentAdapter
@@ -57,6 +56,10 @@ class ChooseSkillFragment : BaseFragment<ChooseSkillMainPresenter>(), ChooseSkil
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -75,6 +78,7 @@ class ChooseSkillFragment : BaseFragment<ChooseSkillMainPresenter>(), ChooseSkil
     private fun initViews() {
         setToolbarData()
         setListeners()
+        mainListener.hideLoading()
     }
 
     private fun setToolbarData() {
@@ -84,17 +88,11 @@ class ChooseSkillFragment : BaseFragment<ChooseSkillMainPresenter>(), ChooseSkil
     private fun setListeners() {
         btn_cancel.setOnClickListener(this)
         btn_ok.setOnClickListener(this)
-      /*  spinner_skill.setItems("Выберите компетенцию")
-        spinner_skill.setOnClickListener {
-            val fragment = ChooseAddSkillFragment.newInstance(mainListener)
-            fragment.setTargetFragment(this, CHOOSE_SKILL)
-            mainListener.showFragment(SHOW_THEMES, this, fragment)
-        }*/
         tv_skill.text = "Выберите компетенцию"
         li_choose_skill.setOnClickListener{
             val fragment = ChooseAddSkillFragment.newInstance(mainListener)
             fragment.setTargetFragment(this, CHOOSE_SKILL)
-            mainListener.showFragment(SHOW_THEMES, this, fragment)
+            mainListener.showFragment(this, fragment)
         }
         spinner_level.setItems(resources.getStringArray(R.array.skill_levels).toList())
         level = getString(R.string.low_level)
@@ -115,7 +113,6 @@ class ChooseSkillFragment : BaseFragment<ChooseSkillMainPresenter>(), ChooseSkil
 
     private fun addSkill() {
         val intent = Intent()
-//        level?.let { skill?.level = it }
         val skillJson = gsonConverter.toJson(skill)
         intent.putExtra(SKILL_KEY, skillJson)
         targetFragment?.onActivityResult(ADD_SKILL, RESULT_OK, intent)

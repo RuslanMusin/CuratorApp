@@ -9,11 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
-import com.summer.itis.curatorapp.model.theme.SuggestionTheme
-import com.summer.itis.curatorapp.model.theme.ThemeProgress
+import com.summer.itis.curatorapp.model.theme.Suggestion
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
+import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.AppHelper.Companion.setMultiline
 import com.summer.itis.curatorapp.utils.Const.ALL_CHOOSED
+import com.summer.itis.curatorapp.utils.Const.CHANGED_CURATOR
 import com.summer.itis.curatorapp.utils.Const.EDIT_SUGGESTION
 import com.summer.itis.curatorapp.utils.Const.THEME_KEY
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
@@ -22,7 +24,7 @@ import kotlinx.android.synthetic.main.toolbar_back_done.*
 
 class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSuggestionView, View.OnClickListener {
 
-    private lateinit var suggestion: SuggestionTheme
+    private lateinit var suggestion: Suggestion
 
     override lateinit var mainListener: NavigationView
 
@@ -47,11 +49,15 @@ class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSugg
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         arguments?.let {
-            suggestion = gsonConverter.fromJson(it.getString(THEME_KEY), SuggestionTheme::class.java)
+            suggestion = gsonConverter.fromJson(it.getString(THEME_KEY), Suggestion::class.java)
         }
     }
 
@@ -69,11 +75,18 @@ class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSugg
         setToolbarData()
         setListeners()
         setThemeData()
+        setEditText()
+        mainListener.hideLoading()
+    }
+
+    private fun setEditText() {
+        setMultiline(et_theme_name)
+        setMultiline(et_theme_desc)
     }
 
     private fun setThemeData() {
-        et_theme_name.setText(suggestion.themeProgress?.title)
-        et_theme_desc.setText(suggestion.themeProgress?.description)
+        et_theme_name.setText(suggestion.getCorrectTitle())
+        et_theme_desc.setText(suggestion.getCorrectDesc())
     }
 
     private fun setToolbarData() {
@@ -94,10 +107,11 @@ class EditSuggestionFragment : BaseFragment<EditSuggestionPresenter>(), EditSugg
                     val title = et_theme_name.text.toString()
                     val desc = et_theme_desc.text.toString()
 
-                    suggestion.themeProgress?.title = title
-                    suggestion.themeProgress?.description = desc
+                    suggestion.progress?.title = title
+                    suggestion.progress?.description = desc
+                    suggestion.status = AppHelper.getStatus(CHANGED_CURATOR)
 
-                    presenter.updateTheme(suggestion)
+                    presenter.updateSuggestion(suggestion)
                 }
             }
 

@@ -1,7 +1,6 @@
 package com.summer.itis.curatorapp.repository.comment
 
 import com.summer.itis.curatorapp.model.comment.Comment
-import com.summer.itis.curatorapp.model.material.Material
 import io.reactivex.Single
 import retrofit2.adapter.rxjava2.Result
 

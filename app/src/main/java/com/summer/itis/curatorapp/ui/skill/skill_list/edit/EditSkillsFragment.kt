@@ -7,20 +7,17 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.skill.Skill
-import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_PROFILE
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity.Companion.SHOW_THEMES
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.skill.skill_list.view.SkillListFragment.Companion.EDIT_SKILLS
 import com.summer.itis.curatorapp.ui.student.search.choose_skill.ChooseAddSkillFragment
-import com.summer.itis.curatorapp.ui.student.search.choose_skill_main.ChooseSkillFragment
 import com.summer.itis.curatorapp.utils.AppHelper
-import com.summer.itis.curatorapp.utils.Const.ADD_SKILL
 import com.summer.itis.curatorapp.utils.Const.CHOOSE_SKILL
 import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
 import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
@@ -63,6 +60,10 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -77,32 +78,7 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
         super.onViewCreated(view, savedInstanceState)
         initViews()
         presenter.loadCuratorSkills(AppHelper.currentCurator.id)
-//        loadSkills()
     }
-
-   /* private fun loadSkills() {
-//        presenter.loadWorks(AppHelper.currentCurator.id)
-        if(user.skills.size == 0) {
-            skills = ArrayList()
-            for (i in 1..10) {
-                val skill = Skill()
-                skill.id = "$i"
-                if(i / 2 == 0) {
-                    skill.level = getString(R.string.low_level)
-                    skill.name = "Machine Learning $i"
-                } else {
-                    skill.level = getString(R.string.high_level)
-                    skill.name = "Android $i"
-                }
-                skills.add(skill)
-            }
-
-        } else {
-            skills = user.skills
-        }
-        changeDataSet(skills)
-
-    }*/
 
     private fun initViews() {
         setToolbarData()
@@ -112,6 +88,7 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
 
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar_add_done)
+        toolbar_title.text = getString(R.string.skills)
         btn_back.visibility = View.VISIBLE
         btn_add.visibility = View.VISIBLE
         btn_ok.visibility = View.VISIBLE
@@ -185,6 +162,7 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
     override fun showSkills(skills: List<Skill>) {
         this.skills = skills.toMutableList()
         changeDataSet(this.skills)
+        mainListener.hideLoading()
     }
 
     override fun returnAfterEdit() {
@@ -196,30 +174,16 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
     }
 
     private fun addSkill() {
-        /*val fragment = ChooseSkillFragment.newInstance(mainListener)
-        fragment.setTargetFragment(this, ADD_SKILL)
-        mainListener.showFragment(SHOW_PROFILE, this, fragment)*/
+        mainListener.showLoading()
         val fragment = ChooseAddSkillFragment.newInstance(mainListener)
         fragment.setTargetFragment(this, CHOOSE_SKILL)
-        mainListener.showFragment(SHOW_PROFILE, this, fragment)
+        mainListener.showFragment(this, fragment)
     }
 
-   /* override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        inflater?.inflate(R.menu.search_menu, menu)
-        menu?.let { setSearchMenuItem(it) }
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-*/
     private fun setSearchMenuItem() {
-       /*val searchItem = menu.findItem(R.id.action_search)
-
-        val searchView: SearchView = searchItem.actionView as SearchView
-        val finalSearchView = searchView*/
        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
            override fun onQueryTextSubmit(query: String): Boolean {
-//                presenter.loadOfficialTestsByQUery(query)
-
                return false
            }
 
@@ -263,7 +227,6 @@ class EditSkillsFragment : BaseFragment<EditSkillsPresenter>(), EditSkillsView, 
                     Log.d(TAG_SKILLS, "skill added")
                     skills.add(0, skill)
                     AppHelper.currentCurator.skills = skills
-                    saveCuratorState()
                     changeDataSet(skills)
                 }
             }

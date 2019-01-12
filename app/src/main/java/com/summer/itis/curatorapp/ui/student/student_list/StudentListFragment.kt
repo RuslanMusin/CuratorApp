@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
+import android.util.Log
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.google.gson.reflect.TypeToken
@@ -26,12 +27,13 @@ import com.summer.itis.curatorapp.utils.Const.REQUEST_CODE
 import com.summer.itis.curatorapp.utils.Const.SEND_THEME
 import com.summer.itis.curatorapp.utils.Const.SKILL_KEY
 import com.summer.itis.curatorapp.utils.Const.TAB_NAME
+import com.summer.itis.curatorapp.utils.Const.TAG_LOG
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.layout_recycler_list.*
-import kotlinx.android.synthetic.main.toolbar_add.*
+import kotlinx.android.synthetic.main.toolbar_back.*
+import java.util.*
 import java.util.regex.Pattern
-import kotlin.collections.ArrayList
 
 class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListView, View.OnClickListener {
 
@@ -50,12 +52,7 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
 
     private var requestCode = ADD_STUDENT
 
-
     companion object {
-
-        const val TAG_SKILLS = "TAG_SKILLS"
-
-        const val EDIT_SKILLS = 1
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
             val fragment = StudentListFragment()
@@ -69,6 +66,10 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
             fragment.mainListener = navigationView
             return fragment
         }
+    }
+
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -93,67 +94,7 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
     override fun showStudents(students: List<Student>) {
         this.students = students.toMutableList()
         changeDataSet(this.students)
-    }
-
-    private fun loadStudents() {
-//        presenter.loadStudents()
-        students = ArrayList()
-        var student: Student
-        val skillOther = loadSkills()
-        for(i in 1..10) {
-            student = Student()
-            student.id = "$i"
-            if(i % 2 == 0) {
-                student.name = "Ruslan"
-                student.lastname = "Musin"
-                student.patronymic = "Martovich"
-                student.description = "usual desc"
-                student.group.name = "11-603"
-                student.courseNumber = 3
-                student.skills = skillOther.subList(0, 4)
-            } else {
-                student.name = "Azat"
-                student.lastname = "Alekbaev"
-                student.patronymic = "Azatovich"
-                student.description = "usual desc"
-                student.group.name = "11-605"
-                student.courseNumber = 1
-                student.skills = skillOther.subList(5, 9)
-            }
-            students.add(student)
-        }
-
-        changeDataSet(students)
-    }
-
-    private fun loadSkills(): MutableList<Skill> {
-//        presenter.loadWorks(AppHelper.currentCurator.id)
-        val skills: MutableList<Skill> = ArrayList()
-        var skill: Skill = Skill()
-
-        skill.name = "Java"
-        skill.id = "101"
-//        skill.level = getString(R.string.medium_level)
-        skills.add(skill)
-
-        var level: Int
-        var levelStr: String = getString(R.string.low_level)
-        for(i in 1..10) {
-            skill = Skill()
-            skill.id = "$i"
-            if(i % 2 == 0) {
-//                skill.level = getString(R.string.low_level)
-                skill.name = "Machine Learning $i"
-            } else {
-//                skill.level = getString(R.string.high_level)
-                skill.name = "Android $i"
-            }
-           /* level = Random().nextInt(3)
-            this.activity?.let { levelStr = AppHelper.getLevelStr(level, it) }
-            skill.level = levelStr*/
-            skills.add(skill)
-        }
-        return skills
+        mainListener.hideLoading()
     }
 
     private fun initViews() {
@@ -163,8 +104,8 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
     }
 
     private fun setToolbarData() {
-        mainListener.setToolbar(toolbar_add)
-        btn_add.visibility = View.GONE
+        mainListener.setToolbar(toolbar_back)
+        toolbar_title.text = getString(R.string.menu_students)
     }
 
     private fun setListeners() {
@@ -206,14 +147,14 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
     }
 
     override fun onItemClick(item: Student) {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(ID_KEY, item.id)
         args.putInt(REQUEST_CODE, requestCode)
         args.putString(TAB_NAME, SHOW_THEMES)
         val fragment = StudentFragment.newInstance(args, mainListener)
         fragment.setTargetFragment(this, requestCode)
-        mainListener.showFragment(SHOW_THEMES, this, fragment)
-//        mainListener.pushFragments(TAB_STUDENTS, fragment, true)
+        mainListener.showFragment(this, fragment)
     }
 
     override fun onClick(v: View) {
@@ -238,9 +179,6 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
 
             override fun onQueryTextSubmit(query: String): Boolean {
-//                presenter.loadOfficialTestsByQUery(query)
-                findFromList(query)
-
                 if (!finalSearchView.isIconified) {
                     finalSearchView.isIconified = true
                 }
@@ -263,7 +201,7 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
             args.putString(COURSE_KEY, yearsJson)
             val fragment = SearchFilterFragment.newInstance(args, mainListener)
             fragment.setTargetFragment(this, FILTERS)
-            mainListener.showFragment(SHOW_THEMES, this, fragment)
+            mainListener.showFragment(this, fragment)
             false
         }
 
@@ -271,10 +209,11 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
 
     private fun findFromList(query: String) {
         lastQuery = query
-        val pattern: Pattern = Pattern.compile("${query.toLowerCase()}.*")
+        val pattern: Pattern = Pattern.compile(".*${query.toLowerCase()}.*")
         val list: MutableList<Student> = java.util.ArrayList()
         for(student in students) {
-            if(pattern.matcher(student.name.toLowerCase()).matches() && filter(student)) {
+            if(pattern.matcher(student.getFullName().toLowerCase()).matches() && filter(student)) {
+                Log.d(TAG_LOG, "matched student = ${student.getFullName()}")
                 list.add(student)
             }
         }
@@ -320,23 +259,25 @@ class StudentListFragment : BaseFragment<StudentListPresenter>(), StudentListVie
     }
 
     private fun filter(student: Student): Boolean {
+        Log.d(TAG_LOG, "courses size = ${courses.size}")
+        Log.d(TAG_LOG, "skills size = ${skills.size}")
         if(courses.size != 0) {
             var yearFlag = false
             for (year in courses) {
-                if (student.courseNumber == year) {
+                if (student.course == year) {
                     yearFlag = true
+                    Log.d(TAG_LOG, "year true")
+                    break
                 }
             }
             if (yearFlag) {
                 var skillFlag = true
                 for (skillFilter in skills) {
-                    var skillItemFlag = false
-                    for (skill in student.skills) {
-                        if (skill.equals(skillFilter)) {
-                            skillItemFlag = true
-                        }
+                    Log.d(TAG_LOG, "skillFilter = ${skillFilter.id} and hash = ${skillFilter.hashCode()}")
+                    for(skill in student.skillsIds) {
+                        Log.d(TAG_LOG, "skillId = ${skill}")
                     }
-                    if (skillItemFlag == false) {
+                    if(!student.skillsIds.contains(skillFilter.id)) {
                         skillFlag = false
                         break
                     }

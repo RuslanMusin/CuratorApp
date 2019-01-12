@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/toolbar_edit"
-    android:layout_width="match_parent"
-    android:layout_height="?attr/actionBarSize"
-    android:background="?attr/colorPrimary"
-    app:contentInsetLeft="0dp"
-    app:contentInsetStart="0dp"
-    >
+                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                   android:id="@+id/toolbar_edit"
+                                   android:layout_width="match_parent"
+                                   android:layout_height="?attr/actionBarSize"
+                                   android:background="?attr/colorPrimary"
+                                   app:contentInsetLeft="0dp"
+                                   app:contentInsetStart="0dp"
+>
 
     <RelativeLayout
         android:id="@+id/rl_toolbar"
@@ -35,7 +34,7 @@
             android:textSize="@dimen/text.18"
             android:layout_toEndOf="@id/btn_back"
             android:layout_marginStart="16dp"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
             />
 
         <ImageButton

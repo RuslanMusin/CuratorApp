@@ -8,34 +8,24 @@ import android.support.v7.widget.SearchView
 import android.view.*
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.summer.itis.curatorapp.R
-import com.summer.itis.curatorapp.model.user.Curator
-import com.summer.itis.curatorapp.model.user.Person
-import com.summer.itis.curatorapp.model.user.Student
+import com.summer.itis.curatorapp.model.user.User
 import com.summer.itis.curatorapp.model.work.Work
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
-import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationBaseActivity
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
 import com.summer.itis.curatorapp.ui.work.work_item.WorkFragment
 import com.summer.itis.curatorapp.utils.AppHelper
 import com.summer.itis.curatorapp.utils.Const
-import com.summer.itis.curatorapp.utils.Const.CURATOR_TYPE
 import com.summer.itis.curatorapp.utils.Const.ID_KEY
-import com.summer.itis.curatorapp.utils.Const.OWNER_TYPE
-import com.summer.itis.curatorapp.utils.Const.PERSON_TYPE
-import com.summer.itis.curatorapp.utils.Const.STUDENT_TYPE
-import com.summer.itis.curatorapp.utils.Const.TAB_NAME
-import com.summer.itis.curatorapp.utils.Const.WATCHER_TYPE
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.fragment_works_one_list.*
 import kotlinx.android.synthetic.main.layout_recycler_list.*
-import kotlinx.android.synthetic.main.toolbar_edit.*
 import java.util.*
 import java.util.regex.Pattern
 
 class WorkListFragment : BaseFragment<WorkListPresenter>(), WorkListView, View.OnClickListener {
 
     lateinit var tabName: String
-    lateinit var user: Person
+    lateinit var user: User
     lateinit override var mainListener: NavigationView
     private lateinit var adapter: WorkAdapter
 
@@ -65,6 +55,10 @@ class WorkListFragment : BaseFragment<WorkListPresenter>(), WorkListView, View.O
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
@@ -89,28 +83,7 @@ class WorkListFragment : BaseFragment<WorkListPresenter>(), WorkListView, View.O
     override fun showWorks(works: List<Work>) {
         this.works = works.toMutableList()
         changeDataSet(this.works)
-    }
-
-    private fun loadSkills() {
-//        presenter.loadWorks(AppHelper.currentCurator.id)
-        if(user.works.size == 0) {
-            works = ArrayList()
-            val themes = AppHelper.getThemeList(AppHelper.currentCurator)
-            val calendarFirst = Calendar.getInstance()
-            calendarFirst.set(2018, 9, 10)
-            for (i in 0..9) {
-                val work = Work()
-                work.id = "$i"
-                work.theme = themes[i]
-                work.dateStart = calendarFirst.time
-                work.dateFinish = null
-                works.add(work)
-            }
-            user.works = works
-        } else {
-            works = user.works
-        }
-        changeDataSet(works)
+        mainListener.hideLoading()
     }
 
     private fun initViews() {
@@ -122,13 +95,9 @@ class WorkListFragment : BaseFragment<WorkListPresenter>(), WorkListView, View.O
     private fun setToolbarData() {
         mainListener.setToolbar(toolbar)
         mainListener.setToolbarTitle(getString(R.string.works))
-       /* btn_back.visibility = View.VISIBLE
-        btn_edit.visibility = View.GONE*/
     }
 
     private fun setListeners() {
-//        btn_edit.setOnClickListener(this)
-//        btn_back.setOnClickListener(this)
     }
 
     override fun setNotLoading() {
@@ -166,37 +135,20 @@ class WorkListFragment : BaseFragment<WorkListPresenter>(), WorkListView, View.O
     }
 
     override fun onItemClick(item: Work) {
+        mainListener.showLoading()
         val args = Bundle()
         args.putString(Const.ID_KEY, item.id)
         val fragment = WorkFragment.newInstance(args, mainListener)
-        mainListener.pushFragments(NavigationBaseActivity.TAB_WORKS, fragment, true)
+        mainListener.pushFragments(fragment, true)
     }
 
     override fun onClick(v: View) {
         when (v.id) {
 
-            R.id.btn_edit -> editSkills()
-
             R.id.btn_back -> backFragment()
 
         }
     }
-
-    private fun editSkills() {
-       /* val fragment = EditSkillsFragment.newInstance(mainListener)
-        fragment.setTargetFragment(this, EDIT_SKILLS)
-        mainListener.loadFragment(fragment)*/
-    }
-
-   /* override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when(requestCode) {
-
-              EDIT_SKILLS -> changeDataSet(step.subjects)
-            }
-        }
-    }*/
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.search_menu, menu)

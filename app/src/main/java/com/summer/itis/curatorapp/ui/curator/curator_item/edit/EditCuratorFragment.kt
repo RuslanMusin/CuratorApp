@@ -1,6 +1,5 @@
 package com.summer.itis.curatorapp.ui.curator.curator_item.edit
 
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
@@ -13,32 +12,23 @@ import com.summer.itis.curatorapp.R
 import com.summer.itis.curatorapp.model.user.Curator
 import com.summer.itis.curatorapp.ui.base.base_first.fragment.BaseFragment
 import com.summer.itis.curatorapp.ui.base.navigation_base.NavigationView
-import com.summer.itis.curatorapp.ui.curator.curator_item.description.view.DescriptionFragment.Companion.EDIT_DESC
-import com.summer.itis.curatorapp.ui.curator.curator_item.view.CuratorFragment.Companion.EDIT_CURATOR
-import com.summer.itis.curatorapp.utils.AppHelper
+import com.summer.itis.curatorapp.utils.AppHelper.Companion.setMultiline
 import com.summer.itis.curatorapp.utils.Const.CURATOR_KEY
+import com.summer.itis.curatorapp.utils.Const.EDIT_CURATOR
 import com.summer.itis.curatorapp.utils.Const.gsonConverter
+import kotlinx.android.synthetic.main.fragment_add_step.*
 import kotlinx.android.synthetic.main.fragment_change_profile.*
-import kotlinx.android.synthetic.main.toolbar_edit.*
+import kotlinx.android.synthetic.main.toolbar_back_done.*
 
 class EditCuratorFragment : BaseFragment<EditCuratorPresenter>(), EditCuratorView, View.OnClickListener {
 
-    lateinit var user: Curator
+    lateinit var curator: Curator
     override lateinit var mainListener: NavigationView
 
     @InjectPresenter
     lateinit var presenter: EditCuratorPresenter
 
     companion object {
-
-        const val TAG_CURATOR = "TAG_CURATOR"
-
-        const val CURATOR_NAME = "CURATOR_NAME"
-        const val CURATOR_LASTNAME = "CURATOR_LASTNAME"
-        const val CURATOR_PATRONYMIC = "CURATOR_PATRONYMIC"
-
-        const val RESULT_EDITED = 1
-        const val RESULT_CANCELED = 0
 
         fun newInstance(args: Bundle, navigationView: NavigationView): Fragment {
             val fragment = EditCuratorFragment()
@@ -54,9 +44,18 @@ class EditCuratorFragment : BaseFragment<EditCuratorPresenter>(), EditCuratorVie
         }
     }
 
+    override fun showBottomNavigation() {
+        mainListener.showBottomNavigation()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        user = AppHelper.currentCurator
+        arguments?.let {
+            val curatorJson = it.getString(CURATOR_KEY)
+            curatorJson?.let {
+                curator = gsonConverter.fromJson(curatorJson, Curator::class.java)
+            }
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -73,15 +72,19 @@ class EditCuratorFragment : BaseFragment<EditCuratorPresenter>(), EditCuratorVie
         setToolbarData()
         setListeners()
         setUserData()
+        setEditText()
+        mainListener.hideLoading()
+    }
+
+    private fun setEditText() {
+        setMultiline(et_name)
+        setMultiline(et_lastname)
+        setMultiline(et_patronymic)
     }
 
     private fun setToolbarData() {
-        mainListener.setToolbar(toolbar_edit)
-        btn_edit.visibility = View.GONE
-        btn_ok.visibility = View.VISIBLE
-        btn_back.visibility = View.VISIBLE
-        toolbar_edit.title = "${user.name} ${user.lastname} ${user.patronymic}"
-
+        mainListener.setToolbar(toolbar_back_done)
+        toolbar_title.text = getString(R.string.edit_profile)
     }
 
     private fun setListeners() {
@@ -90,9 +93,9 @@ class EditCuratorFragment : BaseFragment<EditCuratorPresenter>(), EditCuratorVie
     }
 
     private fun setUserData() {
-        et_name.setText(user.name)
-        et_lastname.setText(user.lastname)
-        et_patronymic.setText(user.patronymic)
+        et_name.setText(curator.name)
+        et_lastname.setText(curator.lastname)
+        et_patronymic.setText(curator.patronymic)
 
     }
 
@@ -103,22 +106,20 @@ class EditCuratorFragment : BaseFragment<EditCuratorPresenter>(), EditCuratorVie
 
             R.id.btn_back -> {
                 backFragment()
-//                onCanceledAction(EDIT_CURATOR, null)
             }
         }
     }
 
     private fun changeData() {
-        user.name = et_name.text.toString()
-        user.lastname = et_lastname.text.toString()
-        user.patronymic = et_patronymic.text.toString()
-        presenter.updateCurator(user)
+        curator.name = et_name.text.toString()
+        curator.lastname = et_lastname.text.toString()
+        curator.patronymic = et_patronymic.text.toString()
+        presenter.updateCurator(curator)
     }
 
     override fun returnAfterEdit() {
-//        saveCuratorState()
         val intent = Intent()
-        intent.putExtra(CURATOR_KEY, gsonConverter.toJson(user))
+        intent.putExtra(CURATOR_KEY, gsonConverter.toJson(curator))
         targetFragment?.onActivityResult(EDIT_CURATOR, RESULT_OK, intent)
         mainListener.hideFragment()
     }
